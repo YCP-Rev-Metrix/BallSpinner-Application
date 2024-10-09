@@ -5,6 +5,11 @@
         <TargetFrameworks>net8.0;</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+		<RootNamespace>RevMetrix.BallSpinner.BackEnd</RootNamespace>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="RevMetrix.Client.Api" Version="1.0.15" />
+    </ItemGroup>
 
 </Project>

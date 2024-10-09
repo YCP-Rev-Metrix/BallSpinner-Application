@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace FrontEnd;
+namespace RevMetrix.BallSpinner.FrontEnd;
 
 public static class MauiProgram
 {

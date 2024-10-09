@@ -1,4 +1,4 @@
-﻿namespace FrontEnd;
+﻿namespace RevMetrix.BallSpinner.FrontEnd;
 
 public partial class AppShell : Shell
 {

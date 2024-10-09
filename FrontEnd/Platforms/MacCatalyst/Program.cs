@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace FrontEnd;
+namespace RevMetrix.BallSpinner.FrontEnd;
 
 public class Program
 {

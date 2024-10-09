@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace FrontEnd;
+namespace RevMetrix.BallSpinner.FrontEnd;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate

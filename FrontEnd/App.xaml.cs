@@ -1,4 +1,4 @@
-﻿namespace FrontEnd;
+﻿namespace RevMetrix.BallSpinner.FrontEnd;
 
 public partial class App : Application
 {
@@ -7,5 +7,10 @@ public partial class App : Application
         InitializeComponent();
 
         MainPage = new AppShell();
+    }
+
+    protected override void CleanUp()
+    {
+        //Dispose
     }
 }
