@@ -7,9 +7,7 @@ namespace RevMetrix.BallSpinner.BackEnd;
 /// </summary>
 public class Backend : IDisposable
 {
-    /// <summary>
     /// <inheritdoc cref="IFrontEnd"/>
-    /// </summary>
     public IFrontEnd FrontEnd { get; private set; } = null!;
 
     /// <summary>
