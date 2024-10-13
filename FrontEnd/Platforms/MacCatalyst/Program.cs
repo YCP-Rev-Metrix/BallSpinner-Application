@@ -3,13 +3,16 @@ using UIKit;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 
+/// <summary>
+/// Entry point for MAC OSX
+/// </summary>
 public class Program
 {
-    // This is the main entry point of the application.
-    static void Main(string[] args)
+    /// <summary>
+    /// This is the main entry point of the application for MAC OSX only!
+    /// </summary>
+    public static void Main(string[] args)
     {
-        // if you want to use a different Application Delegate class from "AppDelegate"
-        // you can specify it here.
         UIApplication.Main(args, null, typeof(AppDelegate));
     }
 }

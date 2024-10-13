@@ -6,7 +6,7 @@
 namespace RevMetrix.BallSpinner.FrontEnd.WinUI;
 
 /// <summary>
-/// Provides application-specific behavior to supplement the default Application class.
+/// Provides application-specific behavior to supplement the default Application class. For WINDOWS only!
 /// </summary>
 public partial class App : MauiWinUIApplication
 {
@@ -18,6 +18,6 @@ public partial class App : MauiWinUIApplication
     {
         this.InitializeComponent();
     }
-
+    
     protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 }
