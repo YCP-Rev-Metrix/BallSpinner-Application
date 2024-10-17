@@ -61,6 +61,8 @@
       <None Remove="Resources\Raw\Modules\Three\three.webgpu.min.js" />
       <None Remove="Resources\Raw\Modules\Three\three.webgpu.nodes.js" />
       <None Remove="Resources\Raw\Modules\Three\three.webgpu.nodes.min.js" />
+      <None Remove="Resources\Raw\Pages\ChartJS\ChartJS.html" />
+      <None Remove="Resources\Raw\Pages\ChartJS\ChartJS.js" />
     </ItemGroup>
 
     <ItemGroup>
@@ -83,6 +85,19 @@
       <MauiXaml Update="AlertPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Resources\Raw\Modules\Chart\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <MauiAsset Update="Resources\Raw\Pages\ChartJS\ChartJS.html">
+        <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+      </MauiAsset>
+      <MauiAsset Update="Resources\Raw\Pages\ChartJS\ChartJS.js">
+        <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+      </MauiAsset>
     </ItemGroup>
 
 </Project>
