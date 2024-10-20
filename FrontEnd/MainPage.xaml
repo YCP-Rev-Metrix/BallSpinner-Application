@@ -68,7 +68,17 @@
                 SemanticProperties.HeadingLevel="Level2"
                 Style="{StaticResource SubHeadline}"
                 Text="Welcome to &#10;.NET Multi-platform App UI" />
+            <Button Text="Login"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Clicked="OnButtonClicked" />
+            <Label x:Name="label"
+                   Text="Click the Button above"
+                   FontSize="18"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center" />
         </VerticalStackLayout>
     </ScrollView>
+    
 
 </ContentPage>
