@@ -1,14 +1,10 @@
 const ctx = document.getElementById('myChart');
 
-const labels = ['0', '1', '2', '3', '4', '5', '6'];
 const data = {
-    labels: labels,
+    labels: [],
     datasets: [{
-        label: 'My First Dataset',
-        data: [65, 59, 80, 81, 56, 55, 40],
-        fill: false,
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0.1
+        data: [],
+        borderColor: 'rgb(75, 192, 192)'
     }]
 };
 
@@ -16,25 +12,46 @@ var chart = new Chart(ctx, {
     type: 'line',
     data: data,
     options: {
+        tooltips: {
+            enabled: false
+        },
         scales: {
             y: {
+                min: 0,
+                max: 1,
                 type: 'linear',
-                display: true,
-                ticks: {
-                    beginAtZero: true,
-                    max: 100
-                }
-            }
+            },
         },
         animation: {
-            duration: 0
+            animation: false
+        },
+        spanGaps: true,
+        datasets: {
+            line: {
+                pointRadius: 0
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            },
         }
     }
 });
 
-setInterval(function () {
-    var indexToUpdate = Math.round(Math.random() * data.labels.length);
-    chart.data.datasets[0].data[indexToUpdate] = Math.random() * 100;
+const startTime = Date.now();
+function getTime() {
+    return Math.round((Date.now() - startTime) / 1000);
+}
 
-    chart.update();
+setInterval(function () {
+    var newTime = getTime();
+    var newValue = Math.random();
+
+    chart.data.labels.push(newTime);
+    chart.data.datasets[0].data.push(newValue);
 }, 16);
+
+setInterval(function () {
+    chart.update();
+}, 500);
