@@ -55,4 +55,14 @@ public partial class MainPage : ContentPage
     {
         throw new NotImplementedException();
     }
+
+    private void OnButtonAClicked(object sender, EventArgs args)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void OnButtonBClicked(object sender, EventArgs args)
+    {
+        throw new NotImplementedException();
+    }
 }
