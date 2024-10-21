@@ -1,71 +1,70 @@
 using System.Text;
 using Newtonsoft.Json;
 
-namespace BackEnd.Posts
+namespace BackEnd.Posts;
+
+public class LoginUser
 {
-    public class LoginUser
+    private static readonly HttpClient Client = new HttpClient();
+    
+    public class AuthenticateResponse
     {
-        private static readonly HttpClient Client = new HttpClient();
+        public string? TokenA { get; set; }
+        public string? TokenB { get; set; }
+    }
+
+    private class RequestUserAuthenticate
+    {
+        public string? firstName { get; set; }
+        public string? lastName { get; set; }
+        public string? username { get; set; }
+        public string? password { get; set; }
+        public string? email { get; set; }
+        public string? phone_number { get; set; }
+    }
+
+    public static async Task LoginAsync()
+    {
+        var request = new RequestUserAuthenticate()
+        {
+            firstName = "string",
+            lastName = "string",
+            username = "string",
+            password = "string",
+            email = "string",
+            phone_number = "string"
+        };
+
+        var jsonBody = JsonConvert.SerializeObject(request);
+
+        // Create the request content
+        var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
         
-        public class AuthenticateResponse
+        try
         {
-            public string? TokenA { get; set; }
-            public string? TokenB { get; set; }
-        }
+            var response = await Client.PostAsync("https://api.revmetrix.io/api/posts/Authorize", content);
+            response.EnsureSuccessStatusCode();
 
-        private class RequestUserAuthenticate
-        {
-            public string? firstName { get; set; }
-            public string? lastName { get; set; }
-            public string? username { get; set; }
-            public string? password { get; set; }
-            public string? email { get; set; }
-            public string? phone_number { get; set; }
-        }
+            var responseBody = await response.Content.ReadAsStringAsync();
 
-        public static async Task Main()
-        {
-            var request = new RequestUserAuthenticate()
-            {
-                firstName = "string",
-                lastName = "string",
-                username = "string",
-                password = "string",
-                email = "string",
-                phone_number = "string"
-            };
-
-            var jsonBody = JsonConvert.SerializeObject(request);
-
-            // Create the request content
-            var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+            // Parse the JSON response
+            var responseObject = JsonConvert.DeserializeObject<AuthenticateResponse>(responseBody);
             
-            try
-            {
-                var response = await Client.PostAsync("https://api.revmetrix.io/api/posts/Authorize", content);
-                response.EnsureSuccessStatusCode();
-
-                var responseBody = await response.Content.ReadAsStringAsync();
-
-                // Parse the JSON response
-                var responseObject = JsonConvert.DeserializeObject<AuthenticateResponse>(responseBody);
-                
-                // Output the tokens
-                Console.WriteLine($"TokenA: {responseObject?.TokenA}");
-                Console.WriteLine($"TokenB: {responseObject?.TokenB}");
-            }
-            catch (HttpRequestException e)
-            {
-                Console.WriteLine("Request error: " + e.Message);
-            }
-            catch (JsonException je)
-            {
-                Console.WriteLine("JSON parsing error: " + je.Message);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("An unexpected error occurred: " + ex.Message);
-            }
+            // Output the tokens
+            Console.WriteLine($"TokenA: {responseObject?.TokenA}");
+            Console.WriteLine($"TokenB: {responseObject?.TokenB}");
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine("Request error: " + e.Message);
+        }
+        catch (JsonException je)
+        {
+            Console.WriteLine("JSON parsing error: " + je.Message);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("An unexpected error occurred: " + ex.Message);
         }
     }
 }
