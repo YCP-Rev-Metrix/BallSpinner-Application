@@ -55,8 +55,8 @@
     </ContentPage.ToolbarItems>
 
     <VerticalStackLayout Padding="30,0" Spacing="25">
-        <ScrollView HeightRequest="750">
-            <Grid>
+        <ScrollView>
+            <Grid HeightRequest="750">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*" />
                     <RowDefinition Height="1*" />
@@ -100,8 +100,52 @@
                             Source="Pages/ChartJS/ChartJS.html" />
                     </Grid>
                 </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="2*" />
+                    </Grid.ColumnDefinitions>
+
+                    <WebView Grid.Column="0" Source="Pages/ThreeJS/ThreeJS.html" />
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+
+                        <WebView
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Source="Pages/ChartJS/ChartJS.html" />
+
+                        <WebView
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Source="Pages/ChartJS/ChartJS.html" />
+
+                        <WebView
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Source="Pages/ChartJS/ChartJS.html" />
+
+                        <WebView
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Source="Pages/ChartJS/ChartJS.html" />
+                    </Grid>
+                </Grid>
             </Grid>
         </ScrollView>
+
+        <Button
+            Clicked="OnAddBallSpinnerButtonClicked"
+            HorizontalOptions="Center"
+            Text="Add BallSpinner"
+            VerticalOptions="Center" />
 
         <Button
             Clicked="OnButtonClicked"

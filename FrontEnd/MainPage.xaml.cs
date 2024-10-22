@@ -65,4 +65,9 @@ public partial class MainPage : ContentPage
     {
         throw new NotImplementedException();
     }
+
+    private void OnAddBallSpinnerButtonClicked(object sender, EventArgs args)
+    {
+        throw new NotImplementedException();
+    }
 }
