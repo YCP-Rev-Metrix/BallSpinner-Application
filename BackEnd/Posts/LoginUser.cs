@@ -1,6 +1,6 @@
 using System.Text;
 using Newtonsoft.Json;
-
+using RevMetrix.BallSpinner.BackEnd;
 namespace BackEnd.Posts
 {
     public partial class Database: IDatabase
@@ -23,7 +23,7 @@ namespace BackEnd.Posts
             public string? phone_number { get; set; }
         }
 
-        public static async Task Main()
+        public async Task LoginUser()
         {
             var request = new RequestUserAuthenticate()
             {
