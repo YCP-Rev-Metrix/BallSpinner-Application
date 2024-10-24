@@ -16,15 +16,32 @@ public class FrontEnd : IFrontEnd
     /// The core application that the front end will visualize
     /// </summary>
     public Backend Backend { get; private set; } = null!;
-    
+
+    private WebViewServer _webViewServer;
+
+    /// <summary>
+    /// Called before <see cref="Backend"/> is initialized
+    /// </summary>
+    public FrontEnd()
+    {
+        Console.WriteLine("FrontEnd Pre-Init");
+
+        _webViewServer = new WebViewServer();
+    }
+
+    /// <summary>
+    /// Called after <see cref="Backend"/> is initialized
+    /// </summary>
     public void Init(Backend backend)
     {
+        Console.WriteLine("FrontEnd Init");
+
         Backend = backend;
     }
     
     public void Dispose()
     {
-
+        _webViewServer.Dispose();
     }
 
     public void Alert(string message)

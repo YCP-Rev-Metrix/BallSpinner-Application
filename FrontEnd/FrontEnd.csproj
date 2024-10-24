@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-		<TargetFrameworks>net8.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">net8.0-maccatalyst</TargetFrameworks>
         <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0;</TargetFrameworks>
 
         <!-- Note for MacCatalyst:
@@ -54,13 +54,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Resources\Raw\Modules\Three\three.cjs" />
-      <None Remove="Resources\Raw\Modules\Three\three.module.js" />
-      <None Remove="Resources\Raw\Modules\Three\three.module.min.js" />
-      <None Remove="Resources\Raw\Modules\Three\three.webgpu.js" />
-      <None Remove="Resources\Raw\Modules\Three\three.webgpu.min.js" />
-      <None Remove="Resources\Raw\Modules\Three\three.webgpu.nodes.js" />
-      <None Remove="Resources\Raw\Modules\Three\three.webgpu.nodes.min.js" />
       <None Remove="Resources\Raw\Pages\ChartJS\ChartJS.html" />
       <None Remove="Resources\Raw\Pages\ChartJS\ChartJS.js" />
     </ItemGroup>
@@ -85,10 +78,6 @@
       <MauiXaml Update="AlertPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Resources\Raw\Modules\Chart\" />
     </ItemGroup>
 
     <ItemGroup>
