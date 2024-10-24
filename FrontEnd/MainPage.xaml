@@ -68,7 +68,7 @@
                         <ColumnDefinition Width="2*" />
                     </Grid.ColumnDefinitions>
 
-                    <WebView Grid.Column="0" Source="http://localhost:4837/Pages/ThreeJS/ThreeJS.html" />
+                    <WebView Grid.Column="0" Source="http://localhost:8081/Pages/ThreeJS/ThreeJS.html" />
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*" />
@@ -82,22 +82,22 @@
                         <WebView
                             Grid.Row="0"
                             Grid.Column="0"
-                            Source="http://localhost:4837/Pages/ChartJS/ChartJS.html" />
+                            Source="http://localhost:8081/Pages/ChartJS/ChartJS.html" />
 
                         <WebView
                             Grid.Row="0"
                             Grid.Column="1"
-                            Source="http://localhost:4837/Pages/ChartJS/ChartJS.html" />
+                            Source="http://localhost:8081/Pages/ChartJS/ChartJS.html" />
 
                         <WebView
                             Grid.Row="1"
                             Grid.Column="0"
-                            Source="http://localhost:4837/Pages/ChartJS/ChartJS.html" />
+                            Source="http://localhost:8081/Pages/ChartJS/ChartJS.html" />
 
                         <WebView
                             Grid.Row="1"
                             Grid.Column="1"
-                            Source="http://localhost:4837/Pages/ChartJS/ChartJS.html" />
+                            Source="http://localhost:8081/Pages/ChartJS/ChartJS.html" />
                     </Grid>
                 </Grid>
                 <Grid Grid.Row="1">
@@ -106,7 +106,7 @@
                         <ColumnDefinition Width="2*" />
                     </Grid.ColumnDefinitions>
 
-                    <WebView Grid.Column="0" Source="http://localhost:4837/Pages/ThreeJS/ThreeJS.html" />
+                    <WebView Grid.Column="0" Source="http://localhost:8081/Pages/ThreeJS/ThreeJS.html" />
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*" />
@@ -120,22 +120,22 @@
                         <WebView
                             Grid.Row="0"
                             Grid.Column="0"
-                            Source="http://localhost:4837/Pages/ChartJS/ChartJS.html" />
+                            Source="http://localhost:8081/Pages/ChartJS/ChartJS.html" />
 
                         <WebView
                             Grid.Row="0"
                             Grid.Column="1"
-                            Source="http://localhost:4837/Pages/ChartJS/ChartJS.html" />
+                            Source="http://localhost:8081/Pages/ChartJS/ChartJS.html" />
 
                         <WebView
                             Grid.Row="1"
                             Grid.Column="0"
-                            Source="http://localhost:4837/Pages/ChartJS/ChartJS.html" />
+                            Source="http://localhost:8081/Pages/ChartJS/ChartJS.html" />
 
                         <WebView
                             Grid.Row="1"
                             Grid.Column="1"
-                            Source="http://localhost:4837/Pages/ChartJS/ChartJS.html" />
+                            Source="http://localhost:8081/Pages/ChartJS/ChartJS.html" />
                     </Grid>
                 </Grid>
             </Grid>

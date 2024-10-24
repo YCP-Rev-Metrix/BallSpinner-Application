@@ -22,7 +22,7 @@ public class WebViewServer : IDisposable
 
     private const string URI_HOST = "localhost";
     private const string URI_SCHEME = "http";
-    private const int URI_PORT = 4837; //random
+    private const int URI_PORT = 8081; //random
     private const int MAX_REQUESTS = 8;
 
     private HttpListener _listener;
