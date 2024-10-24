@@ -2,7 +2,7 @@
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 
-using BackEnd;
+
 /// <summary>
 /// View for the main page
 /// </summary>
@@ -15,7 +15,9 @@ public partial class MainPage : ContentPage
     }
     async void OnButtonClicked(object sender, EventArgs args)
     {
-        await LoginUser.Main();
+        Database database = new Database();
+        database.LoginUser();
+        //await LoginUser.Main();
         Console.WriteLine("Logged in");
     }
 

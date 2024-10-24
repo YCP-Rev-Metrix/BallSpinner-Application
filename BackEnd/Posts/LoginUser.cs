@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace BackEnd.Posts
 {
-    public class LoginUser
+    public partial class Database: IDatabase
     {
         private static readonly HttpClient Client = new HttpClient();
         
