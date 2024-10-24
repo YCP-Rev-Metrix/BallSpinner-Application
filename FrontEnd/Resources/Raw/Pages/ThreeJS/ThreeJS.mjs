@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from '/Modules/Three/Addons/OrbitControls.js';
+
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff);
 
