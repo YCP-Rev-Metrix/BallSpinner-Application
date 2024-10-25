@@ -1,4 +1,5 @@
 ﻿using BackEnd.Posts;
+using RevMetrix.BallSpinner.BackEnd;
 using System.Windows.Input;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
@@ -8,17 +9,22 @@ namespace RevMetrix.BallSpinner.FrontEnd;
 /// </summary>
 public partial class MainPage : ContentPage
 {
+    private IDatabase _database = null!;
+
     /// <summary/>
     public MainPage()
     {
         InitializeComponent();
     }
+
+    public void Init(IDatabase database)
+    {
+        _database = database;
+    }
+
     async void OnButtonClicked(object sender, EventArgs args)
     {
-        Database database = new Database();
-        database.LoginUser();
-        //await LoginUser.Main();
-        Console.WriteLine("Logged in");
+        await _database.LoginUser();
     }
 
     private void OnNewShotButtonClicked(object sender, EventArgs args)

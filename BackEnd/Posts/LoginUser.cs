@@ -66,6 +66,8 @@ namespace BackEnd.Posts
             {
                 Console.WriteLine("An unexpected error occurred: " + ex.Message);
             }
+
+            Console.WriteLine("Logged in");
         }
     }
 }

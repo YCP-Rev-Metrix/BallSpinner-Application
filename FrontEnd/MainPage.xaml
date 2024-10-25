@@ -56,7 +56,7 @@
 
     <VerticalStackLayout Padding="30,0" Spacing="25">
         <ScrollView>
-            <Grid HeightRequest="750">
+            <Grid HeightRequest="650">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*" />
                     <RowDefinition Height="1*" />
