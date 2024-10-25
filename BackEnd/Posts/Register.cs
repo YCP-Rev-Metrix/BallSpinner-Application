@@ -2,17 +2,15 @@ using System.Text;
 using Newtonsoft.Json;
 using RevMetrix.BallSpinner.BackEnd;
 using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+
 namespace RevMetrix.BallSpinner.BackEnd.Database
 {
-    ///<Summary>
-    /// Placeholder (fill in this section later)
-    ///</Summary>
-    public partial class Database: IDatabase
-    { 
+    public partial class Database : IDatabase
+    {
         ///<Summary>
         /// Placeholder (fill in this section later)
         ///</Summary>
-        public async Task LoginUser()
+        public async Task Register()
         {
             var request = new RequestUserAuthenticate()
             {
@@ -28,7 +26,7 @@ namespace RevMetrix.BallSpinner.BackEnd.Database
 
             // Create the request content
             var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-            
+
             try
             {
                 var response = await Client.PostAsync("https://api.revmetrix.io/api/posts/Authorize", content);
@@ -38,7 +36,7 @@ namespace RevMetrix.BallSpinner.BackEnd.Database
 
                 // Parse the JSON response
                 var responseObject = JsonConvert.DeserializeObject<AuthenticateResponse>(responseBody);
-                
+
                 // Output the tokens
                 Console.WriteLine($"TokenA: {responseObject?.TokenA}");
                 Console.WriteLine($"TokenB: {responseObject?.TokenB}");
@@ -55,8 +53,6 @@ namespace RevMetrix.BallSpinner.BackEnd.Database
             {
                 Console.WriteLine("An unexpected error occurred: " + ex.Message);
             }
-
-            Console.WriteLine("Logged in");
         }
     }
 }
