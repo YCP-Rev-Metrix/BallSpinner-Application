@@ -50,6 +50,13 @@ setInterval(function () {
 
     chart.data.labels.push(newTime);
     chart.data.datasets[0].data.push(newValue);
+
+    if (chart.data.labels.length > 500) {
+        chart.data.labels.shift();
+    }
+
+    if (chart.data.datasets[0].data.length > 500)
+        chart.data.datasets[0].data.shift();
 }, 16);
 
 setInterval(function () {

@@ -22,7 +22,7 @@ public partial class MainPage : ContentPage
         _database = database;
     }
 
-    async void OnButtonClicked(object sender, EventArgs args)
+    private async void OnButtonClicked(object sender, EventArgs args)
     {
         await _database.LoginUser();
     }

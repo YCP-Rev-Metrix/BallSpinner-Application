@@ -22,11 +22,11 @@ public class WebViewServer : IDisposable
 
     private const string URI_HOST = "localhost";
     private const string URI_SCHEME = "http";
-    private const int URI_PORT = 8081; //random
+    private const int URI_PORT = 8081;
     private const int MAX_REQUESTS = 8;
 
     private HttpListener _listener;
-    private Dictionary<string, CachedResult> _fileCache = new ();
+    private Dictionary<string, CachedResult> _fileCache = [];
 
     public WebViewServer()
     {
@@ -92,6 +92,8 @@ public class WebViewServer : IDisposable
             }
 
             string responseText;
+            bool valid = false;
+
             if (string.IsNullOrEmpty(contentType))
             {
                 responseText = NOT_ALLOWED;
@@ -105,14 +107,18 @@ public class WebViewServer : IDisposable
                 using Stream file = await FileSystem.OpenAppPackageFileAsync(path);
                 using StreamReader reader = new StreamReader(file);
                 responseText = await reader.ReadToEndAsync();
+                valid = true;
             }
 
             response = Encoding.UTF8.GetBytes(responseText);
-            _fileCache[path] = new CachedResult
+            if (valid)
             {
-                Bytes = response,
-                ContentType = contentType
-            };
+                _fileCache[path] = new CachedResult
+                {
+                    Bytes = response,
+                    ContentType = contentType
+                };  
+            }
         }
 
         context.Response.ContentType = contentType;
