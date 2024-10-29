@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
-using Microsoft.UI.Windowing;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 
@@ -40,7 +39,7 @@ public static class MauiProgram
                     var id = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(handle);
                     var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(id);
 
-                    if(appWindow.Presenter is OverlappedPresenter overlappedPresenter)
+                    if(appWindow.Presenter is Microsoft.UI.Windowing.OverlappedPresenter overlappedPresenter)
                     {
                         if (rootWindow)
                         {
@@ -55,7 +54,7 @@ public static class MauiProgram
                         }
 
                         //pages should always start centered to the window
-                        DisplayArea displayArea = DisplayArea.GetFromWindowId(id, DisplayAreaFallback.Nearest);
+                        Microsoft.UI.Windowing.DisplayArea displayArea = Microsoft.UI.Windowing.DisplayArea.GetFromWindowId(id, Microsoft.UI.Windowing.DisplayAreaFallback.Nearest);
                         if (displayArea is not null)
                         {
                             var centeredPosition = appWindow.Position;
