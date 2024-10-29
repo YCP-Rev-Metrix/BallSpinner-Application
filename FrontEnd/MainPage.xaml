@@ -38,20 +38,24 @@
         <MenuBarItem Text="Help">
             <MenuFlyoutItem
                 Clicked="OnHelpButtonClicked"
-                IsEnabled="false"
+                IsEnabled="true"
                 Text="Help" />
         </MenuBarItem>
     </ContentPage.MenuBarItems>
 
     <ContentPage.ToolbarItems>
         <ToolbarItem
-            Clicked="OnButtonAClicked"
+            Clicked="OnStartButtonClicked"
             IsEnabled="false"
-            Text="Toolbar Button A" />
+            Text="Start" />
         <ToolbarItem
-            Clicked="OnButtonBClicked"
+            Clicked="OnStopButtonClicked"
             IsEnabled="true"
-            Text="Toolbar Button B" />
+            Text="Stop" />
+        <ToolbarItem
+            Clicked="OnResetButtonClicked"
+            IsEnabled="true"
+            Text="Reset" />
     </ContentPage.ToolbarItems>
 
     <VerticalStackLayout Padding="30,0" Spacing="25">

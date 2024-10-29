@@ -1,4 +1,5 @@
 ﻿using RevMetrix.BallSpinner.BackEnd;
+using RevMetrix.BallSpinner.FrontEnd.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ public class FrontEnd : IFrontEnd
     public Backend Backend { get; private set; } = null!;
 
     private WebViewServer _webViewServer;
+    private Window? _helpWindow;
 
     /// <summary>
     /// Called before <see cref="Backend"/> is initialized
@@ -46,9 +48,30 @@ public class FrontEnd : IFrontEnd
 
     public void Alert(string message)
     {
-        var window = new Window(new AlertPage(message));
-        window.Title = "Alert";
-        
+        var window = new Window(new AlertPage(message))
+        {
+            Title = "Alert"
+        };
+
         Application.Current!.OpenWindow(window);
+    }
+
+    /// <summary>
+    /// Opens the help window
+    /// </summary>
+    public void Help()
+    {
+        if (_helpWindow != null)
+            return;
+
+        _helpWindow = new Window(new HelpPage())
+        {
+            Title = "Help"
+        };
+        Application.Current!.OpenWindow(_helpWindow);
+        _helpWindow.Destroying += (object? sender, EventArgs e) =>
+        {
+            _helpWindow = null;
+        };
     }
 }

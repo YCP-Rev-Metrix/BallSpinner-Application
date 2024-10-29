@@ -9,7 +9,10 @@ namespace RevMetrix.BallSpinner.FrontEnd;
 /// </summary>
 public partial class MainPage : ContentPage
 {
+    private FrontEnd _frontEnd = null!;
     private IDatabase _database = null!;
+
+    //public MainPage MainPage => Content;
 
     /// <summary/>
     public MainPage()
@@ -17,8 +20,9 @@ public partial class MainPage : ContentPage
         InitializeComponent();
     }
 
-    public void Init(IDatabase database)
+    public void Init(FrontEnd frontEnd, IDatabase database)
     {
+        _frontEnd = frontEnd;
         _database = database;
     }
 
@@ -53,22 +57,27 @@ public partial class MainPage : ContentPage
         Application.Current!.Quit();
     }
 
-    private void OnResetButtonClicked(object sender, EventArgs args)
+    private void OnResetViewButtonClicked(object sender, EventArgs args)
     {
         throw new NotImplementedException();
     }
 
     private void OnHelpButtonClicked(object sender, EventArgs args)
     {
-        throw new NotImplementedException();
+        _frontEnd.Help();
     }
 
-    private void OnButtonAClicked(object sender, EventArgs args)
+    private void OnStartButtonClicked(object sender, EventArgs args)
     {
         throw new NotImplementedException();
     }
 
-    private void OnButtonBClicked(object sender, EventArgs args)
+    private void OnStopButtonClicked(object sender, EventArgs args)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void OnResetButtonClicked(object sender, EventArgs args)
     {
         throw new NotImplementedException();
     }
