@@ -72,7 +72,7 @@
                         <ColumnDefinition Width="2*" />
                     </Grid.ColumnDefinitions>
 
-                    <WebView Grid.Column="0" Source="http://localhost:8081/Pages/ThreeJS/ThreeJS.html" />
+                    <WebView Grid.Column="0" Source="http://localhost:8081/Pages/Simulation/Simulation.html" />
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*" />

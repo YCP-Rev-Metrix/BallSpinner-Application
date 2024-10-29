@@ -64,6 +64,8 @@
     <ItemGroup>
       <None Remove="Resources\Raw\Pages\ChartJS\ChartJS.html" />
       <None Remove="Resources\Raw\Pages\ChartJS\ChartJS.js" />
+      <None Remove="Resources\Raw\Pages\Simulation\Simulation.html" />
+      <None Remove="Resources\Raw\Pages\Simulation\Simulation.mjs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -96,6 +98,12 @@
         <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
       </MauiAsset>
       <MauiAsset Update="Resources\Raw\Pages\ChartJS\ChartJS.js">
+        <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+      </MauiAsset>
+      <MauiAsset Update="Resources\Raw\Pages\Simulation\Simulation.html">
+        <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+      </MauiAsset>
+      <MauiAsset Update="Resources\Raw\Pages\Simulation\Simulation.mjs">
         <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
       </MauiAsset>
     </ItemGroup>
