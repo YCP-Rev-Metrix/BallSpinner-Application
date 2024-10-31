@@ -8,6 +8,7 @@
     Shell.FlyoutBehavior="Disabled">
 
     <ShellContent
+        x:Name="Content"
         Title="BallSpinner"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />

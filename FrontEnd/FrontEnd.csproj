@@ -54,8 +54,18 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Remove="NewFolder\**" />
+      <EmbeddedResource Remove="NewFolder\**" />
+      <MauiCss Remove="NewFolder\**" />
+      <MauiXaml Remove="NewFolder\**" />
+      <None Remove="NewFolder\**" />
+    </ItemGroup>
+
+    <ItemGroup>
       <None Remove="Resources\Raw\Pages\ChartJS\ChartJS.html" />
       <None Remove="Resources\Raw\Pages\ChartJS\ChartJS.js" />
+      <None Remove="Resources\Raw\Pages\Simulation\Simulation.html" />
+      <None Remove="Resources\Raw\Pages\Simulation\Simulation.mjs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -80,6 +90,9 @@
       <MauiXaml Update="AlertPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
+      <MauiXaml Update="Pages\HelpPage.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
     </ItemGroup>
 
     <ItemGroup>
@@ -89,6 +102,16 @@
       <MauiAsset Update="Resources\Raw\Pages\ChartJS\ChartJS.js">
         <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
       </MauiAsset>
+      <MauiAsset Update="Resources\Raw\Pages\Simulation\Simulation.html">
+        <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+      </MauiAsset>
+      <MauiAsset Update="Resources\Raw\Pages\Simulation\Simulation.mjs">
+        <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+      </MauiAsset>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PRIResource Remove="NewFolder\**" />
     </ItemGroup>
 
 </Project>

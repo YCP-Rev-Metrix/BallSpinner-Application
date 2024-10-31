@@ -6,18 +6,18 @@ namespace RevMetrix.BallSpinner.FrontEnd;
 public partial class App : Application
 {
     /// <inheritdoc cref="IFrontEnd"/>
-    public IFrontEnd FrontEnd;
+    public FrontEnd FrontEnd;
 
     /// <inheritdoc cref="Backend"/>
     public Backend BackEnd;
 
+    private MainPage _mainPage = null!;
     private IDatabase _database;
-    private MainPage _mainPage;
 
     public App()
     {
         InitializeComponent();
-        MainPage = _mainPage = new MainPage();
+        MainPage = new AppShell();
 
         FrontEnd = new FrontEnd();
         BackEnd = new Backend();
@@ -26,8 +26,6 @@ public partial class App : Application
 
         FrontEnd.Init(BackEnd);
         BackEnd.Init(FrontEnd, _database);
-
-        _mainPage.Init(BackEnd.Database);
     }
 
     /// <summary>
@@ -36,6 +34,9 @@ public partial class App : Application
     protected override void OnStart()
     {
         base.OnStart();
+
+        _mainPage = (MainPage)((AppShell)MainPage!).CurrentPage;
+        _mainPage.Init(FrontEnd, BackEnd.Database);
     }
 
     /// <summary>
