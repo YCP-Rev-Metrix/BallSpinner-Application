@@ -1,0 +1,25 @@
+﻿html {
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        color: rgb(255, 255, 255);
+        background-color: rgb(31, 31, 31);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    body {
+        color: rgb(31, 31, 31);
+        background-color: rgb(255,255,255);
+    }
+}

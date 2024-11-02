@@ -17,6 +17,7 @@ public partial class BallSpinnerView : ContentView
 
         _viewModel = (BallSpinnerViewModel)BindingContext;
         _viewModel.LeftView.DataReceived += (metric, value, timeFromStart) => { DataReceived(LeftView, metric, value, timeFromStart); };
+        _viewModel.TopMiddleView.DataReceived += (metric, value, timeFromStart) => { DataReceived(TopMiddleView, metric, value, timeFromStart); };
     }
 
     private void DataReceived(WebView webview, Metric metric, float value, float timeFromStart)

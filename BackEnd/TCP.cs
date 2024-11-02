@@ -27,7 +27,7 @@ public class TCP
             var reply = new Ping().Send(host);
             tcpClient.Connect(host, port);
 
-            byte[] buffer = new byte[1024];
+            /*byte[] buffer = new byte[1024];
 
             tcpClient.Client.Send(Encoding.UTF8.GetBytes("Hello from windows!"));
 
@@ -37,7 +37,7 @@ public class TCP
                 var text = Encoding.UTF8.GetString(buffer, 0, size);
                 if (size > 0)
                     Debug.WriteLine(text);
-            }
+            }*/
         }
         catch(Exception e)
         {

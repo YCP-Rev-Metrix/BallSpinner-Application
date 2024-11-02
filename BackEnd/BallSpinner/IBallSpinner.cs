@@ -32,12 +32,12 @@ public interface IBallSpinner
     /// <summary>
     ///Event triggered when an error message is received from the Ball Spinner.
     /// </summary>
-    event Action SendErrorToApp;
+    event Action? SendErrorToApp;
 
     /// <summary>
     /// Event triggered when a rejection message is received from the Ball Spinner.
     /// </summary>
-    event Action SendRejection;
+    event Action? SendRejection;
 
     //Methods
     /// <summary>
@@ -80,7 +80,7 @@ public interface IBallSpinner
     /// Checks if the connection to the Ball Spinner device is established.
     /// </summary>
     /// <returns>True if connected, false otherwise.</returns>
-    bool IsConnection();
+    bool IsConnected();
 
 
 }

@@ -1,8 +1,8 @@
 namespace RevMetrix.BallSpinner.FrontEnd.Pages;
 
-public partial class HelpPage : ContentPage
+public partial class HelpView : ContentPage
 {
-	public HelpPage()
+	public HelpView()
 	{
 		InitializeComponent();
 	}

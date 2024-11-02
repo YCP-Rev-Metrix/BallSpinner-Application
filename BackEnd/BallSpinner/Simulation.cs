@@ -40,7 +40,7 @@ public class Simulation : IBallSpinner
     }
 
     ///<inheritdoc/>
-    public bool IsConnection()
+    public bool IsConnected()
     {
         throw new NotImplementedException();
     }
@@ -66,15 +66,16 @@ public class Simulation : IBallSpinner
     ///<inheritdoc/>
     public void Start()
     {
+        TimeSpan frequency = TimeSpan.FromSeconds(1 / 60f);
         _timer = new Timer((o) =>
         {
             DataParser.DataReceived(Metric.RotationX, (float)DateTime.UtcNow.TimeOfDay.TotalSeconds, (float)DateTime.UtcNow.TimeOfDay.TotalSeconds);
-        }, null, TimeSpan.FromSeconds(0.25f), TimeSpan.FromSeconds(0.25f));
+        }, null, frequency, frequency);
     }
 
     ///<inheritdoc/>
     public void Stop()
     {
-        throw new NotImplementedException();
+        _timer?.Dispose();
     }
 }

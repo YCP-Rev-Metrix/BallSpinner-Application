@@ -81,7 +81,10 @@ public partial class MainPage : ContentPage
 
     private void OnStopButtonClicked(object sender, EventArgs args)
     {
-        throw new NotImplementedException();
+        foreach (var spinner in BallSpinners)
+        {
+            spinner.Stop();
+        }
     }
 
     private void OnResetButtonClicked(object sender, EventArgs args)
@@ -89,9 +92,14 @@ public partial class MainPage : ContentPage
         throw new NotImplementedException();
     }
 
-    private void OnAddBallSpinnerButtonClicked(object sender, EventArgs args)
+    private async void OnAddBallSpinnerButtonClicked(object sender, EventArgs args)
     {
-        BallSpinners.Add(new BallSpinnerViewModel(new Simulation()));
-        OnPropertyChanged(nameof(BallSpinners));
+        var ballSpinner = await _frontEnd.AddBallSpinner();
+
+        if(ballSpinner != null)
+        {
+            BallSpinners.Add(new BallSpinnerViewModel(ballSpinner));
+            OnPropertyChanged(nameof(BallSpinners));
+        }
     }
 }

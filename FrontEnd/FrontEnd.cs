@@ -1,4 +1,5 @@
 ﻿using RevMetrix.BallSpinner.BackEnd;
+using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using RevMetrix.BallSpinner.FrontEnd.Pages;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ public class FrontEnd : IFrontEnd
 
     private WebViewServer _webViewServer;
     private Window? _helpWindow;
+    private Window? _newBallSpinnerWindow;
 
     /// <summary>
     /// Called before <see cref="Backend"/> is initialized
@@ -64,7 +66,7 @@ public class FrontEnd : IFrontEnd
         if (_helpWindow != null)
             return;
 
-        _helpWindow = new Window(new HelpPage())
+        _helpWindow = new Window(new HelpView())
         {
             Title = "Help"
         };
@@ -73,5 +75,32 @@ public class FrontEnd : IFrontEnd
         {
             _helpWindow = null;
         };
+    }
+
+    public async Task<IBallSpinner?> AddBallSpinner()
+    {
+        if (_newBallSpinnerWindow != null)
+            return null;
+
+        TaskCompletionSource<IBallSpinner?> task = new TaskCompletionSource<IBallSpinner?>();
+        var newBallSpinnerView = new NewBallSpinnerView(task);
+        _newBallSpinnerWindow = new Window(newBallSpinnerView)
+            {
+                Title = "Add Ball Spinner"
+            };
+        Application.Current!.OpenWindow(_newBallSpinnerWindow);
+        _newBallSpinnerWindow.Destroying += (object? sender, EventArgs e) =>
+        {
+            _newBallSpinnerWindow = null;
+            
+            if(!task.Task.IsCompleted)
+                task.SetCanceled();
+        };
+
+        var result = await task.Task;
+        if(_newBallSpinnerWindow != null)
+            Application.Current.CloseWindow(_newBallSpinnerWindow);
+
+        return result;
     }
 }

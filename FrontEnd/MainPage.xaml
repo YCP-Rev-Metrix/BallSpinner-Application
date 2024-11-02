@@ -51,7 +51,7 @@
             Text="Start" />
         <ToolbarItem
             Clicked="OnStopButtonClicked"
-            IsEnabled="false"
+            IsEnabled="true"
             Text="Stop" />
         <ToolbarItem
             Clicked="OnResetButtonClicked"
@@ -59,33 +59,35 @@
             Text="Reset" />
     </ContentPage.ToolbarItems>
 
-    <VerticalStackLayout Padding="30,0" Spacing="25">
+    <Grid>
         <ScrollView VerticalScrollBarVisibility="Always">
-            <CollectionView ItemsSource="{Binding BallSpinners}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <local:BallSpinnerView />
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            <StackLayout>
+                <CollectionView ItemsSource="{Binding BallSpinners}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <local:BallSpinnerView />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Button
+                    Clicked="OnAddBallSpinnerButtonClicked"
+                    HorizontalOptions="Center"
+                    Text="Add BallSpinner"
+                    VerticalOptions="Center" />
+
+                <Button
+                    Clicked="OnButtonClicked"
+                    HorizontalOptions="Center"
+                    Text="Login"
+                    VerticalOptions="Center" />
+                <Label
+                    x:Name="label"
+                    FontSize="18"
+                    HorizontalOptions="Center"
+                    Text="Click the Button above"
+                    VerticalOptions="Center" />
+            </StackLayout>
         </ScrollView>
-
-        <Button
-            Clicked="OnAddBallSpinnerButtonClicked"
-            HorizontalOptions="Center"
-            Text="Add BallSpinner"
-            VerticalOptions="Center" />
-
-        <Button
-            Clicked="OnButtonClicked"
-            HorizontalOptions="Center"
-            Text="Login"
-            VerticalOptions="Center" />
-        <Label
-            x:Name="label"
-            FontSize="18"
-            HorizontalOptions="Center"
-            Text="Click the Button above"
-            VerticalOptions="Center" />
-    </VerticalStackLayout>
+    </Grid>
 </ContentPage>
