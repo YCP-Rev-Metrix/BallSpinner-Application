@@ -31,7 +31,16 @@ scene.add(mesh)
 camera.position.z = 5;
 
 function animate() {
-
     renderer.render(scene, camera);
-    mesh.rotation.x += 3.1415926 / 360;
+    //mesh.rotation.x += 3.1415926 / 360;
+}
+
+var minX = 0;
+
+window.data = function (metric, value, time) {
+    console.log('hello' + metric + '  ' + value + ' ' + time);
+    if (metric === 'RotationX' && time > minX) {
+        mesh.rotation.x = value;
+        minX = time;
+    }
 }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="RevMetrix.BallSpinner.FrontEnd.BallSpinnerView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:RevMetrix.BallSpinner.FrontEnd">
+    <VerticalStackLayout>
+        <Label Text="{Binding Name}" />
+        <Grid HeightRequest="400">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+
+            <WebView
+                x:Name="LeftView"
+                Grid.Column="0"
+                Source="{Binding LeftView.Source}" />
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+
+                <WebView
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Source="{Binding TopMiddleView.Source}" />
+
+                <WebView
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Source="{Binding BottomMiddleView.Source}" />
+
+                <WebView
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Source="{Binding TopRightView.Source}" />
+
+                <WebView
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Source="{Binding BottomRightView.Source}" />
+            </Grid>
+        </Grid>
+    </VerticalStackLayout>
+</ContentView>

@@ -1,5 +1,7 @@
 using RevMetrix.BallSpinner.BackEnd;
+using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using RevMetrix.BallSpinner.BackEnd.Database;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
@@ -12,12 +14,14 @@ public partial class MainPage : ContentPage
     private FrontEnd _frontEnd = null!;
     private IDatabase _database = null!;
 
-    //public MainPage MainPage => Content;
+    public ObservableCollection<BallSpinnerViewModel> BallSpinners { get; } = new() { new BallSpinnerViewModel(new Simulation()) };
 
     /// <summary/>
     public MainPage()
     {
         InitializeComponent();
+
+        BindingContext = this;
     }
 
     public void Init(FrontEnd frontEnd, IDatabase database)
@@ -69,7 +73,10 @@ public partial class MainPage : ContentPage
 
     private void OnStartButtonClicked(object sender, EventArgs args)
     {
-        throw new NotImplementedException();
+        foreach (var spinner in BallSpinners)
+        {
+            spinner.Start();
+        }
     }
 
     private void OnStopButtonClicked(object sender, EventArgs args)
@@ -84,6 +91,7 @@ public partial class MainPage : ContentPage
 
     private void OnAddBallSpinnerButtonClicked(object sender, EventArgs args)
     {
-        throw new NotImplementedException();
+        BallSpinners.Add(new BallSpinnerViewModel(new Simulation()));
+        OnPropertyChanged(nameof(BallSpinners));
     }
 }
