@@ -69,7 +69,10 @@ public class Simulation : IBallSpinner
         TimeSpan frequency = TimeSpan.FromSeconds(1 / 60f);
         _timer = new Timer((o) =>
         {
-            DataParser.DataReceived(Metric.RotationX, (float)DateTime.UtcNow.TimeOfDay.TotalSeconds, (float)DateTime.UtcNow.TimeOfDay.TotalSeconds);
+            float time = (float)DateTime.UtcNow.TimeOfDay.TotalSeconds;
+            DataParser.DataReceived(Metric.RotationX, MathF.Sin(time), time);
+            DataParser.DataReceived(Metric.RotationY, MathF.Cos(time), time);
+            DataParser.DataReceived(Metric.RotationZ, -MathF.Sin(time), time);
         }, null, frequency, frequency);
     }
 

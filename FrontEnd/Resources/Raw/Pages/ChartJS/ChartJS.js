@@ -13,7 +13,13 @@ const data = {
     labels: [],
     datasets: [{
         data: [],
-        borderColor: 'rgb(255, 0, 0)'
+        borderColor: 'rgb(255, 0, 0)',
+    }, {
+        data: [],
+        borderColor: 'rgb(0, 255, 0)'
+    }, {
+        data: [],
+        borderColor: 'rgb(0, 0, 255)'
     }]
 };
 
@@ -64,15 +70,23 @@ window.data = function (metric, value, time) {
     if (metric === 'RotationX') {
         chart.data.labels.push(time);
         chart.data.datasets[0].data.push(value);
-    }/*
-    else if (metric === 'RotationY') {
-        chart.data.labels.push(time);
+    } else if (metric === 'RotationY') {
         chart.data.datasets[1].data.push(value);
-    }
-    else if (metric === 'RotationZ') {
-        chart.data.labels.push(time);
+    } else if (metric === 'RotationZ') {
         chart.data.datasets[2].data.push(value);
-    }*/
+    }
+
+    if (chart.data.labels.length > 300)
+        chart.data.labels.shift();
+
+    if (chart.data.datasets[0].data.length > 300)
+        chart.data.datasets[0].data.shift();
+
+    if (chart.data.datasets[1].data.length > 300)
+        chart.data.datasets[1].data.shift();
+
+    if (chart.data.datasets[2].data.length > 300)
+        chart.data.datasets[2].data.shift();
 }
 
 setInterval(function () {

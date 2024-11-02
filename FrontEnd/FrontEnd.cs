@@ -92,9 +92,9 @@ public class FrontEnd : IFrontEnd
         _newBallSpinnerWindow.Destroying += (object? sender, EventArgs e) =>
         {
             _newBallSpinnerWindow = null;
-            
+
             if(!task.Task.IsCompleted)
-                task.SetCanceled();
+                task.SetResult(null);
         };
 
         var result = await task.Task;
