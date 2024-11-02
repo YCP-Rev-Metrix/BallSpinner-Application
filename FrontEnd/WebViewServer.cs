@@ -89,6 +89,9 @@ public class WebViewServer : IDisposable
                 case ".mjs":
                     contentType = "text/javascript";
                     break;
+                case ".css":
+                    contentType = "text/css";
+                    break;
             }
 
             string responseText;
@@ -113,11 +116,13 @@ public class WebViewServer : IDisposable
             response = Encoding.UTF8.GetBytes(responseText);
             if (valid)
             {
+#if !DEBUG
                 _fileCache[path] = new CachedResult
                 {
                     Bytes = response,
                     ContentType = contentType
                 };
+#endif
             }
         }
 

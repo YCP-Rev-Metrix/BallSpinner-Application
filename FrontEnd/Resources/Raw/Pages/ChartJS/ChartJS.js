@@ -1,10 +1,25 @@
 const ctx = document.getElementById('myChart');
 
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    Chart.defaults.color = 'rgb(255, 255, 255)';
+}
+else {
+    Chart.defaults.color = 'rgb(31, 31, 31)';
+}
+
+Chart.defaults.elements.line.borderWidth = 1;
+
 const data = {
     labels: [],
     datasets: [{
         data: [],
-        borderColor: 'rgb(75, 192, 192)'
+        borderColor: 'rgb(255, 0, 0)',
+    }, {
+        data: [],
+        borderColor: 'rgb(0, 255, 0)'
+    }, {
+        data: [],
+        borderColor: 'rgb(0, 0, 255)'
     }]
 };
 
@@ -17,10 +32,15 @@ var chart = new Chart(ctx, {
         },
         scales: {
             y: {
-                min: 0,
-                max: 1,
                 type: 'linear',
             },
+            x: {
+                ticks: {
+                    callback: function (value) {
+                        return value.toFixed(1); // Display values with 2 decimal places
+                    }
+                }
+            }
         },
         animation: {
             animation: false
@@ -35,7 +55,9 @@ var chart = new Chart(ctx, {
             legend: {
                 display: false
             },
-        }
+        },
+        responsive: true,
+        maintainAspectRatio: false,
     }
 });
 
@@ -44,20 +66,28 @@ function getTime() {
     return Math.round((Date.now() - startTime) / 1000);
 }
 
-setInterval(function () {
-    var newTime = getTime();
-    var newValue = Math.random();
-
-    chart.data.labels.push(newTime);
-    chart.data.datasets[0].data.push(newValue);
-
-    if (chart.data.labels.length > 500) {
-        chart.data.labels.shift();
+window.data = function (metric, value, time) {
+    if (metric === 'RotationX') {
+        chart.data.labels.push(time);
+        chart.data.datasets[0].data.push(value);
+    } else if (metric === 'RotationY') {
+        chart.data.datasets[1].data.push(value);
+    } else if (metric === 'RotationZ') {
+        chart.data.datasets[2].data.push(value);
     }
 
-    if (chart.data.datasets[0].data.length > 500)
+    if (chart.data.labels.length > 300)
+        chart.data.labels.shift();
+
+    if (chart.data.datasets[0].data.length > 300)
         chart.data.datasets[0].data.shift();
-}, 16);
+
+    if (chart.data.datasets[1].data.length > 300)
+        chart.data.datasets[1].data.shift();
+
+    if (chart.data.datasets[2].data.length > 300)
+        chart.data.datasets[2].data.shift();
+}
 
 setInterval(function () {
     chart.update();

@@ -14,7 +14,6 @@ public interface IBallSpinner
 {
 
     /// <summary>
-    /// Properties 
     /// Gets or sets the name of the Ball Spinner device.
     /// </summary>
     string Name { get; set;}
@@ -28,17 +27,17 @@ public interface IBallSpinner
     /// Events
     /// Event triggered when data is received from the Ball Spinner.
     /// </summary>
-    event Action DataParser;
+    DataParser DataParser { get; }
 
     /// <summary>
     ///Event triggered when an error message is received from the Ball Spinner.
     /// </summary>
-    event Action sendErrorToApp;
+    event Action? SendErrorToApp;
 
     /// <summary>
     /// Event triggered when a rejection message is received from the Ball Spinner.
     /// </summary>
-    event Action sendRejection;
+    event Action? SendRejection;
 
     //Methods
     /// <summary>
@@ -54,7 +53,7 @@ public interface IBallSpinner
     /// <summary>
     /// Sets the active SmartDot on the Ball Spinner device.
     /// </summary>
-    void setSmartDot();
+    void SetSmartDot();
 
     /// <summary>
     /// Starts the Ball Spinner device, beginning any data transmission.
@@ -73,25 +72,48 @@ public interface IBallSpinner
     List<string> SendBackListOfSmartDots();
 
     /// <summary>
-    /// Sends an error message to the connected application.
-    /// </summary>
-    //void sendErrorToApp();
-
-    /// <summary>
-    /// Sends a rejection message to the connected application.
-    /// </summary>
-    // void sendRejection();
-
-    /// <summary>
     /// Resends the last message if needed.
     /// </summary>
-    void resendMessage();
+    void ResendMessage();
 
     /// <summary>
     /// Checks if the connection to the Ball Spinner device is established.
     /// </summary>
     /// <returns>True if connected, false otherwise.</returns>
-    bool isConnection();
+    bool IsConnected();
 
 
+}
+
+/// <summary>
+/// Flags of all types of metrics a ball spinner can output
+/// </summary>
+[Flags]
+public enum Metric
+{
+    /// <summary/>
+    None = 0,
+    /// <summary/>
+    MagnetometerX = 1<<0,
+    /// <summary/>
+    MagnetometerY = 1<<1,
+    /// <summary/>
+    MagnetometerZ = 1<<2,
+
+    /// <summary/>
+    RotationX = 1<<2,
+    /// <summary/>
+    RotationY = 1<<3,
+    /// <summary/>
+    RotationZ = 1<<4,
+
+    /// <summary/>
+    AccelerationX = 1<<5,
+    /// <summary/>
+    AccelerationY = 1<<6,
+    /// <summary/>
+    AccelerationZ = 1<<7,
+
+    /// <summary/>
+    Light = 1<<8
 }

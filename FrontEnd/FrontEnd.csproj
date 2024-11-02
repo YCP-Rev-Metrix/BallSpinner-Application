@@ -84,13 +84,28 @@
       <Compile Update="MainPage.xaml.cs">
         <DependentUpon>MainPage.xaml</DependentUpon>
       </Compile>
+      <Compile Update="BallSpinnerView.xaml.cs">
+        <DependentUpon>BallSpinnerView.xaml</DependentUpon>
+      </Compile>
+      <Compile Update="Pages\HelpView.xaml.cs">
+        <DependentUpon>HelpView.xaml</DependentUpon>
+      </Compile>
+      <Compile Update="Pages\NewBallSpinnerView.xaml.cs">
+        <DependentUpon>NewBallSpinnerView.xaml</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
       <MauiXaml Update="AlertPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
-      <MauiXaml Update="Pages\HelpPage.xaml">
+      <MauiXaml Update="BallSpinnerView.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="Pages\HelpView.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="Pages\NewBallSpinnerView.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
     </ItemGroup>
@@ -112,6 +127,10 @@
 
     <ItemGroup>
       <PRIResource Remove="NewFolder\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <MauiCss Remove="Resources\Raw\Pages\Style.css" />
     </ItemGroup>
 
 </Project>
