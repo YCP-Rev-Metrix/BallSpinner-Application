@@ -3,6 +3,7 @@ using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using RevMetrix.BallSpinner.BackEnd.Database;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 
@@ -29,8 +30,8 @@ public partial class MainPage : ContentPage
         _frontEnd = frontEnd;
         _database = database;
     }
-
-    private async void OnButtonClicked(object sender, EventArgs args)
+    
+    private async void OnLoginButtonClicked(object sender, EventArgs args)
     {
         _frontEnd.Login();
     }

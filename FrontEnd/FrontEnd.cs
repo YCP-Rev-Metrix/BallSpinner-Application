@@ -110,7 +110,7 @@ public class FrontEnd : IFrontEnd
         if (_newLoginWindow != null)
             return;
 
-        _newLoginWindow = new Window()
+        _newLoginWindow = new Window(new LoginPage())
         {
             Title = "LoginPage"
         };

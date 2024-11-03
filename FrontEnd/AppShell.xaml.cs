@@ -7,4 +7,9 @@ public partial class AppShell : Shell
     {
         InitializeComponent();
     }
+
+    public void SetContent(MainPage page)
+    {
+        Content = new MainPage();
+    }
 }

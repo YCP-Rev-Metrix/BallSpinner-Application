@@ -17,8 +17,9 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
+        
         MainPage = new AppShell();
-
+        
         FrontEnd = new FrontEnd();
         BackEnd = new Backend();
 
@@ -26,18 +27,16 @@ public partial class App : Application
 
         FrontEnd.Init(BackEnd);
         BackEnd.Init(FrontEnd, _database);
+        
+        MainPage.Loaded += MainPage_Loaded;
     }
 
-    /// <summary>
-    /// Called when the application is opens
-    /// </summary>
-    protected override void OnStart()
+    private void MainPage_Loaded(object? sender, EventArgs e)
     {
-        base.OnStart();
-
         _mainPage = (MainPage)((AppShell)MainPage!).CurrentPage;
         _mainPage.Init(FrontEnd, BackEnd.Database);
     }
+
 
     /// <summary>
     /// Called when the application is closing

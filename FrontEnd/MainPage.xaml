@@ -62,7 +62,7 @@
     <Grid>
         <ScrollView VerticalScrollBarVisibility="Always">
             <StackLayout>
-                <CollectionView ItemsSource="{Binding BallSpinners}">
+                <CollectionView IsEnabled="false" ItemsSource="{Binding BallSpinners}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <local:BallSpinnerView />
@@ -77,16 +77,9 @@
                     VerticalOptions="Center" />
 
                 <Button
-                    Clicked="OnButtonClicked"
+                    Clicked="OnLoginButtonClicked"
                     HorizontalOptions="Center"
                     Text="Login"
-                    VerticalOptions="Center" />
-                
-                <Label
-                    x:Name="label"
-                    FontSize="18"
-                    HorizontalOptions="Center"
-                    Text="Click the Button above"
                     VerticalOptions="Center" />
             </StackLayout>
         </ScrollView>

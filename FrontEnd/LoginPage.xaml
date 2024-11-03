@@ -5,17 +5,183 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:RevMetrix.BallSpinner.FrontEnd"
     Title="LoginPage">
-    
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
 
-        <Button
-            Clicked="OnLoginButtonClicked"
+    <HorizontalStackLayout
+    Padding="10,0,10,0"
+    HorizontalOptions="FillAndExpand"
+    VerticalOptions="Start">
+
+        <VerticalStackLayout
+        Margin="20"
+        Padding="20"
+        BackgroundColor="#f0f4f8"
+        HorizontalOptions="FillAndExpand"
+        SemanticProperties.HeadingLevel="Level2"
+        Spacing="10"
+        VerticalOptions="Start">
+
+            <!--  Form Heading  -->
+            <Label
+            Padding="10,5"
+            FontAttributes="Bold"
+            FontSize="24"
             HorizontalOptions="Center"
+            Text="Register"
+            TextColor="#43A5BE" />
+
+            <!--  Firstname Entry  -->
+            <Entry
+            x:Name="RegisterFirstName"
+            Margin="0,10,0,0"
+            BackgroundColor="White"
+            FontSize="16"
+            HeightRequest="50"
+            HorizontalOptions="FillAndExpand"
+            Placeholder="Firstname"
+            PlaceholderColor="#A9A9A9"
+            TextColor="#333333" />
+
+            <!--  Lastname Entry  -->
+            <Entry
+            x:Name="RegisterLastName"
+            Margin="0,10,0,0"
+            BackgroundColor="White"
+            FontSize="16"
+            HeightRequest="50"
+            HorizontalOptions="FillAndExpand"
+            Placeholder="Lastname"
+            PlaceholderColor="#A9A9A9"
+            TextColor="#333333" />
+
+            <!--  Username Entry  -->
+            <Entry
+            x:Name="RegisterUsername"
+            Margin="0,10,0,0"
+            BackgroundColor="White"
+            FontSize="16"
+            HeightRequest="50"
+            HorizontalOptions="FillAndExpand"
+            Placeholder="Username"
+            PlaceholderColor="#A9A9A9"
+            TextColor="#333333" />
+
+            <!--  Password Entry  -->
+            <Entry
+            x:Name="RegisterPassword"
+            Margin="0,10,0,0"
+            BackgroundColor="White"
+            FontSize="16"
+            HeightRequest="50"
+            HorizontalOptions="FillAndExpand"
+            IsPassword="True"
+            Placeholder="Password"
+            PlaceholderColor="#A9A9A9"
+            TextColor="#333333" />
+
+            <!--  Email Entry  -->
+            <Entry
+            x:Name="RegisterEmail"
+            Margin="0,10,0,0"
+            BackgroundColor="White"
+            FontSize="16"
+            HeightRequest="50"
+            HorizontalOptions="FillAndExpand"
+            Placeholder="Email"
+            PlaceholderColor="#A9A9A9"
+            TextColor="#333333" />
+
+            <!--  Phone Number Entry  -->
+            <Entry
+            x:Name="RegisterPhone"
+            Margin="0,10,0,0"
+            BackgroundColor="White"
+            FontSize="16"
+            HeightRequest="50"
+            HorizontalOptions="FillAndExpand"
+            Placeholder="Phone Number"
+            PlaceholderColor="#A9A9A9"
+            TextColor="#333333" />
+
+            <!--  Register Button  -->
+            <Button
+            Margin="0,20,0,0"
+            BackgroundColor="#43A5BE"
+            Clicked="OnRegisterButtonClicked"
+            CornerRadius="20"
+            FontAttributes="Bold"
+            FontSize="18"
+            HeightRequest="50"
+            HorizontalOptions="FillAndExpand"
+            Text="Register"
+            TextColor="White" />
+        </VerticalStackLayout>
+        <!--  Login Form  -->
+        <VerticalStackLayout
+        Margin="20"
+        Padding="20"
+        BackgroundColor="#F7F7F7"
+        HorizontalOptions="Center"
+        SemanticProperties.HeadingLevel="Level2"
+        Spacing="15"
+        VerticalOptions="Start">
+            <!--  Title  -->
+            <Label
+            FontAttributes="Bold"
+            FontSize="24"
+            HorizontalOptions="Center"
+            Text="Welcome Back!"
+            TextColor="#2C3E50" />
+
+            <!--  Username Entry  -->
+            <Entry
+            x:Name="LoginUsername"
+            BackgroundColor="#FFFFFF"
+            FontSize="16"
+            HeightRequest="50"
+            HorizontalOptions="Fill"
+            Placeholder="Username"
+            PlaceholderColor="#BDC3C7"
+            SemanticProperties.Description="Enter Username"
+            SemanticProperties.HeadingLevel="Level2"
+            Text=""
+            TextColor="#34495E" />
+
+            <!--  Password Entry  -->
+            <Entry
+            x:Name="LoginPassword"
+            BackgroundColor="#FFFFFF"
+            FontSize="16"
+            HeightRequest="50"
+            HorizontalOptions="Fill"
+            IsPassword="True"
+            Placeholder="Password"
+            PlaceholderColor="#BDC3C7"
+            SemanticProperties.Description="Enter Password"
+            SemanticProperties.HeadingLevel="Level2"
+            Text=""
+            TextColor="#34495E" />
+
+            <!--  Login Button  -->
+            <Button
+            Padding="10,0"
+            BackgroundColor="#43A5BE"
+            BorderColor="#2980B9"
+            BorderWidth="1"
+            Clicked="OnLoginButtonClicked"
+            CornerRadius="5"
+            FontSize="18"
+            HorizontalOptions="Center"
+            SemanticProperties.Hint="Log the user in when clicked"
             Text="Login"
-            VerticalOptions="Center" />
-    </VerticalStackLayout>
+            TextColor="White" />
+
+            <!--  Optional: Forgot Password Link  -->
+            <Label
+            FontSize="14"
+            HorizontalOptions="Center"
+            Text="Forgot your password?"
+            TextColor="#2980B9" />
+
+        </VerticalStackLayout>
+    </HorizontalStackLayout>
 </ContentPage>

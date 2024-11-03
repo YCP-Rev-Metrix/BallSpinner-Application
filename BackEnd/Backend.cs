@@ -20,7 +20,7 @@ public class Backend : IDisposable
     public void Init(IFrontEnd frontEnd, IDatabase database)
     {
         Console.WriteLine("BackEnd Init");
-        TCP tcp = new TCP();
+
         FrontEnd = frontEnd;
         Database = database;
     }
