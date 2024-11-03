@@ -3,6 +3,7 @@ using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using RevMetrix.BallSpinner.BackEnd.Database;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 
@@ -30,9 +31,27 @@ public partial class MainPage : ContentPage
         _database = database;
     }
 
-    private async void OnButtonClicked(object sender, EventArgs args)
+    private async void OnRegisterClicked(object sender, EventArgs args)
     {
-        await _database.LoginUser();
+        var firstname = RegisterFirstName.Text;
+        var lastname = RegisterLastName.Text;
+        var username = RegisterUsername.Text;
+        var password = RegisterPassword.Text;
+        var email = RegisterEmail.Text;
+        var phone = RegisterPhone.Text;
+        var token = await _database.RegisterUser(firstname, lastname, username, password, email, phone);
+        Console.WriteLine($"Auth: {token?.TokenA}");
+        Console.WriteLine($"Refresh: {token?.TokenB}");
+    }
+    
+    private async void OnLoginClicked(object sender, EventArgs args)
+    {
+        var username = LoginUsername.Text;
+        var password = LoginPassword.Text;
+        
+        var token = await _database.LoginUser(username, password);
+        Console.WriteLine($"Auth: {token?.TokenA}");
+        Console.WriteLine($"Refresh: {token?.TokenB}");
     }
 
     private void OnNewShotButtonClicked(object sender, EventArgs args)

@@ -1,3 +1,5 @@
+using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+
 namespace RevMetrix.BallSpinner.BackEnd;
 
 ///<Summary>
@@ -9,7 +11,7 @@ public interface IDatabase
     ///<Summary>
     /// Database method for logging in a user
     ///</Summary>
-    Task LoginUser();
+    Task<Token?> LoginUser(string username, string password);
     //Task DeleteSmartDot();
     //Task DeleteBallSpinner();
     //Task DeleteShot();
@@ -25,5 +27,5 @@ public interface IDatabase
     ///<Summary>
     /// Database method for getting a user registered
     ///</Summary>
-    Task Register();
+    Task<Token?> RegisterUser(string firstname, string lastname, string username, string password, string email, string phonenumber);
 }
