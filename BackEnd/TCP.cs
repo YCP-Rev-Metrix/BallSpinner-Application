@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -16,32 +17,44 @@ namespace RevMetrix.BallSpinner.BackEnd;
 /// </summary>
 public class TCP
 {
+    private TcpClient _client;
+
     /// <summary/>
     public TCP()
     {
+        _client = new TcpClient();
+
+        Connect();
+        Listen();
+    }
+
+    private async void Connect()
+    {
         try
         {
-            TcpClient tcpClient = new TcpClient();
-            string host = "10.127.7.27";
+            _client = new TcpClient();
+            string host = "10.127.7.20";
             int port = 8411;
             var reply = new Ping().Send(host);
-            tcpClient.Connect(host, port);
+            await _client.ConnectAsync(host, port);
 
-            /*byte[] buffer = new byte[1024];
-
-            tcpClient.Client.Send(Encoding.UTF8.GetBytes("Hello from windows!"));
-
-            while (true)
-            {
-                int size = tcpClient.Client.Receive(buffer);
-                var text = Encoding.UTF8.GetString(buffer, 0, size);
-                if (size > 0)
-                    Debug.WriteLine(text);
-            }*/
+            await _client.Client.SendAsync(Encoding.UTF8.GetBytes("Hello from the application!"));
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Console.WriteLine(e.ToString());
+        }
+    }
+
+    private async void Listen()
+    {
+        while (_client.Connected)
+        {
+            byte[] buffer = new byte[1024];
+            int size = await _client.Client.ReceiveAsync(buffer);
+
+            if (size > 0)
+                Debug.WriteLine(Encoding.UTF8.GetString(buffer, 0, size));
         }
     }
 }
