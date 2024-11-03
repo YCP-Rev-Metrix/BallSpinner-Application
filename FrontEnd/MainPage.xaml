@@ -51,7 +51,7 @@
             Text="Start" />
         <ToolbarItem
             Clicked="OnStopButtonClicked"
-            IsEnabled="false"
+            IsEnabled="true"
             Text="Stop" />
         <ToolbarItem
             Clicked="OnResetButtonClicked"
@@ -59,194 +59,202 @@
             Text="Reset" />
     </ContentPage.ToolbarItems>
 
-    <VerticalStackLayout Padding="30,0" Spacing="25">
+    <Grid>
         <ScrollView VerticalScrollBarVisibility="Always">
-            <CollectionView ItemsSource="{Binding BallSpinners}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <local:BallSpinnerView />
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </ScrollView>
+            <StackLayout>
+                <CollectionView IsEnabled="false" ItemsSource="{Binding BallSpinners}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <local:BallSpinnerView />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
-        <Button
-            Clicked="OnAddBallSpinnerButtonClicked"
-            HorizontalOptions="Center"
-            Text="Add BallSpinner"
-            VerticalOptions="Center" />
-        
-        <HorizontalStackLayout VerticalOptions="Start"
-                       HorizontalOptions="FillAndExpand"
-                       Padding="10,0,10,0">
-            
-            <VerticalStackLayout VerticalOptions="Start"
-                                 HorizontalOptions="FillAndExpand"
-                                 Padding="20"
-                                 BackgroundColor="#f0f4f8"
-                                 Spacing="10"
-                                 Margin="20"
-                                 SemanticProperties.HeadingLevel="Level2">
-                
-                <!-- Form Heading -->
-                <Label Text="Register"
-                       FontSize="24"
-                       FontAttributes="Bold"
-                       TextColor="#43A5BE"
-                       HorizontalOptions="Center"
-                       Padding="10,5" />
+                <Button
+                    Clicked="OnAddBallSpinnerButtonClicked"
+                    HorizontalOptions="Center"
+                    Text="Add BallSpinner"
+                    VerticalOptions="Center" />
 
-                <!-- Firstname Entry -->
-                <Entry x:Name="RegisterFirstName"
-                       Placeholder="Firstname"
-                       PlaceholderColor="#A9A9A9"
-                       BackgroundColor="White"
-                       TextColor="#333333"
-                       FontSize="16"
-                       Margin="0,10,0,0"
-                       HeightRequest="50"
-                       HorizontalOptions="FillAndExpand"
-                       />
+                <HorizontalStackLayout
+                    Padding="10,0,10,0"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="Start">
 
-                <!-- Lastname Entry -->
-                <Entry x:Name="RegisterLastName"
-                       Placeholder="Lastname"
-                       PlaceholderColor="#A9A9A9"
-                       BackgroundColor="White"
-                       TextColor="#333333"
-                       FontSize="16"
-                       Margin="0,10,0,0"
-                       HeightRequest="50"
-                       HorizontalOptions="FillAndExpand"
-                       />
-
-                <!-- Username Entry -->
-                <Entry x:Name="RegisterUsername"
-                       Placeholder="Username"
-                       PlaceholderColor="#A9A9A9"
-                       BackgroundColor="White"
-                       TextColor="#333333"
-                       FontSize="16"
-                       Margin="0,10,0,0"
-                       HeightRequest="50"
-                       HorizontalOptions="FillAndExpand"
-                       />
-
-                <!-- Password Entry -->
-                <Entry x:Name="RegisterPassword"
-                       Placeholder="Password"
-                       IsPassword="True"
-                       PlaceholderColor="#A9A9A9"
-                       BackgroundColor="White"
-                       TextColor="#333333"
-                       FontSize="16"
-                       Margin="0,10,0,0"
-                       HeightRequest="50"
-                       HorizontalOptions="FillAndExpand"
-                       />
-
-                <!-- Email Entry -->
-                <Entry x:Name="RegisterEmail"
-                       Placeholder="Email"
-                       PlaceholderColor="#A9A9A9"
-                       BackgroundColor="White"
-                       TextColor="#333333"
-                       FontSize="16"
-                       Margin="0,10,0,0"
-                       HeightRequest="50"
-                       HorizontalOptions="FillAndExpand"
-                       />
-
-                <!-- Phone Number Entry -->
-                <Entry x:Name="RegisterPhone"
-                       Placeholder="Phone Number"
-                       PlaceholderColor="#A9A9A9"
-                       BackgroundColor="White"
-                       TextColor="#333333"
-                       FontSize="16"
-                       Margin="0,10,0,0"
-                       HeightRequest="50"
-                       HorizontalOptions="FillAndExpand"
-                       />
-
-                <!-- Register Button -->
-                <Button Text="Register"
-                        FontAttributes="Bold"
-                        FontSize="18"
-                        BackgroundColor="#43A5BE"
-                        TextColor="White"
+                    <VerticalStackLayout
+                        Margin="20"
+                        Padding="20"
+                        BackgroundColor="#f0f4f8"
                         HorizontalOptions="FillAndExpand"
-                        CornerRadius="20"
-                        HeightRequest="50"
-                        Margin="0,20,0,0"
-                        Clicked="OnRegisterClicked"
-                        />
-            </VerticalStackLayout>
-           <!-- Login Form -->
-            <VerticalStackLayout VerticalOptions="Start"
-                                 HorizontalOptions="Center"
-                                 Padding="20"
-                                 Spacing="15"
-                                 BackgroundColor="#F7F7F7"
-                                 Margin="20"
-                                 SemanticProperties.HeadingLevel="Level2">
-                <!-- Title -->
-                <Label Text="Welcome Back!"
-                       FontSize="24"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center"
-                       TextColor="#2C3E50" />
+                        SemanticProperties.HeadingLevel="Level2"
+                        Spacing="10"
+                        VerticalOptions="Start">
 
-                <!-- Username Entry -->
-                <Entry Text=""
-                       x:Name="LoginUsername"
-                       Placeholder="Username"
-                       HorizontalOptions="Fill"
-                       PlaceholderColor="#BDC3C7"
-                       SemanticProperties.HeadingLevel="Level2"
-                       SemanticProperties.Description="Enter Username"
-                       FontSize="16"
-                       HeightRequest="50"
-                       BackgroundColor="#FFFFFF"
-                       TextColor="#34495E"
-                       />
+                        <!--  Form Heading  -->
+                        <Label
+                            Padding="10,5"
+                            FontAttributes="Bold"
+                            FontSize="24"
+                            HorizontalOptions="Center"
+                            Text="Register"
+                            TextColor="#43A5BE" />
 
-                <!-- Password Entry -->
-                <Entry Text=""
-                       x:Name="LoginPassword"
-                       Placeholder="Password"
-                       IsPassword="True"
-                       HorizontalOptions="Fill"
-                       PlaceholderColor="#BDC3C7"
-                       SemanticProperties.HeadingLevel="Level2"
-                       SemanticProperties.Description="Enter Password"
-                       FontSize="16"
-                       HeightRequest="50"
-                       BackgroundColor="#FFFFFF"
-                       TextColor="#34495E"
-                       />
+                        <!--  Firstname Entry  -->
+                        <Entry
+                            x:Name="RegisterFirstName"
+                            Margin="0,10,0,0"
+                            BackgroundColor="White"
+                            FontSize="16"
+                            HeightRequest="50"
+                            HorizontalOptions="FillAndExpand"
+                            Placeholder="Firstname"
+                            PlaceholderColor="#A9A9A9"
+                            TextColor="#333333" />
 
-                <!-- Login Button -->
-                <Button Text="Login"
-                        SemanticProperties.Hint="Log the user in when clicked"
-                        Clicked="OnLoginClicked"
+                        <!--  Lastname Entry  -->
+                        <Entry
+                            x:Name="RegisterLastName"
+                            Margin="0,10,0,0"
+                            BackgroundColor="White"
+                            FontSize="16"
+                            HeightRequest="50"
+                            HorizontalOptions="FillAndExpand"
+                            Placeholder="Lastname"
+                            PlaceholderColor="#A9A9A9"
+                            TextColor="#333333" />
+
+                        <!--  Username Entry  -->
+                        <Entry
+                            x:Name="RegisterUsername"
+                            Margin="0,10,0,0"
+                            BackgroundColor="White"
+                            FontSize="16"
+                            HeightRequest="50"
+                            HorizontalOptions="FillAndExpand"
+                            Placeholder="Username"
+                            PlaceholderColor="#A9A9A9"
+                            TextColor="#333333" />
+
+                        <!--  Password Entry  -->
+                        <Entry
+                            x:Name="RegisterPassword"
+                            Margin="0,10,0,0"
+                            BackgroundColor="White"
+                            FontSize="16"
+                            HeightRequest="50"
+                            HorizontalOptions="FillAndExpand"
+                            IsPassword="True"
+                            Placeholder="Password"
+                            PlaceholderColor="#A9A9A9"
+                            TextColor="#333333" />
+
+                        <!--  Email Entry  -->
+                        <Entry
+                            x:Name="RegisterEmail"
+                            Margin="0,10,0,0"
+                            BackgroundColor="White"
+                            FontSize="16"
+                            HeightRequest="50"
+                            HorizontalOptions="FillAndExpand"
+                            Placeholder="Email"
+                            PlaceholderColor="#A9A9A9"
+                            TextColor="#333333" />
+
+                        <!--  Phone Number Entry  -->
+                        <Entry
+                            x:Name="RegisterPhone"
+                            Margin="0,10,0,0"
+                            BackgroundColor="White"
+                            FontSize="16"
+                            HeightRequest="50"
+                            HorizontalOptions="FillAndExpand"
+                            Placeholder="Phone Number"
+                            PlaceholderColor="#A9A9A9"
+                            TextColor="#333333" />
+
+                        <!--  Register Button  -->
+                        <Button
+                            Margin="0,20,0,0"
+                            BackgroundColor="#43A5BE"
+                            Clicked="OnRegisterClicked"
+                            CornerRadius="20"
+                            FontAttributes="Bold"
+                            FontSize="18"
+                            HeightRequest="50"
+                            HorizontalOptions="FillAndExpand"
+                            Text="Register"
+                            TextColor="White" />
+                    </VerticalStackLayout>
+                    <!--  Login Form  -->
+                    <VerticalStackLayout
+                        Margin="20"
+                        Padding="20"
+                        BackgroundColor="#F7F7F7"
                         HorizontalOptions="Center"
-                        Padding="10,0"
-                        BackgroundColor="#43A5BE"
-                        TextColor="White"
-                        FontSize="18"
-                        CornerRadius="5"
-                        BorderColor="#2980B9"
-                        BorderWidth="1" />
-                
-                <!-- Optional: Forgot Password Link -->
-                <Label Text="Forgot your password?"
-                       HorizontalOptions="Center"
-                       TextColor="#2980B9"
-                       FontSize="14" />
+                        SemanticProperties.HeadingLevel="Level2"
+                        Spacing="15"
+                        VerticalOptions="Start">
+                        <!--  Title  -->
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="24"
+                            HorizontalOptions="Center"
+                            Text="Welcome Back!"
+                            TextColor="#2C3E50" />
 
-            </VerticalStackLayout>
-        </HorizontalStackLayout>
+                        <!--  Username Entry  -->
+                        <Entry
+                            x:Name="LoginUsername"
+                            BackgroundColor="#FFFFFF"
+                            FontSize="16"
+                            HeightRequest="50"
+                            HorizontalOptions="Fill"
+                            Placeholder="Username"
+                            PlaceholderColor="#BDC3C7"
+                            SemanticProperties.Description="Enter Username"
+                            SemanticProperties.HeadingLevel="Level2"
+                            Text=""
+                            TextColor="#34495E" />
 
-    </VerticalStackLayout>
+                        <!--  Password Entry  -->
+                        <Entry
+                            x:Name="LoginPassword"
+                            BackgroundColor="#FFFFFF"
+                            FontSize="16"
+                            HeightRequest="50"
+                            HorizontalOptions="Fill"
+                            IsPassword="True"
+                            Placeholder="Password"
+                            PlaceholderColor="#BDC3C7"
+                            SemanticProperties.Description="Enter Password"
+                            SemanticProperties.HeadingLevel="Level2"
+                            Text=""
+                            TextColor="#34495E" />
+
+                        <!--  Login Button  -->
+                        <Button
+                            Padding="10,0"
+                            BackgroundColor="#43A5BE"
+                            BorderColor="#2980B9"
+                            BorderWidth="1"
+                            Clicked="OnLoginClicked"
+                            CornerRadius="5"
+                            FontSize="18"
+                            HorizontalOptions="Center"
+                            SemanticProperties.Hint="Log the user in when clicked"
+                            Text="Login"
+                            TextColor="White" />
+
+                        <!--  Optional: Forgot Password Link  -->
+                        <Label
+                            FontSize="14"
+                            HorizontalOptions="Center"
+                            Text="Forgot your password?"
+                            TextColor="#2980B9" />
+
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>
