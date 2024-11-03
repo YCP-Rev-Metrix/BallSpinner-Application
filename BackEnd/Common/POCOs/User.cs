@@ -29,7 +29,9 @@ public class User
     /// <summary>
     /// Get and set lastname
     /// </summary>
-    public string? lastname { get; set; } 
+    public string? lastname { get; set; }
+
+    /// <summary>
     /// Get and set Username
     /// </summary>
     public string? username { get; set; } 
