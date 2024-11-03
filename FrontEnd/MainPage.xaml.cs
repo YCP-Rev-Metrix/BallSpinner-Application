@@ -32,7 +32,7 @@ public partial class MainPage : ContentPage
 
     private async void OnButtonClicked(object sender, EventArgs args)
     {
-        await _database.LoginUser();
+        _frontEnd.Login();
     }
 
     private void OnNewShotButtonClicked(object sender, EventArgs args)

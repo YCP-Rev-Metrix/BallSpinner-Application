@@ -81,6 +81,7 @@
                     HorizontalOptions="Center"
                     Text="Login"
                     VerticalOptions="Center" />
+                
                 <Label
                     x:Name="label"
                     FontSize="18"

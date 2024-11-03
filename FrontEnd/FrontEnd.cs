@@ -22,6 +22,7 @@ public class FrontEnd : IFrontEnd
     private WebViewServer _webViewServer;
     private Window? _helpWindow;
     private Window? _newBallSpinnerWindow;
+    private Window? _newLoginWindow;
 
     /// <summary>
     /// Called before <see cref="Backend"/> is initialized
@@ -102,5 +103,21 @@ public class FrontEnd : IFrontEnd
             Application.Current.CloseWindow(_newBallSpinnerWindow);
 
         return result;
+    }
+
+    public void Login()
+    {
+        if (_newLoginWindow != null)
+            return;
+
+        _newLoginWindow = new Window()
+        {
+            Title = "LoginPage"
+        };
+        Application.Current!.OpenWindow(_newLoginWindow);
+        _newLoginWindow.Destroying += (object? sender, EventArgs e) =>
+        {
+            _newLoginWindow = null;
+        };
     }
 }
