@@ -110,7 +110,7 @@ public class FrontEnd : IFrontEnd
         if (_newLoginWindow != null)
             return;
 
-        _newLoginWindow = new Window(new LoginPage())
+        _newLoginWindow = new Window(new LoginPage(this, Backend.Database))
         {
             Title = "LoginPage"
         };
