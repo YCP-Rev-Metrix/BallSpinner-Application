@@ -25,13 +25,16 @@ public class Simulation : IBallSpinner
     ///<inheritdoc/>
     public event Action? SendRejection;
 
-    private Timer _timer = null!;
+    private Timer? _timer;
 
     /// <summary>
     /// 
     /// Disposes of resources used by the simulation component.
     /// </summary>
-    public void Dispose() { }
+    public void Dispose()
+    {
+        _timer?.Dispose();
+    }
 
     ///<inheritdoc/>
     public void InitializeConnection()

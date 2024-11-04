@@ -15,7 +15,7 @@ namespace RevMetrix.BallSpinner.BackEnd;
 /// <summary>
 /// TCP client that connects to the ball spinner device
 /// </summary>
-public class TCP
+public class TCP : IDisposable
 {
     private TcpClient _client;
 
@@ -24,11 +24,16 @@ public class TCP
     {
         _client = new TcpClient();
 
-        Connect();
-        Listen();
+        Task.Run(Connect);
     }
 
-    private async void Connect()
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        _client.Dispose();
+    }
+
+    private async Task Connect()
     {
         try
         {
@@ -44,6 +49,8 @@ public class TCP
         {
             Console.WriteLine(e.ToString());
         }
+
+        Listen();
     }
 
     private async void Listen()

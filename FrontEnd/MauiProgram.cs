@@ -49,8 +49,10 @@ public static class MauiProgram
                         }
                         else
                         {
-                            //popups should always be above the main page
-                            overlappedPresenter.IsAlwaysOnTop = true;
+                            //popup
+                            overlappedPresenter.IsMaximizable = false;
+                            overlappedPresenter.IsMinimizable = false;
+                            overlappedPresenter.IsResizable = false;
                         }
 
                         //pages should always start centered to the window

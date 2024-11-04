@@ -43,7 +43,7 @@ public class FrontEnd : IFrontEnd
 
         Backend = backend;
     }
-    
+
     public void Dispose()
     {
         _webViewServer.Dispose();
@@ -86,20 +86,20 @@ public class FrontEnd : IFrontEnd
         TaskCompletionSource<IBallSpinner?> task = new TaskCompletionSource<IBallSpinner?>();
         var newBallSpinnerView = new NewBallSpinnerView(task);
         _newBallSpinnerWindow = new Window(newBallSpinnerView)
-            {
-                Title = "Add Ball Spinner"
-            };
+        {
+            Title = "Add Ball Spinner"
+        };
         Application.Current!.OpenWindow(_newBallSpinnerWindow);
         _newBallSpinnerWindow.Destroying += (object? sender, EventArgs e) =>
         {
             _newBallSpinnerWindow = null;
 
-            if(!task.Task.IsCompleted)
+            if (!task.Task.IsCompleted)
                 task.SetResult(null);
         };
 
         var result = await task.Task;
-        if(_newBallSpinnerWindow != null)
+        if (_newBallSpinnerWindow != null)
             Application.Current.CloseWindow(_newBallSpinnerWindow);
 
         return result;
@@ -113,11 +113,12 @@ public class FrontEnd : IFrontEnd
         _newLoginWindow = new Window(new LoginPage(this, Backend.Database))
         {
             Title = "LoginPage",
-            Width = 300,
+            Width = 600,
             Height = 400,
             X = 100,
             Y = 100
-    };
+        };
+
         Application.Current!.OpenWindow(_newLoginWindow);
         _newLoginWindow.Destroying += (object? sender, EventArgs e) =>
         {

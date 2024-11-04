@@ -20,6 +20,11 @@ public partial class BallSpinnerView : ContentView
         _viewModel.TopMiddleView.DataReceived += (metric, value, timeFromStart) => { DataReceived(TopMiddleView, metric, value, timeFromStart); };
     }
 
+    private void OnRemoveBallSpinnerButton(object sender, EventArgs args)
+    {
+        _viewModel.MainPage.RemoveBallSpinner(_viewModel);
+    }
+
     private void DataReceived(WebView webview, Metric metric, float value, float timeFromStart)
     {
         try

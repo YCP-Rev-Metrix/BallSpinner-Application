@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
-public partial class BallSpinnerViewModel : INotifyPropertyChanged
+public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
 {
     public string Name 
     {
@@ -34,8 +34,11 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public BallSpinnerViewModel(IBallSpinner ballspinner)
+    public MainPage MainPage { get; }
+
+    public BallSpinnerViewModel(MainPage mainPage, IBallSpinner ballspinner)
     {
+        MainPage = mainPage;
         _ballSpinner = ballspinner;
 
         LeftView = new BallViewModel(_ballSpinner);
@@ -59,5 +62,10 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged
     protected virtual void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    public void Dispose()
+    {
+        _ballSpinner.Dispose();
     }
 }

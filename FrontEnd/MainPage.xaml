@@ -62,7 +62,10 @@
     <Grid>
         <ScrollView VerticalScrollBarVisibility="Always">
             <StackLayout>
-                <CollectionView IsEnabled="false" ItemsSource="{Binding BallSpinners}">
+                <CollectionView
+                    ItemsSource="{Binding BallSpinners}"
+                    ItemsUpdatingScrollMode="KeepLastItemInView"
+                    VerticalScrollBarVisibility="Never">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <local:BallSpinnerView />
@@ -71,12 +74,14 @@
                 </CollectionView>
 
                 <Button
+                    Margin="10"
                     Clicked="OnAddBallSpinnerButtonClicked"
                     HorizontalOptions="Center"
                     Text="Add BallSpinner"
                     VerticalOptions="Center" />
 
                 <Button
+                    Margin="10"
                     Clicked="OnLoginButtonClicked"
                     HorizontalOptions="Center"
                     Text="Login"

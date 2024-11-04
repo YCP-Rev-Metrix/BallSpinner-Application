@@ -6,7 +6,29 @@
     xmlns:local="clr-namespace:RevMetrix.BallSpinner.FrontEnd">
     <Border>
         <VerticalStackLayout>
-            <Label Text="{Binding Name}" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackLayout Grid.Column="0">
+                    <Label x:Name="Label" Text="{Binding Name}" />
+                </StackLayout>
+                <StackLayout
+                    Grid.Column="2"
+                    HeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
+                    HorizontalOptions="End">
+                    <Button
+                        Padding="-14,-10"
+                        Clicked="OnRemoveBallSpinnerButton"
+                        HeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
+                        MaximumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
+                        MinimumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
+                        Text="🗙" />
+                </StackLayout>
+            </Grid>
+
             <Grid HeightRequest="325">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />

@@ -15,7 +15,7 @@ public partial class MainPage : ContentPage
     private FrontEnd _frontEnd = null!;
     private IDatabase _database = null!;
 
-    public ObservableCollection<BallSpinnerViewModel> BallSpinners { get; } = new() { new BallSpinnerViewModel(new Simulation()) };
+    public ObservableCollection<BallSpinnerViewModel> BallSpinners { get; } = new();
 
     /// <summary/>
     public MainPage()
@@ -30,7 +30,26 @@ public partial class MainPage : ContentPage
         _frontEnd = frontEnd;
         _database = database;
     }
-    
+
+    public void RemoveBallSpinner(BallSpinnerViewModel ballSpinner)
+    {
+        BallSpinners.Remove(ballSpinner);
+        ballSpinner.Dispose();
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+
+        foreach (var ballSpinner in BallSpinners)
+        {
+            ballSpinner.Dispose();
+        }
+
+        BallSpinners.Clear();
+    }
+
+
     private async void OnLoginButtonClicked(object sender, EventArgs args)
     {
         _frontEnd.Login();
@@ -99,7 +118,7 @@ public partial class MainPage : ContentPage
 
         if(ballSpinner != null)
         {
-            BallSpinners.Add(new BallSpinnerViewModel(ballSpinner));
+            BallSpinners.Add(new BallSpinnerViewModel(this, ballSpinner));
             OnPropertyChanged(nameof(BallSpinners));
         }
     }
