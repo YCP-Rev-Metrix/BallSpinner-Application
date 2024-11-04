@@ -37,7 +37,7 @@ public class BallSpinner : IBallSpinner
     /// <inheritdoc/>
     public void Dispose()
     {
-        
+        _connection?.Dispose();
     }
 
     /// <inheritdoc/>

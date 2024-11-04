@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage 
+<ContentPage
     x:Class="RevMetrix.BallSpinner.FrontEnd.LoginPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -7,98 +7,61 @@
     Title="LoginPage">
 
     <HorizontalStackLayout
-    Padding="10,0,10,0"
-    HorizontalOptions="Center"
-    VerticalOptions="Center">
+        Padding="10,0,10,0"
+        HorizontalOptions="Center"
+        VerticalOptions="Center">
         <VerticalStackLayout>
             <!--  Title  -->
             <Label
+                Margin="0,0,0,10"
                 FontAttributes="Bold"
                 FontSize="24"
                 HorizontalOptions="Center"
-                Text="Login/Register"
-                TextColor="#2C3E50" />
-            <!-- Extra space -->
-            <Rectangle
-                   HeightRequest="10" />
-            
+                Text="Login/Register" />
+
             <!--  Username Entry  -->
             <Entry
                 x:Name="UsernameField"
-                BackgroundColor="#FFFFFF"
-                FontSize="16"
-                HeightRequest="50"
+                Margin="0,0,0,10"
                 HorizontalOptions="Fill"
                 Placeholder="Username"
-                PlaceholderColor="#BDC3C7"
                 SemanticProperties.Description="Enter Username"
                 SemanticProperties.HeadingLevel="Level2"
-                Text=""
-                TextColor="#34495E" />
-            
-            <!-- Extra space -->
-            <Rectangle
-                 HeightRequest="10" />
+                Text="" />
 
             <!--  Password Entry  -->
             <Entry
                 x:Name="PasswordField"
-                BackgroundColor="#FFFFFF"
-                FontSize="16"
-                HeightRequest="50"
+                Margin="0,0,0,20"
                 HorizontalOptions="Fill"
                 IsPassword="True"
                 Placeholder="Password"
-                PlaceholderColor="#BDC3C7"
                 SemanticProperties.Description="Enter Password"
                 SemanticProperties.HeadingLevel="Level2"
-                Text=""
-                TextColor="#34495E" />
-
-            <!-- Extra space -->
-            <Rectangle
-                HeightRequest="20"/>
+                Text="" />
 
             <!--  Login Button  -->
             <Button
-                Padding="10,0"
-                BackgroundColor="#43A5BE"
-                BorderColor="#2980B9"
-                BorderWidth="1"
+                Margin="0,0,0,10"
                 Clicked="OnLoginButtonClicked"
-                CornerRadius="5"
-                FontSize="18"
                 HorizontalOptions="Center"
                 SemanticProperties.Hint="Log the user in when clicked"
-                Text="Login"
-                TextColor="White"
-                WidthRequest="100" />
+                Text="Login" />
 
-            <!-- Extra space -->
-            <Rectangle
-                HeightRequest="10" />
-            
-            <!--  Login Button  -->
+            <!--  Register Button  -->
             <Button
                 Padding="10,0"
-                BackgroundColor="#43A5BE"
-                BorderColor="#2980B9"
-                BorderWidth="1"
                 Clicked="OnRegisterButtonClicked"
-                CornerRadius="5"
-                FontSize="18"
                 HorizontalOptions="Center"
-                SemanticProperties.Hint="Log the user in when clicked"
-                Text="Register"
-                TextColor="White" 
-                WidthRequest="100" />
+                SemanticProperties.Hint="Register a new user when clicked"
+                Text="Register" />
 
             <!--  Optional: Forgot Password Link  -->
             <Label
+                Margin="10"
                 FontSize="14"
                 HorizontalOptions="Center"
-                Text="Forgot your password?"
-                TextColor="#2980B9" />
+                Text="Forgot your password?" />
 
         </VerticalStackLayout>
     </HorizontalStackLayout>
