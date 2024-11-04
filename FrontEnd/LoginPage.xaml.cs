@@ -64,8 +64,9 @@ public partial class LoginPage : ContentPage
                 Console.WriteLine($"Auth: {token?.TokenA}");
                 Console.WriteLine($"Refresh: {token?.TokenB}");
 
-                //TODO: Close window
+                //TODO: Test close login
                 await DisplayAlert("Success", "Login Successful", "Yipiee!");
+                _frontEnd.CloseLoginWindow();
             } 
             catch(Exception e) {
                 await DisplayAlert("Alert", e.Message, "BOOOOOOOOOOOOOOOOOOOOOOOOO");
