@@ -25,23 +25,32 @@ public partial class LoginPage : ContentPage
 
     private async void OnRegisterButtonClicked(object sender, EventArgs args)
     {
-        var firstname = RegisterFirstName.Text;
-        var lastname = RegisterLastName.Text;
-        var username = RegisterUsername.Text;
-        var password = RegisterPassword.Text;
-        var email = RegisterEmail.Text;
-        var phone = RegisterPhone.Text;
-        var token = await _database.RegisterUser(firstname, lastname, username, password, email, phone);
-        Console.WriteLine($"Auth: {token?.TokenA}");
-        Console.WriteLine($"Refresh: {token?.TokenB}");
+        var username = UsernameField.Text;
+        var password = PasswordField.Text;
+
+        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+        {
+            await DisplayAlert("Alert", "You have not entered either a username and/or password", "Fine");
+        }
+        else
+        {
+            try
+            {
+                var token = await _database.RegisterUser("a", "a", username, password, "a", "a");
+                Console.WriteLine($"Auth: {token?.TokenA}");
+                Console.WriteLine($"Refresh: {token?.TokenB}");
+            }
+            catch (Exception e)
+            {
+                await DisplayAlert("Alert", e.Message, "BOOOOOOOOOOOOOOOOOOOOOOOOO");
+            }
+        }
     }
 
     private async void OnLoginButtonClicked(object sender, EventArgs args)
     {
-        //string username = "AAAA";
-        //string password = "BBBB";
-        string username = LoginUsername.Text;
-        string password = LoginPassword.Text;
+        string username = UsernameField.Text;
+        string password = PasswordField.Text;
 
         if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
         {

@@ -112,8 +112,12 @@ public class FrontEnd : IFrontEnd
 
         _newLoginWindow = new Window(new LoginPage(this, Backend.Database))
         {
-            Title = "LoginPage"
-        };
+            Title = "LoginPage",
+            Width = 300,
+            Height = 400,
+            X = 100,
+            Y = 100
+    };
         Application.Current!.OpenWindow(_newLoginWindow);
         _newLoginWindow.Destroying += (object? sender, EventArgs e) =>
         {
