@@ -20,7 +20,7 @@ public abstract class TestBase
         FrontEnd = new MockFrontEnd();
         BackEnd = new Backend();
 
-        Database = new MockDatabase();
+        Database = new Database(DatabaseTypes.FAKEDATABASE);
 
         FrontEnd.Init(BackEnd);
         BackEnd.Init(FrontEnd, Database);
