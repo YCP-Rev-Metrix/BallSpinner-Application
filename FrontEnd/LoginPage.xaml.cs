@@ -36,7 +36,7 @@ public partial class LoginPage : ContentPage
         {
             try
             {
-                var token = await _database.RegisterUser("a", "a", username, password, "a", "a");
+                var token = await _database.RegisterUser("a", "a", username, password, "a@gmail.com", "a");
                 Console.WriteLine($"Auth: {token?.TokenA}");
                 Console.WriteLine($"Refresh: {token?.TokenB}");
             }
@@ -63,7 +63,7 @@ public partial class LoginPage : ContentPage
                 var token = await _database.LoginUser(username, password);
                 Console.WriteLine($"Auth: {token?.TokenA}");
                 Console.WriteLine($"Refresh: {token?.TokenB}");
-
+                
                 //TODO: Close window
                 await DisplayAlert("Success", "Login Successful", "Yipiee!");
             } 
