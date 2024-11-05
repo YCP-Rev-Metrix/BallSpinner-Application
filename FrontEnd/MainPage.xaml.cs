@@ -20,6 +20,8 @@ public partial class MainPage : ContentPage
     /// <summary/>
     public MainPage()
     {
+        BallSpinners.Add(new BallSpinnerViewModel(this, new Simulation()));
+
         InitializeComponent();
 
         BindingContext = this;
