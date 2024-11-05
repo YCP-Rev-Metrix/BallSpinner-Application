@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,6 +28,18 @@ public class Simulation : IBallSpinner
     public event Action? SendRejection;
 
     private Timer? _timer;
+
+    // New position and speed properties
+
+
+    public Vector3 Position = Vector3.Zero; 
+    
+    public Vector3 velocity = Vector3.Zero;
+    private Vector3 acceleration = new Vector3(0, 0, 1f);// Constant forward acceleration along Z
+
+    public Vector3 AngularVelocity = new Vector3(0.1f,0.5f,1f);
+    public Quaternion Rotation = Quaternion.Identity;
+
 
     /// <summary>
     /// 
@@ -72,10 +86,40 @@ public class Simulation : IBallSpinner
         TimeSpan frequency = TimeSpan.FromSeconds(1 / 60f);
         _timer = new Timer((o) =>
         {
+
+            Rotation *= Quaternion.CreateFromYawPitchRoll(
+                AngularVelocity.Y * (float)frequency.TotalSeconds, // Yaw
+                AngularVelocity.X * (float)frequency.TotalSeconds, // Pitch
+                AngularVelocity.Z * (float)frequency.TotalSeconds  // Roll
+            );
+
+
+            Vector3 eulerAngles = GetEulerAngles(Rotation);
+
+            // Update time and calculate rotation data
             float time = (float)DateTime.UtcNow.TimeOfDay.TotalSeconds;
-            DataParser.DataReceived(Metric.RotationX, MathF.Sin(time), time);
-            DataParser.DataReceived(Metric.RotationY, MathF.Cos(time), time);
-            DataParser.DataReceived(Metric.RotationZ, -MathF.Sin(time), time);
+            DataParser.DataReceived(Metric.RotationX, eulerAngles.X, time);
+            DataParser.DataReceived(Metric.RotationY, eulerAngles.Y, time);
+            DataParser.DataReceived(Metric.RotationZ, eulerAngles.Z, time);
+
+            // Update velocity based on constant acceleration
+            velocity += acceleration * (float)frequency.TotalSeconds; ;
+
+            // Update position based on current velocity and time elapsed
+            Position += velocity * (float)frequency.TotalSeconds;
+
+
+            // Log velocity and acceleration to the console
+            Debug.WriteLine($"Time: {time}");
+            Debug.WriteLine($"Position: X={Position.X}, Y={Position.Y}, Z={Position.Z}");
+            Debug.WriteLine($"Velocity: X={velocity.X}, Y={velocity.Y}, Z={velocity.Z}");
+            Debug.WriteLine($"Acceleration: X={acceleration.X}, Y={acceleration.Y}, Z={acceleration.Z}");
+
+            // Send updated velocity data as Acceleration metrics
+            DataParser.DataReceived(Metric.AccelerationX, velocity.X, time);
+            DataParser.DataReceived(Metric.AccelerationY, velocity.Y, time);
+            DataParser.DataReceived(Metric.AccelerationZ, velocity.Z, time);
+
         }, null, frequency, frequency);
     }
 
@@ -83,5 +127,16 @@ public class Simulation : IBallSpinner
     public void Stop()
     {
         _timer?.Dispose();
+    }
+
+    private Vector3 GetEulerAngles(Quaternion rotation)
+    {
+        // Convert quaternion to euler angles (yaw, pitch, roll)
+        float yaw = MathF.Atan2(2f * (rotation.Y * rotation.Z + rotation.W * rotation.X),
+                                 rotation.W * rotation.W - rotation.X * rotation.X - rotation.Y * rotation.Y + rotation.Z * rotation.Z);
+        float pitch = MathF.Asin(-2f * (rotation.X * rotation.Z - rotation.W * rotation.Y));
+        float roll = MathF.Atan2(2f * (rotation.X * rotation.Y + rotation.W * rotation.Z),
+                                  rotation.W * rotation.W + rotation.X * rotation.X - rotation.Y * rotation.Y - rotation.Z * rotation.Z);
+        return new Vector3(yaw, pitch, roll);
     }
 }

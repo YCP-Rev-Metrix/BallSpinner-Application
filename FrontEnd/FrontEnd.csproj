@@ -133,7 +133,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <MauiCss Remove="Resources\Raw\Pages\Style.css" />
+        <Folder Include="Resources\Raw\Pages\Simulation\Assets\" />
+        <Folder Include="Resources\Raw\Pages\Simulation\Textures\" />
+	    <MauiCss Remove="Resources\Raw\Pages\Style.css" />
     </ItemGroup>
+
+   
 
 </Project>
