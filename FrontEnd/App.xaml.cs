@@ -23,7 +23,7 @@ public partial class App : Application
         FrontEnd = new FrontEnd();
         BackEnd = new Backend();
 
-        _database = new Database();
+        _database = new Database(DatabaseTypes.REALDATABASE);
 
         FrontEnd.Init(BackEnd);
         BackEnd.Init(FrontEnd, _database);

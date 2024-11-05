@@ -125,4 +125,12 @@ public class FrontEnd : IFrontEnd
             _newLoginWindow = null;
         };
     }
+
+    public void CloseLoginWindow()
+    {
+        if (_newLoginWindow != null)
+        {
+            Application.Current!.CloseWindow(_newLoginWindow);
+        }
+    }
 }
