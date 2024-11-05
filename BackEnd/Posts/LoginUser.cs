@@ -18,8 +18,7 @@ public partial class Database: IDatabase
 
         // Create the request content
         var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-
-        var response = await Client.PostAsync("https://api.revmetrix.io/api/posts/Authorize", content);
+        var response = await Client.PostAsync(BaseAPIURL + "/posts/Authorize", content);
         response.EnsureSuccessStatusCode();
 
         var responseBody = await response.Content.ReadAsStringAsync();
