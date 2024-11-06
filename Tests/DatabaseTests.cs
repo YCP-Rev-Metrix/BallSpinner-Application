@@ -42,7 +42,7 @@ public class DatabaseTests : TestBase
     }
 
     [Fact]
-    private async void LoginTests()
+    private async void SuccessfulLoginTests()
     {
 
         var token = await Database.LoginUser("string", "string");
@@ -57,6 +57,36 @@ public class DatabaseTests : TestBase
         Assert.NotNull(token);
         Assert.Equal(tokenA, expectedTokenA);
         Assert.Equal(tokenB, expectedTokenB);
+    }
+    [Fact]
+    private async void UnsuccessfulLoginTests()
+    {
+          // Ensure method thorws exception when server responds with 403
+          await Assert.ThrowsAsync<HttpRequestException>(() => Database.LoginUser("incorrect", "incorrect"));
+    }
+    [Fact]
+    private async void SuccessfulRegisterTests()
+    {
+            // successful register example
+            var token = await Database.RegisterUser("string", "string", "string", "string", "string", "string");
+    
+            string tokenA = token.TokenA;
+            string tokenB = token.TokenB;
+    
+            string expectedTokenA =
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJqdGkiOiI5ZjJhN2M3My03MDQ3LTQ2ZGItODNjNC1mYWIzZjNlYzA1Y2QiLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MjM4LyIsImF1ZCI6IlJldk1ldHJpeCIsInJvbGUiOiJ1c2VyIiwibmJmIjoxNzMwNzYzOTU4LCJleHAiOjE3MzA3Njc1NTgsImlhdCI6MTczMDc2Mzk1OH0.XcB0zrR_7FsNmfzAPcdChiYTtvYhw2aXX2cfSQJCl9s";
+            string expectedTokenB = "d8E4THTgIuPbLXxo+1bXolJxhWUz3Pr0mzdme9HemBM=";
+    
+            Assert.NotNull(token);
+            Assert.Equal(tokenA, expectedTokenA);
+            Assert.Equal(tokenB, expectedTokenB);
+    }
+    
+    [Fact]
+    private async void UnsuccessfulRegisterTests()
+    {
+          // Ensure method thorws exception when server responds with 403
+          await Assert.ThrowsAsync<HttpRequestException>(() => Database.RegisterUser("string", "string", "403Response", "403Response", "string", "string"));
     }
     
 }

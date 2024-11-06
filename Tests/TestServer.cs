@@ -17,10 +17,11 @@ class TestServer
         Console.WriteLine("Listening on http://localhost:8080/");
 
         // Route handlers
-        var routeHandlers = new Dictionary<string, Func<HttpListenerRequest, object>>
+        var routeHandlers = new Dictionary<string, Func<HttpListenerRequest, HttpListenerResponse, object>>
         {
             { "/hello", HelloHandler },
-            { "/posts/Authorize", LoginHandler }
+            { "/posts/Authorize", LoginHandler },
+            {"/posts/Register", RegisterHandler}
         };
 
         // Listen asynchronously
@@ -34,12 +35,11 @@ class TestServer
             {
                 if (routeHandlers.TryGetValue(request.Url.AbsolutePath, out var handler))
                 {
-                    var responseData = handler(request);
+                    var responseData = handler(request, response);
                     JsonSerializerOptions options = new(JsonSerializerDefaults.Web);
                     string json = JsonSerializer.Serialize(responseData, options);
 
                     response.ContentType = "application/json";
-                    response.StatusCode = 200;
                     byte[] buffer = Encoding.UTF8.GetBytes(json);
                     response.ContentLength64 = buffer.Length;
                     await response.OutputStream.WriteAsync(buffer, 0, buffer.Length);
@@ -67,14 +67,14 @@ class TestServer
     }
 
     // Route handler functions
-    static object HelloHandler(HttpListenerRequest request)
+    static object HelloHandler(HttpListenerRequest request, HttpListenerResponse response)
     {
         return new { message = "Hello, world!" };
     }
     /*
      * For username = string and password = string
      */
-    static object LoginHandler(HttpListenerRequest request)
+    static object LoginHandler(HttpListenerRequest request, HttpListenerResponse response)
     {
         // get request info
         Stream body = request.InputStream;
@@ -96,9 +96,23 @@ class TestServer
                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJqdGkiOiI5ZjJhN2M3My03MDQ3LTQ2ZGItODNjNC1mYWIzZjNlYzA1Y2QiLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MjM4LyIsImF1ZCI6IlJldk1ldHJpeCIsInJvbGUiOiJ1c2VyIiwibmJmIjoxNzMwNzYzOTU4LCJleHAiOjE3MzA3Njc1NTgsImlhdCI6MTczMDc2Mzk1OH0.XcB0zrR_7FsNmfzAPcdChiYTtvYhw2aXX2cfSQJCl9s";
             tokenB =
                 "d8E4THTgIuPbLXxo+1bXolJxhWUz3Pr0mzdme9HemBM=";
+            response.StatusCode = 200;
+            return new { tokenA = tokenA, tokenB = tokenB };
         }
-        
-        return new { tokenA = tokenA, tokenB = tokenB };
+        else 
+        {
+            response.StatusCode = 403;
+            return new {
+                          type = "string",
+                          title = "string",
+                          status = 0,
+                          detail = "string",
+                          instance = "string",
+                          additionalProp1 = "string",
+                          additionalProp2 = "string",
+                          additionalProp3 = "string"
+                        };
+        }
     }
     /*
      * For the following registration information:
@@ -111,11 +125,45 @@ class TestServer
             "phoneNumber": "string"
         }
      */
-    static object RegisterHandler(HttpListenerRequest request)
+    static object RegisterHandler(HttpListenerRequest request, HttpListenerResponse response)
     {
-        string tokenA =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJqdGkiOiI0NTFiZDdhNy1iMGVhLTQ3NTctYTQ0Ni1lODhhM2RkYWYxMzkiLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MjM4LyIsImF1ZCI6IlJldk1ldHJpeCIsInJvbGUiOiJ1c2VyIiwibmJmIjoxNzMwNzYzODI2LCJleHAiOjE3MzA3Njc0MjYsImlhdCI6MTczMDc2MzgyNn0.29pzZLHMKs8LUlkfXk7POOqXIkTX_2vbWdsd0cYrDe0";
-        string tokenB = "fV93U2OOOtaKrQM0THhWIjkfmb+gSSgWp0F+2pn7vJE=";
-        return new { tokenA = tokenA, tokenB = tokenB };
+        // get request info
+         Stream body = request.InputStream;
+         Encoding encoding = request.ContentEncoding;
+         StreamReader reader = new StreamReader(body, encoding);
+                
+         // Convert the body data to a string
+         string bodyData = reader.ReadToEnd();
+         // Deserialize bodyData into Credentials object
+         User user = JsonSerializer.Deserialize<User>(bodyData);
+                
+         // Declare token variables that will hold response token
+         string tokenA = null;
+         string tokenB = null;
+         // Return specific tokens based on the input !IMPORTANT! NEED A MORE EFFICIENT WAY OF DOING THIS
+         if (user.username == "string" && user.password == "string")
+            {
+                tokenA =
+                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJqdGkiOiI5ZjJhN2M3My03MDQ3LTQ2ZGItODNjNC1mYWIzZjNlYzA1Y2QiLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MjM4LyIsImF1ZCI6IlJldk1ldHJpeCIsInJvbGUiOiJ1c2VyIiwibmJmIjoxNzMwNzYzOTU4LCJleHAiOjE3MzA3Njc1NTgsImlhdCI6MTczMDc2Mzk1OH0.XcB0zrR_7FsNmfzAPcdChiYTtvYhw2aXX2cfSQJCl9s";
+                tokenB =
+                    "d8E4THTgIuPbLXxo+1bXolJxhWUz3Pr0mzdme9HemBM=";
+                response.StatusCode = 200;
+                return new { tokenA = tokenA, tokenB = tokenB };
+            }
+         if (user.username == "403Response" && user.password == "403Response")
+             {
+                response.StatusCode = 403;
+                return new {
+                              type = "string",
+                              title = "string",
+                              status = 0,
+                              detail = "string",
+                              instance = "string",
+                              additionalProp1 = "string",
+                              additionalProp2 = "string",
+                              additionalProp3 = "string"
+                            };
+                }
+             return null;
     }
 }
