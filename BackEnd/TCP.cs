@@ -18,12 +18,16 @@ namespace RevMetrix.BallSpinner.BackEnd;
 public class TCP : IDisposable
 {
     private TcpClient _client;
+    private IPAddress _address;
+
+    private const int BUFFER_SIZE = 1024;
+    private const ushort PORT = 8411;
 
     /// <summary/>
-    public TCP()
+    public TCP(IPAddress address)
     {
         _client = new TcpClient();
-
+        _address = address;
         Task.Run(Connect);
     }
 
@@ -37,12 +41,7 @@ public class TCP : IDisposable
     {
         try
         {
-            _client = new TcpClient();
-            string host = "10.127.7.20";
-            int port = 8411;
-            var reply = new Ping().Send(host);
-            await _client.ConnectAsync(host, port);
-
+            await _client.ConnectAsync(_address, PORT);
             await _client.Client.SendAsync(Encoding.UTF8.GetBytes("Hello from the application!"));
         }
         catch (Exception e)
@@ -57,7 +56,7 @@ public class TCP : IDisposable
     {
         while (_client.Connected)
         {
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[BUFFER_SIZE];
             int size = await _client.Client.ReceiveAsync(buffer);
 
             if (size > 0)

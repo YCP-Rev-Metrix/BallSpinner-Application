@@ -1,4 +1,5 @@
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
+using System.Net;
 
 namespace RevMetrix.BallSpinner.FrontEnd.Pages;
 
@@ -20,6 +21,6 @@ public partial class NewBallSpinnerView : ContentPage
 
 	public void AddBallSpinnerButton(object sender, EventArgs args)
 	{
-        _task.SetResult(new BackEnd.BallSpinner.BallSpinner());
+        _task.SetResult(new BackEnd.BallSpinner.BallSpinner(IPAddress.Parse("10.127.7.20")));
     }
 }

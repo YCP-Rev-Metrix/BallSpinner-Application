@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,10 +28,12 @@ public class BallSpinner : IBallSpinner
     public event Action? SendRejection;
 
     private TCP? _connection;
+    private IPAddress _address;
 
     /// <summary />
-    public BallSpinner()
+    public BallSpinner(IPAddress address)
     {
+        _address = address;
         InitializeConnection();
     }
 
@@ -46,7 +49,7 @@ public class BallSpinner : IBallSpinner
         if (IsConnected())
             return;
 
-        _connection = new TCP();
+        _connection = new TCP(_address);
     }
 
     /// <inheritdoc/>
