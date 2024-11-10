@@ -50,7 +50,28 @@ scene.add(gridHelperLarge);
 
 window.addEventListener('resize', onWindowResize);
 
+
+//Point at which the arrow starts.
+const origin = new THREE.Vector3(0, 0, 0);
+
+// length of the arrow.Default is 1.
+const length = 0.2;
+
+//hexadecimal value to define color.
+const hex = 0xffff00;
+
+const arrowHelper = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), mesh.position, length, hex);
+
+scene.add(arrowHelper);
+
 function render() {
+    const dir = new THREE.Vector3(0, 1, 0);  // Initial arrow direction in local space
+    dir.applyQuaternion(mesh.quaternion);    // Apply the ball's rotation quaternion
+    arrowHelper.setDirection(dir);           // Update arrow helper's direction
+
+    // Keep the arrow at the center of the ball
+    arrowHelper.position.copy(mesh.position);
+
     renderer.render(scene, camera);
 }
 

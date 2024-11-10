@@ -76,7 +76,7 @@ scene.add(mesh);
 
 // Animation function with forward movement
 let lastTime = 0;
-const forwardSpeed = 0.001; // Adjust this speed as needed
+//const forwardSpeed = 0.001; // Adjust this speed as needed
 
 function animate(time) {
     const deltaTime = time - lastTime;

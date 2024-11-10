@@ -37,7 +37,7 @@ public class Simulation : IBallSpinner
     public Vector3 velocity = Vector3.Zero;
     private Vector3 acceleration = new Vector3(0, 0, 1f);// Constant forward acceleration along Z
 
-    public Vector3 AngularVelocity = new Vector3(0.1f,0.5f,1f);
+    public Vector3 AngularVelocity = new Vector3(0.1f,0.0f,1f);
     public Quaternion Rotation = Quaternion.Identity;
 
 
