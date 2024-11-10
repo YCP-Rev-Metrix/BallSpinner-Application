@@ -93,27 +93,28 @@ public enum Metric
 {
     /// <summary/>
     None = 0,
-    /// <summary/>
-    MagnetometerX = 1<<0,
-    /// <summary/>
-    MagnetometerY = 1<<1,
-    /// <summary/>
-    MagnetometerZ = 1<<2,
 
     /// <summary/>
-    RotationX = 1<<2,
+    MagnetometerX = 1 << 0,
     /// <summary/>
-    RotationY = 1<<3,
+    MagnetometerY = 1 << 1,
     /// <summary/>
-    RotationZ = 1<<4,
+    MagnetometerZ = 1 << 2,
 
     /// <summary/>
-    AccelerationX = 1<<5,
+    RotationX = 1 << 3,
     /// <summary/>
-    AccelerationY = 1<<6,
+    RotationY = 1 << 4,
     /// <summary/>
-    AccelerationZ = 1<<7,
+    RotationZ = 1 << 5,
 
     /// <summary/>
-    Light = 1<<8
+    AccelerationX = 1 << 6,
+    /// <summary/>
+    AccelerationY = 1 << 7,
+    /// <summary/>
+    AccelerationZ = 1 << 8,
+
+    /// <summary/>
+    Light = 1 << 9
 }

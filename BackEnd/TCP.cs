@@ -59,6 +59,17 @@ public class TCP : IDisposable
             byte[] buffer = new byte[BUFFER_SIZE];
             int size = await _client.Client.ReceiveAsync(buffer);
 
+            if (size <= 0)
+                return;
+
+            //Format
+            //Byte 0 = Message type
+            //Byte 1-2 = Message size (Maximum 65,536 bytes)
+            //
+
+            byte messageType = buffer[0];
+            int messageSize = buffer[1] + (buffer[2] << sizeof(byte));
+
             if (size > 0)
                 Debug.WriteLine(Encoding.UTF8.GetString(buffer, 0, size));
         }
