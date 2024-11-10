@@ -4,13 +4,27 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <VerticalStackLayout HorizontalOptions="Center">
+        
         <Button
             Margin="10"
             Clicked="AddSimulationButton"
             Text="Add Simulation" />
-        <Button
-            Margin="10"
-            Clicked="AddBallSpinnerButton"
-            Text="Connect Ball Spinner" />
+        <HorizontalStackLayout>
+            <Label
+                Margin="0,0,0,10"
+                FontAttributes="Bold"
+                FontSize="16"
+                HorizontalOptions="Center"
+                Text="Connect Ball Spinner: " />
+            <VerticalStackLayout Margin="20,0,0,30" >
+                <Entry x:Name="IPAddr"
+                        Placeholder="IP Address"
+                        Text=""/>
+                <Button
+                    Margin="10"
+                    Clicked="AddBallSpinnerButton"
+                    Text="Connect Ball Spinner" />
+            </VerticalStackLayout>
+        </HorizontalStackLayout>
     </VerticalStackLayout>
 </ContentPage>

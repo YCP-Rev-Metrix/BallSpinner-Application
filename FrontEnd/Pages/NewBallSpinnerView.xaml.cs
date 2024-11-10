@@ -19,8 +19,23 @@ public partial class NewBallSpinnerView : ContentPage
 		_task.SetResult(new Simulation());
     }
 
-	public void AddBallSpinnerButton(object sender, EventArgs args)
+	public async void AddBallSpinnerButton(object sender, EventArgs args)
 	{
-        _task.SetResult(new BackEnd.BallSpinner.BallSpinner(IPAddress.Parse("10.127.7.20")));
+        var addr = IPAddr.Text;
+		if (IPAddr == null)
+		{
+			await DisplayAlert("Alert", "You have not entered an IP address", "Fine");
+		}
+		else
+		{
+			try
+			{
+				_task.SetResult(new BackEnd.BallSpinner.BallSpinner(IPAddress.Parse(addr)));
+			}
+            catch (Exception e)
+            {
+                await DisplayAlert("Alert", e.Message, "BOOOOOOOOOOOOOOOOOOOOOOOOO");
+            }
+        }
     }
 }
