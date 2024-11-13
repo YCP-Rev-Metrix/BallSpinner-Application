@@ -23,6 +23,7 @@ public class FrontEnd : IFrontEnd
     private Window? _helpWindow;
     private Window? _newBallSpinnerWindow;
     private Window? _newLoginWindow;
+    private Window? _newInitialValuesWindow;
 
     /// <summary>
     /// Called before <see cref="Backend"/> is initialized
@@ -87,7 +88,11 @@ public class FrontEnd : IFrontEnd
         var newBallSpinnerView = new NewBallSpinnerView(task);
         _newBallSpinnerWindow = new Window(newBallSpinnerView)
         {
-            Title = "Add Ball Spinner"
+            Title = "Add Ball Spinner",
+            Width = 600,
+            Height = 400,
+            X = 100,
+            Y = 100
         };
         Application.Current!.OpenWindow(_newBallSpinnerWindow);
         _newBallSpinnerWindow.Destroying += (object? sender, EventArgs e) =>
@@ -131,6 +136,31 @@ public class FrontEnd : IFrontEnd
         if (_newLoginWindow != null)
         {
             Application.Current!.CloseWindow(_newLoginWindow);
+        }
+    }
+
+    public void InitialValues()
+    {
+        if (_newInitialValuesWindow != null)
+            return;
+
+        _newInitialValuesWindow = new Window(new InitialValues())
+        {
+            Title = "InputValuesPage"
+        };
+
+        Application.Current!.OpenWindow(_newInitialValuesWindow);
+        _newInitialValuesWindow.Destroying += (object? sender, EventArgs e) =>
+        {
+            _newLoginWindow = null;
+        };
+    }
+
+    public void CloseInitialValuesWindow()
+    {
+        if (_newLoginWindow != null)
+        {
+            Application.Current!.CloseWindow(_newInitialValuesWindow);
         }
     }
 }

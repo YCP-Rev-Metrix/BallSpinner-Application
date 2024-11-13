@@ -81,7 +81,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="MainPage.xaml.cs">
+      <Compile Update="Pages\MainPage.xaml.cs">
         <DependentUpon>MainPage.xaml</DependentUpon>
       </Compile>
       <Compile Update="BallSpinnerView.xaml.cs">
@@ -102,7 +102,13 @@
       <MauiXaml Update="BallSpinnerView.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
-      <MauiXaml Update="LoginPage.xaml">
+      <MauiXaml Update="Pages\CloudManagementPage.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="Pages\InitialValues.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="Pages\LoginPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
       <MauiXaml Update="Pages\HelpView.xaml">

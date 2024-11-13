@@ -59,7 +59,7 @@ public partial class MainPage : ContentPage
 
     private void OnNewShotButtonClicked(object sender, EventArgs args)
     {
-        throw new NotImplementedException();
+        _frontEnd.InitialValues();
     }
 
     private void OnLoadShotButtonClicked(object sender, EventArgs args)
