@@ -16,8 +16,11 @@ public partial class BallSpinnerView : ContentView
         base.OnBindingContextChanged();
 
         _viewModel = (BallSpinnerViewModel)BindingContext;
-        _viewModel.LeftView.DataReceived += (metric, value, timeFromStart) => { DataReceived(LeftView, metric, value, timeFromStart); };
-        _viewModel.TopMiddleView.DataReceived += (metric, value, timeFromStart) => { DataReceived(TopMiddleView, metric, value, timeFromStart); };
+        _viewModel.LeftView.DataReceived += (metric, value, timeFromStart) => { DataReceived(_viewModel.LeftView, LeftView, metric, value, timeFromStart); };
+        _viewModel.TopMiddleView.DataReceived += (metric, value, timeFromStart) => { DataReceived(_viewModel.TopMiddleView, TopMiddleView, metric, value, timeFromStart); };
+        _viewModel.TopRightView.DataReceived += (metric, value, timeFromStart) => { DataReceived(_viewModel.TopRightView, TopRightView, metric, value, timeFromStart); };
+        _viewModel.BottomMiddleView.DataReceived += (metric, value, timeFromStart) => { DataReceived(_viewModel.BottomMiddleView, BottomMiddleView, metric, value, timeFromStart); };
+        _viewModel.BottomRightView.DataReceived += (metric, value, timeFromStart) => { DataReceived(_viewModel.BottomRightView, BottomRightView, metric, value, timeFromStart); };
     }
 
     private void OnRemoveBallSpinnerButton(object sender, EventArgs args)
@@ -25,8 +28,11 @@ public partial class BallSpinnerView : ContentView
         _viewModel.MainPage.RemoveBallSpinner(_viewModel);
     }
 
-    private void DataReceived(WebView webview, Metric metric, float value, float timeFromStart)
+    private void DataReceived(IDataViewModel model, WebView webview, Metric metric, float value, float timeFromStart)
     {
+        if (!model.Metrics.HasFlag(metric))
+            return;
+
         try
         {
             //Need to switch to a web connection, this is crazy slow!

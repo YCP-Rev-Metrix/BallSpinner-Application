@@ -37,7 +37,7 @@ public class Simulation : IBallSpinner
     public Vector3 velocity = Vector3.Zero;
     private Vector3 acceleration = new Vector3(0, 0, 1f);// Constant forward acceleration along Z
 
-    public Vector3 AngularVelocity = new Vector3(0.1f,0.5f,1f);
+    public Vector3 AngularVelocity = new Vector3(0.1f,0.0f,1f);
     public Quaternion Rotation = Quaternion.Identity;
 
 
@@ -83,7 +83,7 @@ public class Simulation : IBallSpinner
     ///<inheritdoc/>
     public void Start()
     {
-        TimeSpan frequency = TimeSpan.FromSeconds(1 / 60f);
+        TimeSpan frequency = TimeSpan.FromSeconds(1 / 30f);
         _timer = new Timer((o) =>
         {
 
@@ -92,7 +92,6 @@ public class Simulation : IBallSpinner
                 AngularVelocity.X * (float)frequency.TotalSeconds, // Pitch
                 AngularVelocity.Z * (float)frequency.TotalSeconds  // Roll
             );
-
 
             Vector3 eulerAngles = GetEulerAngles(Rotation);
 
@@ -103,11 +102,10 @@ public class Simulation : IBallSpinner
             DataParser.DataReceived(Metric.RotationZ, eulerAngles.Z, time);
 
             // Update velocity based on constant acceleration
-            velocity += acceleration * (float)frequency.TotalSeconds; ;
+            velocity += acceleration * (float)frequency.TotalSeconds;
 
             // Update position based on current velocity and time elapsed
             Position += velocity * (float)frequency.TotalSeconds;
-
 
             // Log velocity and acceleration to the console
             Debug.WriteLine($"Time: {time}");
@@ -116,10 +114,19 @@ public class Simulation : IBallSpinner
             Debug.WriteLine($"Acceleration: X={acceleration.X}, Y={acceleration.Y}, Z={acceleration.Z}");
 
             // Send updated velocity data as Acceleration metrics
-            DataParser.DataReceived(Metric.AccelerationX, velocity.X, time);
-            DataParser.DataReceived(Metric.AccelerationY, velocity.Y, time);
-            DataParser.DataReceived(Metric.AccelerationZ, velocity.Z, time);
+            DataParser.DataReceived(Metric.AccelerationX, acceleration.X, time);
+            DataParser.DataReceived(Metric.AccelerationY, acceleration.Y, time);
+            DataParser.DataReceived(Metric.AccelerationZ, acceleration.Z, time);
 
+            // Send magnetometer data (where Z-Forward is north)
+            Vector3 magnetometer = Vector3.TransformNormal(Vector3.UnitZ, Matrix4x4.CreateFromQuaternion(Rotation));
+            DataParser.DataReceived(Metric.MagnetometerX, magnetometer.X, time);
+            DataParser.DataReceived(Metric.MagnetometerY, magnetometer.Y, time);
+            DataParser.DataReceived(Metric.MagnetometerZ, magnetometer.Z, time);
+
+            // Send light data (where Y-Up is brightest)
+            float light = Vector3.Dot(Vector3.TransformNormal(Vector3.UnitZ, Matrix4x4.CreateFromQuaternion(Rotation)), Vector3.UnitY);
+            DataParser.DataReceived(Metric.Light, light, time);
         }, null, frequency, frequency);
     }
 

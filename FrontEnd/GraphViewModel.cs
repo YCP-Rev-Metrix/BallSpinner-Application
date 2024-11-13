@@ -8,8 +8,12 @@ using System.Threading.Tasks;
 namespace RevMetrix.BallSpinner.FrontEnd;
 public class GraphViewModel : WebDataViewModel
 {
-    public GraphViewModel(IBallSpinner ballSpinner) : base(ballSpinner)
+    public string Name { get; }
+
+    public GraphViewModel(IBallSpinner ballSpinner, string name, Metric metrics) : base(ballSpinner)
     {
+        Name = name;
+        Metrics = metrics;
     }
 
     public override string Source => "http://localhost:8081/Pages/ChartJS/ChartJS.html";

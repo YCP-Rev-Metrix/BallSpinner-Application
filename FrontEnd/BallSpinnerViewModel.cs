@@ -42,10 +42,10 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         _ballSpinner = ballspinner;
 
         LeftView = new BallViewModel(_ballSpinner);
-        TopMiddleView = new GraphViewModel(_ballSpinner);
-        BottomMiddleView = new GraphViewModel(_ballSpinner);
-        TopRightView = new GraphViewModel(_ballSpinner);
-        BottomRightView = new GraphViewModel(_ballSpinner);
+        TopMiddleView = new GraphViewModel(_ballSpinner, "Acceleration", Metric.AccelerationX | Metric.AccelerationY | Metric.AccelerationZ);
+        BottomMiddleView = new GraphViewModel(_ballSpinner, "Rotation", Metric.RotationX | Metric.RotationY | Metric.RotationZ);
+        TopRightView = new GraphViewModel(_ballSpinner, "Magnetometer", Metric.MagnetometerX | Metric.MagnetometerY | Metric.MagnetometerZ);
+        BottomRightView = new GraphViewModel(_ballSpinner, "Light", Metric.Light);
     }
 
     public void Start()

@@ -67,13 +67,17 @@ function getTime() {
 }
 
 window.data = function (metric, value, time) {
-    if (metric === 'RotationX') {
+    if (metric.endsWith('X')) {
         chart.data.labels.push(time);
         chart.data.datasets[0].data.push(value);
-    } else if (metric === 'RotationY') {
+    } else if (metric.endsWith('Y')) {
         chart.data.datasets[1].data.push(value);
-    } else if (metric === 'RotationZ') {
+    } else if (metric.endsWith('Z')) {
         chart.data.datasets[2].data.push(value);
+    }
+    else {
+        chart.data.labels.push(time);
+        chart.data.datasets[0].data.push(value);
     }
 
     if (chart.data.labels.length > 300)

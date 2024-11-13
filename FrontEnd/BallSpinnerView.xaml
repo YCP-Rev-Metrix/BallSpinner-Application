@@ -58,13 +58,22 @@
                             Source="{Binding TopMiddleView.Source}" />
                     </Border>
                     <Border Grid.Row="0" Grid.Column="1">
-                        <WebView InputTransparent="True" Source="{Binding BottomMiddleView.Source}" />
+                        <WebView
+                            x:Name="BottomMiddleView"
+                            InputTransparent="True"
+                            Source="{Binding BottomMiddleView.Source}" />
                     </Border>
                     <Border Grid.Row="1" Grid.Column="0">
-                        <WebView InputTransparent="True" Source="{Binding TopRightView.Source}" />
+                        <WebView
+                            x:Name="TopRightView"
+                            InputTransparent="True"
+                            Source="{Binding TopRightView.Source}" />
                     </Border>
                     <Border Grid.Row="1" Grid.Column="1">
-                        <WebView InputTransparent="True" Source="{Binding BottomRightView.Source}" />
+                        <WebView
+                            x:Name="BottomRightView"
+                            InputTransparent="True"
+                            Source="{Binding BottomRightView.Source}" />
                     </Border>
                 </Grid>
             </Grid>
