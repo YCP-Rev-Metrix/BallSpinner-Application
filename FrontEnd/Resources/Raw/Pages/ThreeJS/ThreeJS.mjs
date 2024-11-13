@@ -60,17 +60,75 @@ const length = 0.2;
 //hexadecimal value to define color.
 const hex = 0xffff00;
 
+
+//arrow at the center of the ball
 const arrowHelper = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), mesh.position, length, hex);
 
 scene.add(arrowHelper);
 
+// arrow out the side
+const arrowHelpe = new THREE.ArrowHelper(new THREE.Vector3(1,0, 0), mesh.position, length, hex);
+
+scene.add(arrowHelpe);
+
+// arrow out the side
+const arrowHelp = new THREE.ArrowHelper(new THREE.Vector3(0, 2, 0), mesh.position, length, hex);
+
+scene.add(arrowHelp);
+
+// arrow out the side
+const arrowHel = new THREE.ArrowHelper(new THREE.Vector3(0, 2, 0), mesh.position, length, hex);
+
+scene.add(arrowHel);
+
+// arrow out the side
+const arrowHe = new THREE.ArrowHelper(new THREE.Vector3(0, 2, 0), mesh.position, length, hex);
+
+scene.add(arrowHe);
+
+// arrow out the side
+const arrowH = new THREE.ArrowHelper(new THREE.Vector3(0, 2, 0), mesh.position, length, hex);
+
+scene.add(arrowH);
+
 function render() {
+    //arrow at the center of the ball
     const dir = new THREE.Vector3(0, 1, 0);  // Initial arrow direction in local space
     dir.applyQuaternion(mesh.quaternion);    // Apply the ball's rotation quaternion
     arrowHelper.setDirection(dir);           // Update arrow helper's direction
-
-    // Keep the arrow at the center of the ball
     arrowHelper.position.copy(mesh.position);
+
+    // arrow out the side 
+    const diy = new THREE.Vector3(1, 0, 0);  // Initial arrow direction in local space
+    diy.applyQuaternion(mesh.quaternion);    // Apply the ball's rotation quaternion
+    arrowHelpe.setDirection(diy);           // Update arrow helper's direction
+    arrowHelpe.position.copy(mesh.position);
+
+    // arrow out the side 
+    const die = new THREE.Vector3(0, 0, 1);  // Initial arrow direction in local space
+    die.applyQuaternion(mesh.quaternion);    // Apply the ball's rotation quaternion
+    arrowHelp.setDirection(die);           // Update arrow helper's direction
+    arrowHelp.position.copy(mesh.position);
+
+    // arrow out the side 
+    const dia = new THREE.Vector3(-1, 0, 0);  // Initial arrow direction in local space
+    dia.applyQuaternion(mesh.quaternion);    // Apply the ball's rotation quaternion
+    arrowHel.setDirection(dia);           // Update arrow helper's direction
+    arrowHel.position.copy(mesh.position);
+
+    // arrow out the side 
+    const dis = new THREE.Vector3(0, 0, -1);  // Initial arrow direction in local space
+    dis.applyQuaternion(mesh.quaternion);    // Apply the ball's rotation quaternion
+    arrowHe.setDirection(dis);           // Update arrow helper's direction
+    arrowHe.position.copy(mesh.position);
+
+    // arrow out the side 
+    const dit = new THREE.Vector3(0, -1, 0);  // Initial arrow direction in local space
+    dit.applyQuaternion(mesh.quaternion);    // Apply the ball's rotation quaternion
+    arrowH.setDirection(dit);           // Update arrow helper's direction
+    arrowH.position.copy(mesh.position);
+
+
 
     renderer.render(scene, camera);
 }
