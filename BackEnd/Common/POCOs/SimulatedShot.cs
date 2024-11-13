@@ -4,5 +4,6 @@ namespace RevMetrix.BallSpinner.BackEnd.Common.POCOs;
 ///</Summary>
 public class SimulatedShot
 {
-    
+    public string Name { get; set; }
+    public string DateSaved { get; set; }
 }
