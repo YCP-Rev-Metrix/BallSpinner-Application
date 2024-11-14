@@ -93,6 +93,14 @@
                     HorizontalOptions="Center"
                     Text="New Shot"
                     VerticalOptions="Center" />
+                
+                <Button
+                    Margin="10"
+                    Clicked="OnCloudManagementButtonClicked"
+                    HorizontalOptions="Center"
+                    Text="Cloud Management"
+                    VerticalOptions="Center" />
+                
             </StackLayout>
         </ScrollView>
     </Grid>

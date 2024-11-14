@@ -4,9 +4,64 @@
              x:Class="RevMetrix.BallSpinner.FrontEnd.CloudManagementPage"
              Title="CloudManagementPage">
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
+        <Label
+            Margin="0,30,0,0"
+            FontSize="26"
+            Text="Manage Throws"
             HorizontalOptions="Center" />
+        
+        <Grid Margin="30,20,20,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="100" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" 
+                Text="Name" />
+            <Label Grid.Column="1" 
+                Text="Date Saved" />
+        </Grid>
+    
+        <!-- The folowing grid defines and displays the content set by BindingContent, namely Shots-->
+        <Grid Margin="20,0,20,20">
+            <ListView ItemsSource="{Binding Shots}"
+                      VerticalScrollBarVisibility="Always">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="100" />
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" 
+                                    Text="{Binding Name}" />
+                                <Label Grid.Column="1" 
+                                    Text="{Binding DateSaved}" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+        
+        <HorizontalStackLayout>
+            <Button
+                Margin="10"
+                Clicked="LoadSim"
+                HorizontalOptions="Fill"
+                Text="Submit" />
+            <Button
+                Margin="10"
+                Clicked="LoadInitial"
+                HorizontalOptions="Fill"
+                Text="Submit" />
+        </HorizontalStackLayout>
     </VerticalStackLayout>
+
 </ContentPage>

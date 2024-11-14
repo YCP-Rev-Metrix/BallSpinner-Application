@@ -24,6 +24,7 @@ public class FrontEnd : IFrontEnd
     private Window? _newBallSpinnerWindow;
     private Window? _newLoginWindow;
     private Window? _newInitialValuesWindow;
+    private Window? _newCloudManagementWindow;
 
     /// <summary>
     /// Called before <see cref="Backend"/> is initialized
@@ -152,15 +153,32 @@ public class FrontEnd : IFrontEnd
         Application.Current!.OpenWindow(_newInitialValuesWindow);
         _newInitialValuesWindow.Destroying += (object? sender, EventArgs e) =>
         {
-            _newLoginWindow = null;
+            _newCloudManagementWindow = null;
         };
     }
 
     public void CloseInitialValuesWindow()
     {
-        if (_newLoginWindow != null)
+        if (_newInitialValuesWindow != null)
         {
             Application.Current!.CloseWindow(_newInitialValuesWindow);
         }
+    }
+
+    public void CloudManagement()
+    {
+        if (_newCloudManagementWindow != null)
+            return;
+
+        _newCloudManagementWindow = new Window(new CloudManagementPage())
+        {
+            Title = "InputValuesPage"
+        };
+
+        Application.Current!.OpenWindow(_newCloudManagementWindow);
+        _newCloudManagementWindow.Destroying += (object? sender, EventArgs e) =>
+        {
+            _newCloudManagementWindow = null;
+        };
     }
 }
