@@ -3,14 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RevMetrix.BallSpinner.FrontEnd.CloudManagementPage"
              Title="CloudManagementPage">
-    <VerticalStackLayout>
-        <Label
-            Margin="0,30,0,0"
-            FontSize="26"
-            Text="Manage Throws"
-            HorizontalOptions="Center" />
+
+    <!-- The folowing grid defines and displays the content set by BindingContent, namely Shots-->
+    <Grid Margin="20,20,20,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="70" />
+        </Grid.RowDefinitions>
         
-        <Grid Margin="30,20,20,0">
+        <Label Margin="0,20,0,10"
+               FontSize="26"
+               Text="Manage Shots"
+               HorizontalOptions="Center"/>
+        
+        <Grid Grid.Row="1" 
+              Margin="10,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -18,50 +27,47 @@
                 <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="100" />
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" 
-                Text="Name" />
-            <Label Grid.Column="1" 
-                Text="Date Saved" />
+            <Label Grid.Column="0"
+                   FontSize="18"
+                   Text="Name" />
+            <Label Grid.Column="1"
+                   FontSize="18"
+                   Text="Date Saved" />
         </Grid>
-    
-        <!-- The folowing grid defines and displays the content set by BindingContent, namely Shots-->
-        <Grid Margin="20,0,20,20">
-            <ListView ItemsSource="{Binding Shots}"
-                      VerticalScrollBarVisibility="Always">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid Padding="10">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="200" />
-                                    <ColumnDefinition Width="100" />
-                                </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" 
+
+        <ListView Grid.Row="2"
+                  Margin="0,10,0,0"
+                  ItemsSource="{Binding Shots}"
+                  VerticalScrollBarVisibility="Always">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid Padding="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" 
                                     Text="{Binding Name}" />
-                                <Label Grid.Column="1" 
+                            <Label Grid.Column="1" 
                                     Text="{Binding DateSaved}" />
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </Grid>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
         
-        <HorizontalStackLayout>
-            <Button
-                Margin="10"
-                Clicked="LoadSim"
-                HorizontalOptions="Fill"
-                Text="Submit" />
-            <Button
-                Margin="10"
-                Clicked="LoadInitial"
-                HorizontalOptions="Fill"
-                Text="Submit" />
+        <HorizontalStackLayout Grid.Row="3">
+            <Button Margin="10"
+                    Clicked="LoadSim"
+                    Text="Load Shot" />
+            <Button Margin="10"
+                    Clicked="LoadInitial"
+                    Text="Load Initial Values" />
         </HorizontalStackLayout>
-    </VerticalStackLayout>
+    </Grid>
 
 </ContentPage>
