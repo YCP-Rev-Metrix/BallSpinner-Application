@@ -14,6 +14,11 @@ namespace RevMetrix.BallSpinner.FrontEnd;
 public interface IDataViewModel : IDisposable
 {
     /// <summary>
+    /// Name of the model
+    /// </summary>
+    string Name { get; }
+
+    /// <summary>
     /// Flag collection of all metrics that the view will consume
     /// </summary>
     Metric Metrics { get; }

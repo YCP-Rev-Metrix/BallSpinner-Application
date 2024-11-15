@@ -12,6 +12,7 @@ namespace RevMetrix.BallSpinner.FrontEnd;
 /// </summary>
 public abstract class WebDataViewModel : IDataViewModel
 {
+    public string Name { get; }
 
     /// <summary>
     /// URL that the <see cref="WebView"/> will use

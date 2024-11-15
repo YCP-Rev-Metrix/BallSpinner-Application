@@ -52,29 +52,74 @@
                             <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
 
+
                         <Border Grid.Row="0" Grid.Column="0">
-                            <WebView
-                                x:Name="TopMiddleView"
-                                InputTransparent="True"
-                                Source="{Binding TopMiddleView.Source}" />
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Label
+                                    Grid.Row="0"
+                                    Padding="3,0,0,0"
+                                    Text="{Binding TopMiddleView.Name}" />
+                                <WebView
+                                    x:Name="TopMiddleView"
+                                    Grid.Row="1"
+                                    InputTransparent="True"
+                                    Source="{Binding TopMiddleView.Source}" />
+                            </Grid>
                         </Border>
                         <Border Grid.Row="0" Grid.Column="1">
-                            <WebView
-                                x:Name="BottomMiddleView"
-                                InputTransparent="True"
-                                Source="{Binding BottomMiddleView.Source}" />
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Label
+                                    Grid.Row="0"
+                                    Padding="3,0,0,0"
+                                    Text="{Binding BottomMiddleView.Name}" />
+                                <WebView
+                                    x:Name="BottomMiddleView"
+                                    Grid.Row="1"
+                                    InputTransparent="True"
+                                    Source="{Binding BottomMiddleView.Source}" />
+                            </Grid>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="0">
-                            <WebView
-                                x:Name="TopRightView"
-                                InputTransparent="True"
-                                Source="{Binding TopRightView.Source}" />
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Label
+                                    Grid.Row="0"
+                                    Padding="3,0,0,0"
+                                    Text="{Binding TopRightView.Name}" />
+                                <WebView
+                                    x:Name="TopRightView"
+                                    Grid.Row="1"
+                                    InputTransparent="True"
+                                    Source="{Binding TopRightView.Source}" />
+                            </Grid>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="1">
-                            <WebView
-                                x:Name="BottomRightView"
-                                InputTransparent="True"
-                                Source="{Binding BottomRightView.Source}" />
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Label
+                                    Grid.Row="0"
+                                    Padding="3,0,0,0"
+                                    Text="{Binding BottomRightView.Name}" />
+                                <WebView
+                                    x:Name="BottomRightView"
+                                    Grid.Row="1"
+                                    InputTransparent="True"
+                                    Source="{Binding BottomRightView.Source}" />
+                            </Grid>
                         </Border>
                     </Grid>
                 </Grid>
