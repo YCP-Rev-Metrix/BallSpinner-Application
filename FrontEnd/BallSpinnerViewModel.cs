@@ -46,6 +46,13 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         BottomMiddleView = new GraphViewModel(_ballSpinner, "Rotation", Metric.RotationX | Metric.RotationY | Metric.RotationZ);
         TopRightView = new GraphViewModel(_ballSpinner, "Magnetometer", Metric.MagnetometerX | Metric.MagnetometerY | Metric.MagnetometerZ);
         BottomRightView = new GraphViewModel(_ballSpinner, "Light", Metric.Light);
+
+        _ballSpinner.PropertyChanged += _ballSpinner_PropertyChanged;
+    }
+
+    private void _ballSpinner_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        OnPropertyChanged(e.PropertyName);
     }
 
     public void Start()
@@ -66,6 +73,8 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
 
     public void Dispose()
     {
+        _ballSpinner.PropertyChanged -= _ballSpinner_PropertyChanged;
+
         _ballSpinner.Dispose();
     }
 }

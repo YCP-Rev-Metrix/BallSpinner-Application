@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -10,7 +11,7 @@ namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 /// <summary>
 /// interface defining core functionality for interacting with the ball spinner 
 /// </summary>
-public interface IBallSpinner
+public interface IBallSpinner : INotifyPropertyChanged
 {
 
     /// <summary>

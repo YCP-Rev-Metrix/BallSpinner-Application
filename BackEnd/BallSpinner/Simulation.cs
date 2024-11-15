@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
@@ -26,6 +27,7 @@ public class Simulation : IBallSpinner
 
     ///<inheritdoc/>
     public event Action? SendRejection;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     private Timer? _timer;
 

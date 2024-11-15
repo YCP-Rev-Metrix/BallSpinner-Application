@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -26,6 +27,7 @@ public class BallSpinner : IBallSpinner
 
     /// <inheritdoc/>
     public event Action? SendRejection;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     private TCP? _connection;
     private IPAddress _address;
@@ -44,12 +46,16 @@ public class BallSpinner : IBallSpinner
     }
 
     /// <inheritdoc/>
-    public void InitializeConnection()
+    public async void InitializeConnection()
     {
         if (IsConnected())
             return;
 
         _connection = new TCP(_address);
+        await _connection.Connect();
+
+        Name = await _connection.GetDeviceInfo();
+        PropertyChanged?.Invoke(null, new PropertyChangedEventArgs(nameof(Name)));
     }
 
     /// <inheritdoc/>
