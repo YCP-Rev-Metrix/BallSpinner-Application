@@ -30,6 +30,12 @@ public class TCP : IDisposable
 
     private readonly byte[] _receive = new byte[BUFFER_SIZE];
     private readonly byte[] _send = new byte[BUFFER_SIZE];
+    
+    // Define the delegate for the event handler
+    public delegate void OnDataRecievedEvent(byte[] packet);
+    
+    // Declare the event based on the delegate
+    public event OnDataRecievedEvent OnDataRecieved;
 
     /// <summary/>
     public TCP(IPAddress address)
@@ -108,7 +114,13 @@ public class TCP : IDisposable
 
             if (size > 0)
                 Debug.WriteLine(Encoding.UTF8.GetString(buffer, 0, size));
+                OnDataRecievedEventHandler(buffer);
         }
+    }
+
+    protected virtual void OnDataRecievedEventHandler(byte[] packet)
+    {
+        OnDataRecieved?.Invoke(packet);
     }
 }
 

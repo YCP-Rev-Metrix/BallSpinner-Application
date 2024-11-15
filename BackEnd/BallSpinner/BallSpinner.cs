@@ -29,7 +29,6 @@ public class BallSpinner : IBallSpinner
 
     private TCP? _connection;
     private IPAddress _address;
-
     /// <summary />
     public BallSpinner(IPAddress address)
     {
@@ -50,6 +49,8 @@ public class BallSpinner : IBallSpinner
             return;
 
         _connection = new TCP(_address);
+        // Subscribe to OnDataRecievedEvent
+        _connection.OnDataRecieved += OnDataRecievedEventHandler;
     }
 
     /// <inheritdoc/>
@@ -86,5 +87,11 @@ public class BallSpinner : IBallSpinner
     public void Stop()
     {
         //message ball spinner
+    }
+
+    // Called when TCP class recieves a packet. Send packet to Dataparser parse it. 
+    public void OnDataRecievedEventHandler(byte[] packet)
+    {
+        DataParser.ParsePacket(packet);
     }
 }
