@@ -67,6 +67,9 @@
             <Button Margin="10"
                     Clicked="LoadInitial"
                     Text="Load Initial Values" />
+            <Button Margin="10"
+                    Clicked="Refresh"
+                    Text="Refresh" />
         </HorizontalStackLayout>
     </Grid>
 

@@ -4,10 +4,20 @@ namespace RevMetrix.BallSpinner.FrontEnd;
 
 public partial class CloudManagementPage : ContentPage
 {
+    private ShotsViewModel ContextStore;
 	public CloudManagementPage()
 	{
         InitializeComponent();
-        BindingContext = new ShotsViewModel();
+        ContextStore = new ShotsViewModel();
+        BindingContext = ContextStore;
+    }
+
+    private void Refresh(object sender, EventArgs args)
+    {
+        //Temp hardcoded update, the function for refreshing on the ShotsViewModel side will replace this
+        ContextStore.UpdateTable();
+
+        BindingContext = ContextStore;
     }
 
     private void LoadSim(object sender, EventArgs args)

@@ -36,4 +36,12 @@ internal class ShotsViewModel
 
         Shots = new ObservableCollection<SimulatedShot>(source);
     }
+
+    public void UpdateTable()
+    {
+        Shots.Clear();
+        Shots.Add(new SimulatedShot { Name = "Chris", DateSaved = "6/21/2003" });
+        Shots.Add(new SimulatedShot { Name = "Chris 2", DateSaved = "3/11/2002" });
+        Shots.Add(new SimulatedShot { Name = "Kensie", DateSaved = "11/22/2002" });
+    }
 }
