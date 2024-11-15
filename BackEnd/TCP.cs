@@ -123,9 +123,11 @@ public class TCP : IDisposable
 
                     string text = Encoding.UTF8.GetString(_receive, 0, size);
                     Debug.WriteLine(text);
+                    break;
 
-            if (size > 0)
-                Debug.WriteLine(Encoding.UTF8.GetString(buffer, 0, size));
+                default:
+                    throw new Exception("Unknown message type");
+            }
         }
     }
 }

@@ -58,7 +58,7 @@ public class BallSpinner : IBallSpinner
         PropertyChanged?.Invoke(null, new PropertyChangedEventArgs(nameof(Name)));
         
         // Subscribe to OnDataRecievedEvent
-        _connection.OnDataRecieved += OnDataRecievedEventHandler;
+        //_connection.OnDataRecieved += OnDataRecievedEventHandler;
     }
 
     /// <inheritdoc/>
