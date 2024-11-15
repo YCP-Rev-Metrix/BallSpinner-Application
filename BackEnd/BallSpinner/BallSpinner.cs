@@ -54,9 +54,17 @@ public class BallSpinner : IBallSpinner
         _connection = new TCP(_address);
         await _connection.Connect();
 
-        Name = await _connection.GetDeviceInfo();
+        if (_connection.Connected)
+            OnConnected();
+    }
+
+    private async void OnConnected()
+    {
+        Name = await _connection!.GetDeviceInfo();
         PropertyChanged?.Invoke(null, new PropertyChangedEventArgs(nameof(Name)));
-        
+
+        var smartDot = await _connection.ConnectSmartDot();
+
         // Subscribe to OnDataRecievedEvent
         //_connection.OnDataRecieved += OnDataRecievedEventHandler;
     }

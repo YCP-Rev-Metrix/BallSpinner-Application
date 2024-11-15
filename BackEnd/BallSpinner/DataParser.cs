@@ -37,6 +37,7 @@ public class DataParser
            {
                SensorType.ToString(), SampleCount.ToString(), timeStamp.ToString(), XData.ToString(), YData.ToString(), ZData.ToString()
            };
+
             // Send to writer
             writer.WriteData(dataArray);
             // Define the metric type
@@ -55,6 +56,8 @@ public class DataParser
     /// </summary>
     public void DataReceived(Metric metric, float value, float timeFromStart)
     {
+
+
         OnDataReceived?.Invoke(metric, value, timeFromStart);
     }
 

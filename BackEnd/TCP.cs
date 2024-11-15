@@ -9,6 +9,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Unicode;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RevMetrix.BallSpinner.BackEnd;
 
@@ -31,8 +32,7 @@ public class TCP : IDisposable
     private readonly byte[] _receive = new byte[BUFFER_SIZE];
     private readonly byte[] _send = new byte[BUFFER_SIZE];
 
-    private Dictionary<MessageType, TaskCompletionSource<object>> _pendingMessages = new Dictionary<MessageType, TaskCompletionSource<object>>();
-
+    private List<(MessageType Type, TaskCompletionSource<object> Task)> _pendingMessages = new();
     /// <summary/>
     public TCP(IPAddress address)
     {
@@ -46,10 +46,13 @@ public class TCP : IDisposable
         _client.Dispose();
     }
 
+    /// <summary>
+    /// Gets the name of the connected device
+    /// </summary>
     public async Task<string> GetDeviceInfo()
     {
         var task = new TaskCompletionSource<object>();
-        _pendingMessages.Add(MessageType.GetDeviceInfo, task);
+        _pendingMessages.Add((MessageType.GetDeviceInfoResponse, task));
 
         _send[0] = (byte)MessageType.GetDeviceInfo;
         _send[1] = 0;
@@ -60,12 +63,33 @@ public class TCP : IDisposable
         return (string)result;
     }
 
+
+    /// <summary>
+    /// Gets the name of the connected device
+    /// </summary>
+    public async Task<PhysicalAddress> ConnectSmartDot()
+    {
+        var task = new TaskCompletionSource<object>();
+        _pendingMessages.Add((MessageType.ConnectSmartDotResponse, task));
+
+        _send[0] = (byte)MessageType.ConnectSmartDot;
+        _send[1] = 0;
+        _send[2] = 0;
+        await _client.Client.SendAsync(new ArraySegment<byte>(_send, 0, 3));
+
+        var result = await task.Task;
+        return (PhysicalAddress)result;
+    }
+
+    /// <summary>
+    /// Initialize the TCP connection
+    /// </summary>
     public async Task Connect()
     {
         try
         {
             await _client.ConnectAsync(_address, PORT);
-            byte token = (byte)new Random().Next(255);
+            byte token = (byte)new Random().Next(byte.MaxValue);
 
             //Handshake by telling BallSpinner that I want to connect
             _send[0] = (byte)MessageType.Connect;
@@ -92,12 +116,24 @@ public class TCP : IDisposable
 
             Debug.WriteLine("Connected :)");
 
-            Task.Run(Listen);
+            var _ = Task.Run(Listen); //Do not await the task
         }
         catch (Exception e)
         {
             Console.WriteLine(e.ToString());
         }
+    }
+
+    private (MessageType Type, int Size) GetMessageInfo(byte[] packet)
+    {
+        //Format
+        //Byte 0 = Message type
+        //Byte 1-2 = Message size (Maximum 65,536 bytes)
+        byte messageTypeByte = _receive[0];
+        MessageType messageType = (MessageType)Enum.ToObject(typeof(MessageType), messageTypeByte);
+        int messageSize = _receive[2] + (_receive[1] << 8);
+
+        return (messageType, messageSize);
     }
 
     private async void Listen()
@@ -109,57 +145,90 @@ public class TCP : IDisposable
             if (size <= 0)
                 return;
 
-            //Format
-            //Byte 0 = Message type
-            //Byte 1-2 = Message size (Maximum 65,536 bytes)
-            byte messageTypeByte = _receive[0];
-            MessageType messageType = (MessageType)Enum.ToObject(typeof(MessageType), messageTypeByte);
+            var (messageType, messageSize) = GetMessageInfo(_receive);
 
             switch (messageType)
             {
                 case MessageType.GetDeviceInfo:
                 case MessageType.GetDeviceInfoResponse:
-                    int messageSize = _receive[1] + (_receive[2] << sizeof(byte));
 
-                    string text = Encoding.UTF8.GetString(_receive, 0, size);
+                    string text = Encoding.UTF8.GetString(_receive, 3, messageSize);
                     Debug.WriteLine(text);
+
+                    var task = TryGetResponse(messageType);
+                    task!.SetResult(text);
+
                     break;
 
+                case MessageType.ConnectSmartDot:
+                case MessageType.ConnectSmartDotResponse:
+                    var physicalAddress = new PhysicalAddress(new ArraySegment<byte>(_receive, 3, messageSize).ToArray());
+                    var p = physicalAddress.ToString();
+                    var task2 = TryGetResponse(messageType);
+                    task2!.SetResult(physicalAddress);
+
+                    break;
                 default:
-                    throw new Exception("Unknown message type");
+                    throw new Exception($"Unexpected message type '{messageType}'");
             }
         }
+    }
+
+    private TaskCompletionSource<object>? TryGetResponse(MessageType messageType)
+    {
+        for (int i = 0; i < _pendingMessages.Count; i++)
+        {
+            var message = _pendingMessages[i];
+            if (message.Type == messageType)
+            {
+                _pendingMessages.RemoveAt(i);
+                return message.Task;
+            }
+        }
+
+        return null;
     }
 }
 
 /// <summary>
 /// Types of messages that can be sent to the ball spinner
-/// 2 bits = version number
-/// 6 bits = message
+/// First 2 bits = Version number
+/// Last 6 bits = Message Type
 /// </summary>
 public enum MessageType : byte
 {
     /// <summary>
     /// Connect to the ball spinner
     /// </summary>
-    Connect = 0x81,
+    Connect = 0b10_00_00_01,
+
     /// <summary>
     /// Response from server about connecting to the ball spinner
     /// </summary>
-    ConnectResponse = 0x82,
+    ConnectResponse = 0b10_00_00_10,
 
     /// <summary>
     /// Request for device information
     /// </summary>
-    GetDeviceInfo = 0x83,
+    GetDeviceInfo = 0b10_00_00_11,
 
     /// <summary>
     /// Response from server containing device information
     /// </summary>
-    GetDeviceInfoResponse = 0x84,
+    GetDeviceInfoResponse = 0b10_00_01_00,
 
     /// <summary>
-    /// Send raw text
+    /// Tell the server to connect to the smart dot module
     /// </summary>
-    Text =  0xFF,
+    ConnectSmartDot = 0x85,
+
+    /// <summary>
+    /// Response from server containing smart dot connection info
+    /// </summary>
+    ConnectSmartDotResponse = 0x86,
+
+    /// <summary>
+    /// Send or receive raw, UTF-8 text
+    /// </summary>
+    Text =  0b11_11_11_11,
 }
