@@ -27,6 +27,11 @@ public class Simulation : IBallSpinner
 
     ///<inheritdoc/>
     public event Action? SendRejection;
+
+    ///<inheritdoc/>
+    public event Action<bool>? OnConnectionChanged;
+
+    ///<inheritdoc/>
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private Timer? _timer;
@@ -42,6 +47,11 @@ public class Simulation : IBallSpinner
     public Vector3 AngularVelocity = new Vector3(0.1f,0.0f,1f);
     public Quaternion Rotation = Quaternion.Identity;
 
+    /// <summary/>
+    public Simulation()
+    {
+        InitializeConnection();
+    }
 
     /// <summary>
     /// 
@@ -55,14 +65,11 @@ public class Simulation : IBallSpinner
     ///<inheritdoc/>
     public void InitializeConnection()
     {
-        throw new NotImplementedException();
+        OnConnectionChanged?.Invoke(true);
     }
 
     ///<inheritdoc/>
-    public bool IsConnected()
-    {
-        throw new NotImplementedException();
-    }
+    public bool IsConnected() => true;
 
     ///<inheritdoc/>
     public void ResendMessage()

@@ -27,6 +27,11 @@ public class BallSpinner : IBallSpinner
 
     /// <inheritdoc/>
     public event Action? SendRejection;
+
+    /// <inheritdoc/>
+    public event Action<bool>? OnConnectionChanged;
+
+    /// <inheritdoc/>
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private TCP? _connection;
@@ -60,6 +65,8 @@ public class BallSpinner : IBallSpinner
 
     private async void OnConnected()
     {
+        PropertyChanged?.Invoke(null, new PropertyChangedEventArgs("Connected"));
+
         Name = await _connection!.GetDeviceInfo();
         PropertyChanged?.Invoke(null, new PropertyChangedEventArgs(nameof(Name)));
 
@@ -67,12 +74,13 @@ public class BallSpinner : IBallSpinner
 
         // Subscribe to OnDataRecievedEvent
         //_connection.OnDataRecieved += OnDataRecievedEventHandler;
+        OnConnectionChanged?.Invoke(true);
     }
 
     /// <inheritdoc/>
     public bool IsConnected()
     {
-        return _connection != null;
+        return _connection != null && _connection.Connected;
     }
 
     /// <inheritdoc/>
