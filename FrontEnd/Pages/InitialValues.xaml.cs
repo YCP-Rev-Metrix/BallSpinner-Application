@@ -6,4 +6,9 @@ public partial class InitialValues : ContentPage
 	{
 		InitializeComponent();
 	}
+
+    private void PassValues(object sender, EventArgs args)
+    {
+        throw new NotImplementedException();
+    }
 }

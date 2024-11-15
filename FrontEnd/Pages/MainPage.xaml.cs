@@ -51,8 +51,7 @@ public partial class MainPage : ContentPage
         BallSpinners.Clear();
     }
 
-
-    private async void OnLoginButtonClicked(object sender, EventArgs args)
+    private void OnLoginButtonClicked(object sender, EventArgs args)
     {
         _frontEnd.Login();
     }
@@ -60,6 +59,11 @@ public partial class MainPage : ContentPage
     private void OnNewShotButtonClicked(object sender, EventArgs args)
     {
         _frontEnd.InitialValues();
+    }
+
+    private void OnCloudManagementButtonClicked(object sender, EventArgs args)
+    {
+        _frontEnd.CloudManagement();
     }
 
     private void OnLoadShotButtonClicked(object sender, EventArgs args)

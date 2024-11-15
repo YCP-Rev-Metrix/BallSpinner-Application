@@ -124,13 +124,8 @@ public class TCP : IDisposable
                     string text = Encoding.UTF8.GetString(_receive, 0, size);
                     Debug.WriteLine(text);
 
-                    if(_pendingMessages.Remove(MessageType.GetDeviceInfo, out var task))
-                        task.SetResult(text);
-
-                    break;
-                default:
-                    throw new Exception($"Invalid message type: {messageTypeByte}");
-            }
+            if (size > 0)
+                Debug.WriteLine(Encoding.UTF8.GetString(buffer, 0, size));
         }
     }
 }
