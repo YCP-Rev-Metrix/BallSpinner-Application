@@ -138,8 +138,15 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private void RevUpThoseFryersCauseIAmSureHungryForOne(object sender, EventArgs args)
+    private async void RevUpThoseFryersCauseIAmSureHungryForOne(object sender, EventArgs args)
     {
-        throw new NotImplementedException();
+        // Call motor run
+
+        if(await DisplayAlert("Notice", "Would you like to save this test", "Yes", "No"))
+        {
+            await _database.UploadShot(await DisplayPromptAsync("Notice", "Please name the test"), 20);
+        }
+
+        //throw new NotImplementedException();
     }
 }

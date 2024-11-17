@@ -22,25 +22,25 @@ internal class ShotsViewModel
     }
 
     // The 
-    public async Task<bool> UpdateCollectionContent()
+    public async void UpdateCollectionContent()
     {
         Shots.Clear();
         Random random = new Random();
         int a = random.Next(0,4);
-        
-        if(a == 0)
+
+        if (a == 0)
         {
             Shots.Add(new SimulatedShot { shot = new ShotInfo("Patrick", 20, 20, 20, 20) });
             Shots.Add(new SimulatedShot { shot = new ShotInfo("Ryan", 20, 20, 20, 20) });
             Shots.Add(new SimulatedShot { shot = new ShotInfo("Christain", 20, 20, 20, 20) });
-        } 
-        else if(a == 1)
+        }
+        else if (a == 1)
         {
             for (int i = 0; i < 100; i++)
             {
                 Shots.Add(new SimulatedShot { shot = new ShotInfo("Many entry test: " + i, 20, 20, 20, 20) });
             }
-        } 
+        }
         else if (a == 2)
         {
 
@@ -51,10 +51,8 @@ internal class ShotsViewModel
             SimulatedShotList list = await _database.GetListOfShots();
             if (list != null)
             {
-                foreach (var shot in list.shotList) {Shots.Add(shot);}
+                foreach (var shot in list.shotList) { Shots.Add(shot); }
             }
         }
-
-        return true;
     }
 }
