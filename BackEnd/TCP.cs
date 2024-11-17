@@ -9,6 +9,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Unicode;
 using System.Threading.Tasks;
+using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace RevMetrix.BallSpinner.BackEnd;
@@ -23,6 +24,11 @@ public class TCP : IDisposable
     /// </summary>
     public bool Connected => _client.Connected;
 
+    public delegate void SmartDotRecievedHandler(string[] SmartDotData, Metric[] Metrics, float XData, float YData, float ZData, float timeStamp);
+
+    // Event handler to be fired off when a SmartDot packet is recieved
+    public event SmartDotRecievedHandler SmartDotRecievedEvent;
+    
     private TcpClient _client;
     private IPAddress _address;
 
@@ -168,6 +174,26 @@ public class TCP : IDisposable
                     task2!.SetResult(physicalAddress);
 
                     break;
+                case MessageType.SmartDotDataPacket:
+                    //distribute data to subscribers
+                    int SensorType = _receive[2];
+                    int SampleCount = _receive[3] | (_receive[4] << 8) | (_receive[5] << 16);
+                    float timeStamp = _receive[6] | (_receive[7] << 8) | (_receive[8] << 16) | (_receive[9] << 32);
+                    float XData = _receive[10] | (_receive[11] << 8) | (_receive[12] << 16) | (_receive[13] << 32);
+                    float YData = _receive[14] | (_receive[15] << 8) | (_receive[16] << 16) | (_receive[17] << 32);
+                    float ZData = _receive[18] | (_receive[19] << 8) | (_receive[20] << 16) | (_receive[21] << 32);
+                    // Convert data to a string array
+                    string[] SmartDotData = new string[6] 
+                    {
+                        SensorType.ToString(), SampleCount.ToString(), timeStamp.ToString(), XData.ToString(), YData.ToString(), ZData.ToString()
+                    }; 
+                    // Define the metric type's
+                    Metric TypeX = (Metric) _receive[2];
+                    Metric TypeY = (Metric) (_receive[2] << 1);
+                    Metric TypeZ = (Metric) (_receive[2] << 2);
+                    Metric[] CurrentMetricTypes = {TypeX, TypeY, TypeZ};
+                    SmartDotRecievedEvent?.Invoke(SmartDotData, CurrentMetricTypes, XData, YData, ZData, timeStamp);
+                    break;
                 default:
                     throw new Exception($"Unexpected message type '{messageType}'");
             }
@@ -187,6 +213,20 @@ public class TCP : IDisposable
         }
 
         return null;
+    }
+    /// <summary>
+    /// For now unimplemented. Will be used to send motor instruction packets to SmartDot
+    /// </summary>
+    public async void SendPacketToSmartDot(byte[] instructions)
+    {
+        if (!Connected)
+        {
+            throw new Exception("Must establish a connection to the ballspinner first");
+        }
+        else 
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 
@@ -226,6 +266,11 @@ public enum MessageType : byte
     /// Response from server containing smart dot connection info
     /// </summary>
     ConnectSmartDotResponse = 0x86,
+    
+    /// <summary>
+    /// Indicates a SmartDot data packet
+    /// </summary>
+    SmartDotDataPacket = 0x8A,
 
     /// <summary>
     /// Send or receive raw, UTF-8 text

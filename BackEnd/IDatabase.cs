@@ -17,12 +17,12 @@ public interface IDatabase
     //Task DeleteShot();
     //Task DeleteUser();
     //Task GetListOfBallSpinners();
-    //Task GetListOfShots();
+    Task<SimulatedShotList?> GetListOfShots();
     //Task GetListOfSmartDots();
     //Task GetShotData();
     //Task RegisterSmartDot();
     //Task RegisterBallSpinner();
-    //Task UploadShot();
+    Task<bool> UploadShot(string name, float InitialSpeed);
     //Task GetBalls();
     ///<Summary>
     /// Database method for getting a user registered

@@ -8,7 +8,7 @@
     <Grid Margin="20,20,20,20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="20" />
+            <RowDefinition Height="30" />
             <RowDefinition Height="*" />
             <RowDefinition Height="70" />
         </Grid.RowDefinitions>
@@ -26,13 +26,25 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="100" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0"
                    FontSize="18"
                    Text="Name" />
             <Label Grid.Column="1"
                    FontSize="18"
-                   Text="Date Saved" />
+                   Text="Speed" />
+            <Label Grid.Column="2"
+                   FontSize="18"
+                   Text="Angle" />
+            <Label Grid.Column="3"
+                   FontSize="18"
+                   Text="Position" />
+            <Label Grid.Column="4"
+                   FontSize="18"
+                   Text="Frequency" />
         </Grid>
 
         <ListView Grid.Row="2"
@@ -49,11 +61,20 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="200" />
                                 <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
                             </Grid.ColumnDefinitions>
                             <Label Grid.Column="0" 
-                                    Text="{Binding Name}" />
+                                    Text="{Binding shot.Name}" />
                             <Label Grid.Column="1" 
-                                    Text="{Binding DateSaved}" />
+                                    Text="{Binding shot.Speed}" />
+                            <Label Grid.Column="2" 
+                                   Text="{Binding shot.Angle}" />
+                            <Label Grid.Column="3" 
+                                   Text="{Binding shot.Position}" />
+                            <Label Grid.Column="4" 
+                                   Text="{Binding shot.Frequency}" />
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

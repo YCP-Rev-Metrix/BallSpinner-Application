@@ -21,17 +21,17 @@ internal class ShotsViewModel
 
     private void CreateShotsCollection()
     {
-        source.Add(new SimulatedShot { Name = "Patrick", DateSaved = "10/21/2002" });
+        source.Add(new SimulatedShot { shot = new ShotInfo("Patrick", 20, 20, 20, 20)});
 
-        source.Add(new SimulatedShot { Name = "Ryan", DateSaved = "11/13/2002" });
+        source.Add(new SimulatedShot { shot = new ShotInfo("Ryan", 20, 20, 20, 20)});
 
-        source.Add(new SimulatedShot { Name = "Christian", DateSaved = "12/28/2002" });
+        source.Add(new SimulatedShot { shot = new ShotInfo("Christain", 20, 20, 20, 20)});
 
-        source.Add(new SimulatedShot { Name = "This is a long name test, lets see how this works", DateSaved = "01/01/0001" });
+        source.Add(new SimulatedShot { shot = new ShotInfo("LONG TEST!!!!!!!!!!!!!!!!!!!!!!!!!", 20, 20, 20, 20)});
 
         for (int i = 0; i < 100; i++) 
         {
-            source.Add(new SimulatedShot { Name = "This is a many name test: " + i, DateSaved = "1/1/0" + i });
+            source.Add(new SimulatedShot { shot = new ShotInfo("LONGTESTSTSTSTSTSTSTSTS " + i, 20, 20, 20, 20)});
         }
 
         Shots = new ObservableCollection<SimulatedShot>(source);
@@ -40,8 +40,8 @@ internal class ShotsViewModel
     public void UpdateTable()
     {
         Shots.Clear();
-        Shots.Add(new SimulatedShot { Name = "Chris", DateSaved = "6/21/2003" });
-        Shots.Add(new SimulatedShot { Name = "Chris 2", DateSaved = "3/11/2002" });
-        Shots.Add(new SimulatedShot { Name = "Kensie", DateSaved = "11/22/2002" });
+        Shots.Add(new SimulatedShot { shot = new ShotInfo("Hi", 20, 20, 20, 20)});
+        Shots.Add(new SimulatedShot { shot = new ShotInfo("Hi", 20, 20, 20, 20)});
+        Shots.Add(new SimulatedShot { shot = new ShotInfo("Hi", 20, 20, 20, 20)});
     }
 }
