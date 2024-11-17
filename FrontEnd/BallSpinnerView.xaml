@@ -134,12 +134,20 @@
                 Color="Black" />
             <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
                 <Label
+                    Margin="10"
                     HorizontalOptions="CenterAndExpand"
                     HorizontalTextAlignment="Center"
                     Text="Not Connected"
                     VerticalOptions="CenterAndExpand"
                     VerticalTextAlignment="Center" />
-                <Button Clicked="Reconnect_Clicked" Text="Reconnect" />
+                <Button
+                    Margin="10"
+                    Clicked="Reconnect_Clicked"
+                    Text="Reconnect" />
+                <Button
+                    Margin="10"
+                    Clicked="OnRemoveBallSpinnerButton"
+                    Text="Remove" />
             </VerticalStackLayout>
         </Grid>
 
