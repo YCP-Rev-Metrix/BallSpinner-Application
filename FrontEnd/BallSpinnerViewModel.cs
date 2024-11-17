@@ -53,10 +53,10 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         _ballSpinner = ballspinner;
 
         LeftView = new BallViewModel(_ballSpinner);
-        TopMiddleView = new GraphViewModel(_ballSpinner, "Acceleration", Metric.AccelerationX | Metric.AccelerationY | Metric.AccelerationZ);
-        BottomMiddleView = new GraphViewModel(_ballSpinner, "Rotation", Metric.RotationX | Metric.RotationY | Metric.RotationZ);
-        TopRightView = new GraphViewModel(_ballSpinner, "Magnetometer", Metric.MagnetometerX | Metric.MagnetometerY | Metric.MagnetometerZ);
-        BottomRightView = new GraphViewModel(_ballSpinner, "Light", Metric.Light);
+        TopMiddleView = new GraphViewModel(_ballSpinner, "Acceleration (g)", Metric.AccelerationX | Metric.AccelerationY | Metric.AccelerationZ);
+        BottomMiddleView = new GraphViewModel(_ballSpinner, "Rotation (°)", Metric.RotationX | Metric.RotationY | Metric.RotationZ);
+        TopRightView = new GraphViewModel(_ballSpinner, "Magnetometer (μT)", Metric.MagnetometerX | Metric.MagnetometerY | Metric.MagnetometerZ);
+        BottomRightView = new GraphViewModel(_ballSpinner, "Light (lux)", Metric.Light);
 
         _ballSpinner.PropertyChanged += _ballSpinner_PropertyChanged;
         _ballSpinner.OnConnectionChanged += _ballSpinner_OnConnectionChanged;

@@ -117,10 +117,10 @@ public class Simulation : IBallSpinner
             Position += velocity * (float)frequency.TotalSeconds;
 
             // Log velocity and acceleration to the console
-            Debug.WriteLine($"Time: {time}");
+            /*Debug.WriteLine($"Time: {time}");
             Debug.WriteLine($"Position: X={Position.X}, Y={Position.Y}, Z={Position.Z}");
             Debug.WriteLine($"Velocity: X={velocity.X}, Y={velocity.Y}, Z={velocity.Z}");
-            Debug.WriteLine($"Acceleration: X={acceleration.X}, Y={acceleration.Y}, Z={acceleration.Z}");
+            Debug.WriteLine($"Acceleration: X={acceleration.X}, Y={acceleration.Y}, Z={acceleration.Z}");*/
 
             // Send updated velocity data as Acceleration metrics
             DataParser.DataReceived(Metric.AccelerationX, acceleration.X, time);
@@ -134,7 +134,7 @@ public class Simulation : IBallSpinner
             DataParser.DataReceived(Metric.MagnetometerZ, magnetometer.Z, time);
 
             // Send light data (where Y-Up is brightest)
-            float light = Vector3.Dot(Vector3.TransformNormal(Vector3.UnitZ, Matrix4x4.CreateFromQuaternion(Rotation)), Vector3.UnitY);
+            float light = Math.Max(Vector3.Dot(Vector3.TransformNormal(Vector3.UnitZ, Matrix4x4.CreateFromQuaternion(Rotation)), Vector3.UnitY), 0);
             DataParser.DataReceived(Metric.Light, light, time);
         }, null, frequency, frequency);
     }

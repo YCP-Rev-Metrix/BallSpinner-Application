@@ -138,6 +138,8 @@ var minY = 0;
 var minZ = 0;
 
 window.data = function (metric, value, time) {
+    console.log(metric + " " + value + " " + time);
+
     if (time > minX && metric === 'RotationX') {
         mesh.rotation.x = value;
         minX = time;

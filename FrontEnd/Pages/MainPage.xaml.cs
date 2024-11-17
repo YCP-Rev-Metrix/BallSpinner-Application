@@ -101,6 +101,15 @@ public partial class MainPage : ContentPage
     {
         foreach (var spinner in BallSpinners)
         {
+            if(spinner.NotConnectedFadeVisible)
+            {
+                DisplayAlert("Can't start", "All ball spinners must be connected.", "Okay");
+                return;
+            }    
+        }
+
+        foreach (var spinner in BallSpinners)
+        {
             spinner.Start();
         }
     }
