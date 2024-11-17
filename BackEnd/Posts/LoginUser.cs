@@ -26,6 +26,9 @@ public partial class Database: IDatabase
         // Parse the JSON response
         var responseObject = JsonConvert.DeserializeObject<Token>(responseBody);
         
+        // Set the users token for the session
+        this.UserTokens = responseObject;
+
         return responseObject;
     }
 }

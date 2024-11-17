@@ -1,4 +1,6 @@
-﻿using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+﻿using RevMetrix.BallSpinner.BackEnd;
+using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+using RevMetrix.BallSpinner.BackEnd.Database;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,36 +11,50 @@ using System.Threading.Tasks;
 namespace RevMetrix.BallSpinner.FrontEnd;
 internal class ShotsViewModel
 {
-    //readonly IList<SimulatedShot> source;
     public ObservableCollection<SimulatedShot> Shots { get; private set; }
+    private IDatabase _database = null;
 
-    public ShotsViewModel()
+    public ShotsViewModel(IDatabase database)
     {
-        //source = new List<SimulatedShot>();
         Shots = new ObservableCollection<SimulatedShot>();
-        BuildShotsCollection();
+        _database = database;
+        UpdateCollectionContent();
     }
 
-    public void BuildShotsCollection()
+    // The 
+    public async Task<bool> UpdateCollectionContent()
     {
-        int rand = 0;
-        if(rand == 0)
+        Shots.Clear();
+        Random random = new Random();
+        int a = random.Next(0,4);
+        
+        if(a == 0)
         {
-            Shots.Add(new SimulatedShot { Name = "Patrick", DateSaved = "10/21/2002" });
-            Shots.Add(new SimulatedShot { Name = "Ryan", DateSaved = "11/13/2002" });
-            Shots.Add(new SimulatedShot { Name = "Christian", DateSaved = "12/28/2002" });
-            Shots.Add(new SimulatedShot { Name = "This is a long name test, lets see how this works", DateSaved = "01/01/0001" });
-
+            Shots.Add(new SimulatedShot { shot = new ShotInfo("Patrick", 20, 20, 20, 20) });
+            Shots.Add(new SimulatedShot { shot = new ShotInfo("Ryan", 20, 20, 20, 20) });
+            Shots.Add(new SimulatedShot { shot = new ShotInfo("Christain", 20, 20, 20, 20) });
+        } 
+        else if(a == 1)
+        {
             for (int i = 0; i < 100; i++)
             {
-                Shots.Add(new SimulatedShot { Name = "This is a many name test: " + i, DateSaved = "1/1/0" + i });
+                Shots.Add(new SimulatedShot { shot = new ShotInfo("Many entry test: " + i, 20, 20, 20, 20) });
             }
-        } else 
+        } 
+        else if (a == 2)
         {
-            Shots.Clear();
-            Shots.Add(new SimulatedShot { Name = "Chris", DateSaved = "6/21/2003" });
-            Shots.Add(new SimulatedShot { Name = "Chris 2", DateSaved = "3/11/2002" });
-            Shots.Add(new SimulatedShot { Name = "Kensie", DateSaved = "11/22/2002" });
+
+            Shots.Add(new SimulatedShot { shot = new ShotInfo("Long entry name test: This is a very long name, Walton Alouicious Gonzaga XV", 20, 20, 20, 20) });
         }
+        else if (a == 3)
+        {
+            SimulatedShotList list = await _database.GetListOfShots();
+            if (list != null)
+            {
+                foreach (var shot in list.shotList) {Shots.Add(shot);}
+            }
+        }
+
+        return true;
     }
 }

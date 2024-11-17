@@ -40,6 +40,11 @@ public interface IBallSpinner : INotifyPropertyChanged
     /// </summary>
     event Action? SendRejection;
 
+    /// <summary>
+    /// Invoked when the device is connected or disconnected
+    /// </summary>
+    public event Action<bool>? OnConnectionChanged;
+
     //Methods
     /// <summary>
     /// Disposes of resources used by the Ball Spinner.
