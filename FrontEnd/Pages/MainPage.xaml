@@ -9,7 +9,7 @@
         <MenuBarItem Text="File">
             <MenuFlyoutItem
                 Clicked="OnNewShotButtonClicked"
-                IsEnabled="false"
+                IsEnabled="true"
                 Text="New Shot" />
             <MenuFlyoutItem
                 Clicked="OnLoadShotButtonClicked"
@@ -34,6 +34,17 @@
                 Clicked="OnResetButtonClicked"
                 IsEnabled="false"
                 Text="Reset" />
+        </MenuBarItem>
+
+        <MenuBarItem Text="User">
+            <MenuFlyoutItem
+                Clicked="OnLoginButtonClicked"
+                IsEnabled="true"
+                Text="Login" />
+            <MenuFlyoutItem
+                Clicked="OnCloudManagementButtonClicked"
+                IsEnabled="true"
+                Text="Manage Shots" />
         </MenuBarItem>
 
         <MenuBarItem Text="Help">
@@ -78,27 +89,6 @@
                     Clicked="OnAddBallSpinnerButtonClicked"
                     HorizontalOptions="Center"
                     Text="Add BallSpinner"
-                    VerticalOptions="Center" />
-
-                <Button
-                    Margin="10"
-                    Clicked="OnLoginButtonClicked"
-                    HorizontalOptions="Center"
-                    Text="Login"
-                    VerticalOptions="Center" />
-
-                <Button
-                    Margin="10"
-                    Clicked="OnNewShotButtonClicked"
-                    HorizontalOptions="Center"
-                    Text="New Shot"
-                    VerticalOptions="Center" />
-                
-                <Button
-                    Margin="10"
-                    Clicked="OnCloudManagementButtonClicked"
-                    HorizontalOptions="Center"
-                    Text="Cloud Management"
                     VerticalOptions="Center" />
 
                 <Button
