@@ -21,7 +21,8 @@ class TestServer
         {
             { "/hello", HelloHandler },
             { "/posts/Authorize", LoginHandler },
-            {"/posts/Register", RegisterHandler}
+            {"/posts/Register", RegisterHandler},
+            {"/gets/GetShotsByUsername", GetShotsHandler}
         };
 
         // Listen asynchronously
@@ -165,5 +166,21 @@ class TestServer
                             };
                 }
              return null;
+    } //Still needs to be implemented
+    static object GetShotsHandler(HttpListenerRequest request, HttpListenerResponse response)
+    {
+        // get request info
+         Stream body = request.InputStream;
+         Encoding encoding = request.ContentEncoding;
+         StreamReader reader = new StreamReader(body, encoding);
+                
+         // Convert the body data to a string
+         string bodyData = reader.ReadToEnd();
+         // Deserialize bodyData into Credentials object
+         User user = JsonSerializer.Deserialize<User>(bodyData);
+         
+         return true;
+                
+         
     }
 }

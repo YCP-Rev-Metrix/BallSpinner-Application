@@ -24,25 +24,12 @@ public partial class Database : IDatabase
         {
             return false;
         }
-        
-        var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-        {
-            HasHeaderRecord  = false,
-        };
 
         List<SampleData> sampleData = new List<SampleData>();
+        // Get sample data from temp rev file
+        string path = "./Backend/BallSpinner/TempRev.csv";
+        await GetSampleData(sampleData, path);
         
-        using (var reader = new StreamReader("./Backend/BallSpinner/TempRev.csv"))
-        using (var csv = new CsvReader(reader, config))
-        {
-            csv.Read();
-            while (csv.Read())
-            {
-                var record = csv.GetRecord<SampleData>();
-                sampleData.Add(record);
-            }
-        }
-
         ShotInfo parameters = new ShotInfo(name, InitialSpeed, null, null, null);
         var requestObject = new
         {
@@ -58,5 +45,26 @@ public partial class Database : IDatabase
         response.EnsureSuccessStatusCode();
         
         return true;
+    }
+    ///<Summary>
+    /// Parses temp rev file and puts data into a SampleData list
+    ///</Summary>
+    public async Task<List<SampleData>> GetSampleData(List<SampleData> sampleData, string path)
+    {
+        var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+        {
+            HasHeaderRecord  = false,
+        };
+        
+        using (var reader = new StreamReader(path))
+        using (var csv = new CsvReader(reader, config))
+        {
+            while (csv.Read())
+            {
+                var record = csv.GetRecord<SampleData>();
+                sampleData.Add(record);
+            }
+        }
+        return sampleData;
     }
 }

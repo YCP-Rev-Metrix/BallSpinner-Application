@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Xml;
@@ -87,6 +88,58 @@ public class DatabaseTests : TestBase
     {
           // Ensure method thorws exception when server responds with 403
           await Assert.ThrowsAsync<HttpRequestException>(() => Database.RegisterUser("string", "string", "403Response", "403Response", "string", "string"));
+    }
+    
+    [Fact]
+    private async void GetSampleDataTests()
+    {
+        string path = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName;
+        string[] dataArray = new string[6] 
+        {
+            "1", "5", "43", "434.212", "4342.2", "23423"
+        };
+        
+        TempFileWriter.WriteData(dataArray);
+        
+        string[] dataArray2 =
+        {
+            "3", "52", "4", "112.4124", "4342412.2", "44"
+        };
+                
+        TempFileWriter.WriteData(dataArray2);
+
+        string[] dataArray3 =
+        {
+            "2", "532", "4323", "2112.4124", "431112.2", "765.2"
+        };
+        
+        TempFileWriter.WriteData(dataArray3);
+
+        List<SampleData> sample = new List<SampleData>();
+        await Database.GetSampleData(sample, projectPath + "/TestRevFile.csv");
+        // Test the contents of sample to make sure it is parsed into JSON correctly
+        //Assert.Empty(sample);
+        // Test to make sure dataArray1 is parsed correctly into sample and is 1st element
+        Assert.Equal(1, sample[0].SensorType);
+        Assert.Equal(5, sample[0].Count);
+        Assert.Equal(43, sample[0].Timestamp);
+        Assert.Equal((float) 434.212, sample[0].X);
+        Assert.Equal((float) 4342.2, sample[0].Y);
+        Assert.Equal((float)23423, sample[0].Z);
+        // Test to make sure dataArray2 is parsed correctly into sample and is 2nd element
+        Assert.Equal(3, sample[1].SensorType);
+        Assert.Equal(52, sample[1].Count);
+        Assert.Equal(4, sample[1].Timestamp);
+        Assert.Equal((float) 112.4124, sample[1].X);
+        Assert.Equal((float) 4342412.2, sample[1].Y);
+        Assert.Equal((float)44, sample[1].Z);
+        // Test to make sure dataArray3 is parsed correctly into sample and is 3nd element
+        Assert.Equal(2, sample[2].SensorType);
+        Assert.Equal(532, sample[2].Count);
+        Assert.Equal(4323, sample[2].Timestamp);
+        Assert.Equal((float) 2112.4124, sample[2].X);
+        Assert.Equal((float) 431112.2, sample[2].Y);
+        Assert.Equal((float)765.2, sample[2].Z);
     }
     
 }
