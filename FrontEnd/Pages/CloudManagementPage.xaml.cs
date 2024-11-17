@@ -15,7 +15,7 @@ public partial class CloudManagementPage : ContentPage
     private void Refresh(object sender, EventArgs args)
     {
         //Temp hardcoded update, the function for refreshing on the ShotsViewModel side will replace this
-        ContextStore.UpdateTable();
+        ContextStore.BuildShotsCollection();
 
         BindingContext = ContextStore;
     }

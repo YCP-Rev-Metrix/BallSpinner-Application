@@ -128,4 +128,9 @@ public partial class MainPage : ContentPage
             OnPropertyChanged(nameof(BallSpinners));
         }
     }
+
+    private void RevUpThoseFryersCauseIAmSureHungryForOne(object sender, EventArgs args)
+    {
+        throw new NotImplementedException();
+    }
 }
