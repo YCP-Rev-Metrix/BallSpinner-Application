@@ -79,10 +79,14 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         _ballSpinner.Start();
     }
 
-
     public void Stop()
     {
         _ballSpinner.Stop();
+    }
+
+    public void Reconnect()
+    {
+        _ballSpinner.InitializeConnection();
     }
 
     protected virtual void OnPropertyChanged(string propertyName)

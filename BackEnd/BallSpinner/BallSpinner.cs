@@ -62,9 +62,10 @@ public class BallSpinner : IBallSpinner
         if (IsConnected())
             return;
 
+        _connection?.Dispose();
         _connection = new TCP(_address);
         await _connection.Connect();
-
+        
         if (_connection.Connected)
             OnConnected();
         // Subscribe to smartDotRecieved event. Will trigger when a smartdot packet is received
@@ -78,6 +79,7 @@ public class BallSpinner : IBallSpinner
         Name = await _connection!.GetDeviceInfo();
         PropertyChanged?.Invoke(null, new PropertyChangedEventArgs(nameof(Name)));
 
+        //TODO get list of smart dots and let user select
         var smartDot = await _connection.ConnectSmartDot();
 
         // Subscribe to OnDataRecievedEvent

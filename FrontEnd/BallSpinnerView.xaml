@@ -125,18 +125,22 @@
                 </Grid>
             </VerticalStackLayout>
         </Border>
-        <Grid InputTransparent="True" IsVisible="{Binding NotConnectedFadeVisible}">
+        <Grid IsVisible="{Binding NotConnectedFadeVisible}">
             <BoxView
                 HorizontalOptions="FillAndExpand"
+                InputTransparent="True"
                 Opacity="0.5"
                 VerticalOptions="FillAndExpand"
                 Color="Black" />
-            <Label
-                HorizontalOptions="CenterAndExpand"
-                HorizontalTextAlignment="Center"
-                Text="Not Connected"
-                VerticalOptions="CenterAndExpand"
-                VerticalTextAlignment="Center" />
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                <Label
+                    HorizontalOptions="CenterAndExpand"
+                    HorizontalTextAlignment="Center"
+                    Text="Not Connected"
+                    VerticalOptions="CenterAndExpand"
+                    VerticalTextAlignment="Center" />
+                <Button Clicked="Reconnect_Clicked" Text="Reconnect" />
+            </VerticalStackLayout>
         </Grid>
 
     </Grid>
