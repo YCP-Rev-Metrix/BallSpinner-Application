@@ -144,15 +144,15 @@ public class BallSpinner : IBallSpinner
             // This needs to be refactored to send predefined instructions based on kinematic calculations
             byte[] instructions = new byte[5];
             // Indicates a motor instruction packet
-            instructions[0] = 0x60;
+            instructions[0] = 0x88;
             // Message size
             instructions[1] = 0x03;
-            //Motor 1
+            //Motor 1 (main motor)
             instructions[2] = (byte) CurrentVoltage;
             //Motor 2
-            instructions[3] = (byte) CurrentVoltage;
+            instructions[3] = (byte) 2;
             //Motor 3
-            instructions[4] = (byte) CurrentVoltage;
+            instructions[4] = (byte) 2;
             // Send the motor instruction to the PI
             _connection.SendPacketToSmartDot(instructions);
             // Iterate current voltage for next iteration
