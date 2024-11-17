@@ -15,7 +15,7 @@ public partial class Database : IDatabase
     public async Task<SimulatedShotList?> GetListOfShots()
     {
         // If the user is not logged in, return false
-        if (this.UserTokens.TokenA == null)
+        if (this.UserTokens == null)
         {
             throw new UnauthorizedAccessException();
         }

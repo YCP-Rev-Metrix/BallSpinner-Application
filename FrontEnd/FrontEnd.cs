@@ -170,7 +170,7 @@ public class FrontEnd : IFrontEnd
         if (_newCloudManagementWindow != null)
             return;
 
-        _newCloudManagementWindow = new Window(new CloudManagementPage())
+        _newCloudManagementWindow = new Window(new CloudManagementPage(Backend.Database))
         {
             Title = "InputValuesPage"
         };
