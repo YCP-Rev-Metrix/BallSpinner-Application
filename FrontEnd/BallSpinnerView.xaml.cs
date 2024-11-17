@@ -43,4 +43,9 @@ public partial class BallSpinnerView : ContentView
             Console.WriteLine(e.ToString());
         }
     }
+
+    private void Reconnect_Clicked(object sender, EventArgs e)
+    {
+        _viewModel.Reconnect();
+    }
 }

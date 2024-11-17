@@ -26,8 +26,10 @@ public class TCP : IDisposable
 
     public delegate void SmartDotRecievedHandler(string[] SmartDotData, Metric[] Metrics, float XData, float YData, float ZData, float timeStamp);
 
-    // Event handler to be fired off when a SmartDot packet is recieved
-    public event SmartDotRecievedHandler SmartDotRecievedEvent;
+    /// <summary>
+    /// Fired when a SmartDot packet is recieved
+    /// </summary>
+    public event SmartDotRecievedHandler? SmartDotRecievedEvent;
     
     private TcpClient _client;
     private IPAddress _address;
@@ -39,6 +41,7 @@ public class TCP : IDisposable
     private readonly byte[] _send = new byte[BUFFER_SIZE];
 
     private List<(MessageType Type, TaskCompletionSource<object> Task)> _pendingMessages = new();
+    
     /// <summary/>
     public TCP(IPAddress address)
     {
