@@ -147,7 +147,11 @@ public class FrontEnd : IFrontEnd
 
         _newInitialValuesWindow = new Window(new InitialValues())
         {
-            Title = "InputValuesPage"
+            Title = "InputValuesPage",
+            Width = 400,
+            Height = 500,
+            X = 100,
+            Y = 100
         };
 
         Application.Current!.OpenWindow(_newInitialValuesWindow);

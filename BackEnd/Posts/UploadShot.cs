@@ -20,9 +20,9 @@ public partial class Database : IDatabase
     public async Task<bool> UploadShot(string name, float InitialSpeed)
     {
         // User is not logged in. Return false
-        if (this.UserTokens.TokenA == null)
+        if (this.UserTokens == null)
         {
-            return false;
+            throw new UnauthorizedAccessException();
         }
 
         List<SampleData> sampleData = new List<SampleData>();
