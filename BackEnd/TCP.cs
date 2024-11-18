@@ -24,7 +24,7 @@ public class TCP : IDisposable
     /// </summary>
     public bool Connected => _client.Connected;
 
-    public delegate void SmartDotRecievedHandler(string[] SmartDotData, Metric[] Metrics, float XData, float YData, float ZData, float timeStamp);
+    public delegate void SmartDotRecievedHandler(SensorType sensorType, float timeStamp, float XData, float YData, float ZData);
 
     /// <summary>
     /// Fired when a SmartDot packet is recieved
@@ -149,10 +149,20 @@ public class TCP : IDisposable
     {
         while (true)
         {
-            int size = await _client.Client.ReceiveAsync(_receive);
+            int size = 0;
+
+            try
+            {
+                size = await _client.Client.ReceiveAsync(_receive);
+            }
+            catch(Exception e)
+            {
+                _client.Dispose();
+                return;
+            }
 
             if (size <= 0)
-                return;
+                continue;
 
             var (messageType, messageSize) = GetMessageInfo(_receive);
 
@@ -178,27 +188,19 @@ public class TCP : IDisposable
 
                     break;
                 case MessageType.SmartDotDataPacket:
-                    //distribute data to subscribers
-                    int SensorType = _receive[2];
-                    int SampleCount = _receive[3] | (_receive[4] << 8) | (_receive[5] << 16);
-                    float timeStamp = _receive[6] | (_receive[7] << 8) | (_receive[8] << 16) | (_receive[9] << 32);
-                    float XData = _receive[10] | (_receive[11] << 8) | (_receive[12] << 16) | (_receive[13] << 32);
-                    float YData = _receive[14] | (_receive[15] << 8) | (_receive[16] << 16) | (_receive[17] << 32);
-                    float ZData = _receive[18] | (_receive[19] << 8) | (_receive[20] << 16) | (_receive[21] << 32);
-                    // Convert data to a string array
-                    string[] SmartDotData = new string[6] 
-                    {
-                        SensorType.ToString(), SampleCount.ToString(), timeStamp.ToString(), XData.ToString(), YData.ToString(), ZData.ToString()
-                    }; 
-                    // Define the metric type's
-                    Metric TypeX = (Metric) _receive[2];
-                    Metric TypeY = (Metric) (_receive[2] << 1);
-                    Metric TypeZ = (Metric) (_receive[2] << 2);
-                    Metric[] CurrentMetricTypes = {TypeX, TypeY, TypeZ};
-                    SmartDotRecievedEvent?.Invoke(SmartDotData, CurrentMetricTypes, XData, YData, ZData, timeStamp);
+                    SensorType sensorType = (SensorType)Enum.ToObject(typeof(SensorType), _receive[3]);
+                    int sampleCount = _receive[6] | (_receive[5] << 8) | (_receive[4] << 16); //3 bytes
+                    float timeStamp = BitConverter.ToSingle(_receive, 7); //BitConverter expects LITTLE ENDIAN
+                    float xData = BitConverter.ToSingle(_receive, 11);
+                    float yData = BitConverter.ToSingle(_receive, 15);
+                    float zData = BitConverter.ToSingle(_receive, 19);
+
+                    Debug.WriteLine($"{sensorType}: {xData} {yData} {zData}");
+                    SmartDotRecievedEvent?.Invoke(sensorType, timeStamp, xData, yData, zData);
                     break;
                 default:
-                    throw new Exception($"Unexpected message type '{messageType}'");
+                    break;
+                    //throw new Exception($"Unexpected message type '{messageType}'");
             }
         }
     }
@@ -217,19 +219,31 @@ public class TCP : IDisposable
 
         return null;
     }
+
     /// <summary>
-    /// For now unimplemented. Will be used to send motor instruction packets to SmartDot
+    /// Sends voltages to the motors
     /// </summary>
-    public async void SendPacketToSmartDot(byte[] instructions)
+    public async void SetMotorVoltages(byte x, byte y, byte z)
     {
-        if (!Connected)
+        if (!_client.Connected)
+            throw new Exception("Can't send instructions without being connected");
+
+        // FOR NOW! This is a script that will send automated instructions for MS2
+        // This needs to be refactored to send predefined instructions based on kinematic calculations
+        byte[] instructions = new byte[]
         {
-            throw new Exception("Must establish a connection to the ballspinner first");
-        }
-        else 
-        {
-            throw new NotImplementedException();
-        }
+            0x88, //Type
+
+            0x00,
+            0x03, //Size
+
+            x, //Motor x
+            y, //Motor y
+            z, //Motor z
+        };
+
+        // Send the motor instruction to the PI
+        await _client.Client.SendAsync(instructions);
     }
 }
 
@@ -279,4 +293,12 @@ public enum MessageType : byte
     /// Send or receive raw, UTF-8 text
     /// </summary>
     Text =  0b11_11_11_11,
+}
+
+public enum SensorType : byte
+{ 
+    Accelerometer = 0x41,
+    Gyroscope = 0x47,
+    Light = 0x4C,
+    Magnetometer = 0x4D
 }

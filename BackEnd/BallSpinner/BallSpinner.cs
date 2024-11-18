@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using Timer = System.Timers.Timer;
 
 namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 
@@ -28,11 +29,6 @@ public class BallSpinner : IBallSpinner
 
     /// <inheritdoc/>
     public event Action? SendRejection;
-    
-    // TEMP variables. For now, used for automated motor instructions
-    public int CurrentVoltage = 1;
-    private static System.Timers.Timer aTimer;
-
 
     /// <inheritdoc/>
     public event Action<bool>? OnConnectionChanged;
@@ -42,6 +38,9 @@ public class BallSpinner : IBallSpinner
 
     private TCP? _connection;
     private IPAddress _address;
+
+    private byte _currentVoltage = 0;
+    private Timer? _motorTimer;
 
     /// <summary />
     public BallSpinner(IPAddress address)
@@ -54,6 +53,10 @@ public class BallSpinner : IBallSpinner
     public void Dispose()
     {
         _connection?.Dispose();
+        _connection = null;
+
+        _motorTimer?.Dispose();
+        _motorTimer = null;
     }
 
     /// <inheritdoc/>
@@ -68,8 +71,6 @@ public class BallSpinner : IBallSpinner
         
         if (_connection.Connected)
             OnConnected();
-        // Subscribe to smartDotRecieved event. Will trigger when a smartdot packet is received
-        _connection.SmartDotRecievedEvent += SmartDotRecievedHandler;
     }
 
     private async void OnConnected()
@@ -82,9 +83,15 @@ public class BallSpinner : IBallSpinner
         //TODO get list of smart dots and let user select
         var smartDot = await _connection.ConnectSmartDot();
 
-        // Subscribe to OnDataRecievedEvent
-        //_connection.OnDataRecieved += OnDataRecievedEventHandler;
+        // Subscribe to smartDotRecieved event. Will trigger when a smartdot packet is received
+        _connection.SmartDotRecievedEvent += SmartDotRecievedEvent;
+
         OnConnectionChanged?.Invoke(true);
+    }
+
+    private void SmartDotRecievedEvent(SensorType sensorType, float timeStamp, float XData, float YData, float ZData)
+    {
+        DataParser.SendSmartDotToSubscribers(sensorType, timeStamp, XData, YData, ZData);
     }
 
     /// <inheritdoc/>
@@ -114,58 +121,36 @@ public class BallSpinner : IBallSpinner
     /// <inheritdoc/>
     public void Start()
     {
-        //message ball spinner
+        Stop();
+
+        _currentVoltage = 1;
+        _motorTimer = new Timer(TimeSpan.FromSeconds(1));
+        _motorTimer.Elapsed += OnTimedEvent;
+        _motorTimer.Start();
     }
 
     /// <inheritdoc/>
     public void Stop()
     {
-        //message ball spinner
+        _motorTimer?.Dispose();
+        _motorTimer = null;
     }
     
-    public void SendInstructions()
+    private void OnTimedEvent(object? source, ElapsedEventArgs e)
     {
-        aTimer = new System.Timers.Timer(500);
-        // Run event handler to send packet every 0.5 seconds. Make it repeat.
-        aTimer.Elapsed += OnTimedEvent;
-        aTimer.AutoReset = true;
-        aTimer.Enabled = true;
-    }
-    private void OnTimedEvent(Object source, ElapsedEventArgs e)
-    {
-        if (CurrentVoltage > 30)
-        {
-            // Kill the timer
-            aTimer.Stop();
-            aTimer.Dispose();
-        }
-        else {
-            // FOR NOW! This is a script that will send automated instructions for MS2
-            // This needs to be refactored to send predefined instructions based on kinematic calculations
-            byte[] instructions = new byte[5];
-            // Indicates a motor instruction packet
-            instructions[0] = 0x88;
-            // Message size
-            instructions[1] = 0x03;
-            //Motor 1 (main motor)
-            instructions[2] = (byte) CurrentVoltage;
-            //Motor 2
-            instructions[3] = (byte) 2;
-            //Motor 3
-            instructions[4] = (byte) 2;
-            // Send the motor instruction to the PI
-            _connection.SendPacketToSmartDot(instructions);
-            // Iterate current voltage for next iteration
-            CurrentVoltage++;
-            // Deallocate instructions
-            instructions = null;
-        }
-    }
-    /// <summary>
-    /// Fires when TCP recieves a SmartDot packet
-    /// </summary>
-    public void SmartDotRecievedHandler(string[] SmartDotData, Metric[] Metrics, float XData, float YData, float ZData, float timeStamp)
-    {
-        DataParser.SendSmartDotToSubscribers(SmartDotData, Metrics, XData, YData, ZData, timeStamp);
+        if (!IsConnected())
+            throw new Exception("Can't update motors without connection");
+
+        _currentVoltage++;
+
+        if (_currentVoltage >= 30) //Primary motor supports up to 30, secondary motors only 12
+            _currentVoltage = 0;
+
+        int v = _currentVoltage;
+        if (_currentVoltage > 10)
+            _connection!.SetMotorVoltages(_currentVoltage, 10, 0);
+        else
+            _connection!.SetMotorVoltages(0, 3, 5);
+
     }
 }
