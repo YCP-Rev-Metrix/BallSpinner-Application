@@ -80,6 +80,8 @@ public class BallSpinner : IBallSpinner
         Name = await _connection!.GetDeviceInfo();
         PropertyChanged?.Invoke(null, new PropertyChangedEventArgs(nameof(Name)));
 
+        Stop();
+
         //TODO get list of smart dots and let user select
         var smartDot = await _connection.ConnectSmartDot();
 
@@ -134,6 +136,8 @@ public class BallSpinner : IBallSpinner
     {
         _motorTimer?.Dispose();
         _motorTimer = null;
+
+        _connection?.SetMotorVoltages(0, 0, 0);
     }
     
     private void OnTimedEvent(object? source, ElapsedEventArgs e)
