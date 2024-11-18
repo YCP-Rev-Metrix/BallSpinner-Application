@@ -89,6 +89,11 @@ scene.add(arrowHe);
 // arrow out the side
 const arrowH = new THREE.ArrowHelper(new THREE.Vector3(0, 2, 0), mesh.position, length, hex);
 
+let x = 0;
+let y = 0;
+let z = 0;
+const initialRotation = new THREE.Matrix4();
+
 scene.add(arrowH);
 
 function render() {
@@ -141,17 +146,49 @@ window.data = function (metric, value, time) {
     console.log(metric + " " + value + " " + time);
 
     if (time > minX && metric === 'RotationX') {
-        mesh.rotation.x = value;
+        x = value;
         minX = time;
     }
     else if (time > minY && metric === 'RotationY') {
-        mesh.rotation.y = value;
+        y = value;
         minY = time;
     }
     else if (time > minZ && metric === 'RotationZ') {
-        mesh.rotation.z = value;
+        z = value;
+
+        if (minZ == 0) {
+            initialRotation = new THREE.Matrix4();
+
+            let euler = new THREE.Euler(
+                x,
+                y,
+                z,
+                'XYZ'
+            );
+
+            initialRotation.makeRotationFromEuler(euler);
+        }
+
         minZ = time;
     }
+
+    let newEuler = new THREE.Euler(THREE.MathUtils.degToRad(x), THREE.MathUtils.degToRad(y), THREE.MathUtils.degToRad(z), 'XYZ');
+    let newMatrix = new THREE.Matrix4();
+    newMatrix.makeRotationFromEuler(newEuler);
+
+    let combinedMatrix = new THREE.Matrix4();
+    combinedMatrix.multiply(newMatrix).multiply(initialRotation);
+
+    let quaternionB = new THREE.Quaternion().setFromRotationMatrix(combinedMatrix);
+
+    // Step 2: Interpolate the quaternions using slerp (spherical linear interpolation)
+    let alpha = 0.5;  // Interpolation factor (0.0 is matrixA, 1.0 is matrixB)
+    let interpolatedQuaternion = new THREE.Quaternion().slerp(quaternionA, quaternionB, alpha);
+
+    // Step 3: Convert the interpolated quaternion back to a rotation matrix
+    let interpolatedMatrix = new THREE.Matrix4().makeRotationFromQuaternion(interpolatedQuaternion);
+
+    mesh.rotation.setFromRotationMatrix(combinedMatrix);
 }
 
 function onWindowResize() {
