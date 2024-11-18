@@ -89,9 +89,9 @@ public class BallSpinner : IBallSpinner
         OnConnectionChanged?.Invoke(true);
     }
 
-    private void SmartDotRecievedEvent(SensorType sensorType, float timeStamp, float XData, float YData, float ZData)
+    private void SmartDotRecievedEvent(SensorType sensorType, float timeStamp, int sampleCount, float XData, float YData, float ZData)
     {
-        DataParser.SendSmartDotToSubscribers(sensorType, timeStamp, XData, YData, ZData);
+        DataParser.SendSmartDotToSubscribers(sensorType, timeStamp, sampleCount, XData, YData, ZData);
     }
 
     /// <inheritdoc/>

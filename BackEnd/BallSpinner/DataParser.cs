@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RevMetrix.BallSpinner.BackEnd.Common.Utilities;
 
 namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 
@@ -15,11 +16,11 @@ public class DataParser
     private event Action<Metric, float, float>? OnDataReceived;
     //public event SmartDotPacketRecieved;
     // Initialize writer. On a halt connection event, dispose method must be called.
-    //WriteToTempRevFile writer = new WriteToTempRevFile();
+    //WriteToTempRevFile writer = new WriteToTempRevFile(Utilities.GetTempDir()+"/TempRev.csv");
     /// <summary>
     /// Takes a parsed packet, and sends it to the rev file Writer and the Simulation
     /// </summary>
-    public void SendSmartDotToSubscribers(SensorType sensorType, float timeStamp, float XData, float YData, float ZData)
+    public void SendSmartDotToSubscribers(SensorType sensorType, float timeStamp, int sampleCount, float XData, float YData, float ZData)
     {
         // Send to writer
         //writer.WriteData(SmartDotData);

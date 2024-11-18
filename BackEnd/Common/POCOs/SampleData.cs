@@ -6,25 +6,24 @@ public class SampleData
 {
     public SampleData() { }
 
-    public SampleData(int? sensorType, int? count, float? timestamp, float? x, float? y, float? z)
+    public SampleData(string? type, int? count, float? timestamp, float? x, float? y, float? z)
     {
-        SensorType = sensorType;
-        Count = count;
-        Timestamp = timestamp;
+        this.type = type;
+        this.count = count;
+        logtime = timestamp;
         X = x;
         Y = y;
         Z = z;
     }
         
-    public int? SensorType { get; set; }
+    public string? type { get; set; }
 
-    public int? Count { get; set; }
+    public int? count { get; set; }
 
-    public float? Timestamp { get; set; }
+    public float? logtime { get; set; }
 
     public float? X { get; set; }
     public float? Y { get; set; }
     public float? Z { get; set; }
-    
 
 }

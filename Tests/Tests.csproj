@@ -31,10 +31,4 @@
       <ProjectReference Include="..\BackEnd\BackEnd.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <None Update="TestRevFile.csv">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
 </Project>

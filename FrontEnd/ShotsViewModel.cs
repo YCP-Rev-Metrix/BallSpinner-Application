@@ -30,28 +30,28 @@ internal class ShotsViewModel
 
         if (a == 0)
         {
-            Shots.Add(new SimulatedShot { shot = new ShotInfo("Patrick", 20, 20, 20, 20) });
-            Shots.Add(new SimulatedShot { shot = new ShotInfo("Ryan", 20, 20, 20, 20) });
-            Shots.Add(new SimulatedShot { shot = new ShotInfo("Christain", 20, 20, 20, 20) });
+            Shots.Add(new SimulatedShot { simulatedShot = new ShotInfo("Patrick", 20, 20, 20, 20) });
+            Shots.Add(new SimulatedShot { simulatedShot = new ShotInfo("Ryan", 20, 20, 20, 20) });
+            Shots.Add(new SimulatedShot { simulatedShot = new ShotInfo("Christain", 20, 20, 20, 20) });
         }
         else if (a == 1)
         {
             for (int i = 0; i < 100; i++)
             {
-                Shots.Add(new SimulatedShot { shot = new ShotInfo("Many entry test: " + i, 20, 20, 20, 20) });
+                Shots.Add(new SimulatedShot { simulatedShot = new ShotInfo("Many entry test: " + i, 20, 20, 20, 20) });
             }
         }
         else if (a == 2)
         {
 
-            Shots.Add(new SimulatedShot { shot = new ShotInfo("Long entry name test: This is a very long name, Walton Alouicious Gonzaga XV", 20, 20, 20, 20) });
+            Shots.Add(new SimulatedShot { simulatedShot = new ShotInfo("Long entry name test: This is a very long name, Walton Alouicious Gonzaga XV", 20, 20, 20, 20) });
         }
         else if (a == 3)
         {
             SimulatedShotList list = await _database.GetListOfShots();
             if (list != null)
             {
-                foreach (var shot in list.shotList) { Shots.Add(shot); }
+                foreach (var shot in list.shots) { Shots.Add(shot); }
             }
         }
     }

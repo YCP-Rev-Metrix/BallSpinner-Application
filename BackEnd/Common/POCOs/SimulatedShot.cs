@@ -6,6 +6,6 @@ namespace RevMetrix.BallSpinner.BackEnd.Common.POCOs;
 
 public class SimulatedShot
 {
-    public ShotInfo? shot { get; set; }
+    public ShotInfo? simulatedShot { get; set; }
     public SampleData?[] data { get; set; }
 }

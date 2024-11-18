@@ -23,8 +23,10 @@ public class TCP : IDisposable
     /// True if there is an existing TCP connection
     /// </summary>
     public bool Connected => _client.Connected;
-
-    public delegate void SmartDotRecievedHandler(SensorType sensorType, float timeStamp, float XData, float YData, float ZData);
+    /// <summary>
+    /// Method signature for the SmartDotReceived event 
+    /// </summary>
+    public delegate void SmartDotRecievedHandler(SensorType sensorType, float timeStamp, int sampleCount, float XData, float YData, float ZData);
 
     /// <summary>
     /// Fired when a SmartDot packet is recieved
@@ -196,7 +198,7 @@ public class TCP : IDisposable
                     float zData = BitConverter.ToSingle(_receive, 19);
 
                     Debug.WriteLine($"{sensorType}: {xData} {yData} {zData}");
-                    SmartDotRecievedEvent?.Invoke(sensorType, timeStamp, xData, yData, zData);
+                    SmartDotRecievedEvent?.Invoke(sensorType, timeStamp, sampleCount, xData, yData, zData);
                     break;
                 default:
                     break;

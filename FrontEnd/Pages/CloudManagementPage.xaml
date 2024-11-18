@@ -66,15 +66,15 @@
                                 <ColumnDefinition Width="100" />
                             </Grid.ColumnDefinitions>
                             <Label Grid.Column="0" 
-                                    Text="{Binding shot.Name}" />
+                                    Text="{Binding simulatedShot.Name}" />
                             <Label Grid.Column="1" 
-                                    Text="{Binding shot.Speed}" />
+                                    Text="{Binding simulatedShot.Speed}" />
                             <Label Grid.Column="2" 
-                                   Text="{Binding shot.Angle}" />
+                                   Text="{Binding simulatedShot.Angle}" />
                             <Label Grid.Column="3" 
-                                   Text="{Binding shot.Position}" />
+                                   Text="{Binding simulatedShot.Position}" />
                             <Label Grid.Column="4" 
-                                   Text="{Binding shot.Frequency}" />
+                                   Text="{Binding simulatedShot.Frequency}" />
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

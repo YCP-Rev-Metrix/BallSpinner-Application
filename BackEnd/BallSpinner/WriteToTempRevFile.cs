@@ -10,7 +10,7 @@ public class WriteToTempRevFile : IDisposable
     private bool _disposed = false;
     private bool _isFileCleared = false;
 
-    public WriteToTempRevFile(string filePath = "./TempRev.csv")
+    public WriteToTempRevFile(string filePath)
     {
         _filePath = filePath;
     }
