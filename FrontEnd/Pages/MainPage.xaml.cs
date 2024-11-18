@@ -135,7 +135,12 @@ public partial class MainPage : ContentPage
 
         if(await DisplayAlert("Notice", "Would you like to save this test", "Yes", "No"))
         {
-            await _database.UploadShot(await DisplayPromptAsync("Notice", "Please name the test"), 20);
+            string name = await DisplayPromptAsync("Notice", "Please name the test");
+
+            if (name != null)
+            {
+                await _database.UploadShot(name, 20);
+            }
         }
 
         //throw new NotImplementedException();
