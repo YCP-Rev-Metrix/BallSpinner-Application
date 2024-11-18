@@ -16,15 +16,14 @@ public class DataParser
     private event Action<Metric, float, float>? OnDataReceived;
     //public event SmartDotPacketRecieved;
     // Initialize writer. On a halt connection event, dispose method must be called.
-    //WriteToTempRevFile writer = new WriteToTempRevFile(Utilities.GetTempDir()+"/TempRev.csv");
+    WriteToTempRevFile writer = new WriteToTempRevFile(Utilities.GetTempDir()+"/TempRev.csv");
     /// <summary>
     /// Takes a parsed packet, and sends it to the rev file Writer and the Simulation
     /// </summary>
     public void SendSmartDotToSubscribers(SensorType sensorType, float timeStamp, int sampleCount, float XData, float YData, float ZData)
     {
-        // Send to writer
-        //writer.WriteData(SmartDotData);
         //Debug.WriteLine();
+        string sensorTypeString;
 
         // Invoke the event for the simulation for each axis
         switch (sensorType)
@@ -33,26 +32,35 @@ public class DataParser
                 OnDataReceived?.Invoke(Metric.AccelerationX, XData, timeStamp);
                 OnDataReceived?.Invoke(Metric.AccelerationY, YData, timeStamp);
                 OnDataReceived?.Invoke(Metric.AccelerationZ, ZData, timeStamp);
-
+                sensorTypeString = "Accelerometer";
                 break;
             case SensorType.Gyroscope:
                 OnDataReceived?.Invoke(Metric.RotationX, XData, timeStamp);
                 OnDataReceived?.Invoke(Metric.RotationY, YData, timeStamp);
                 OnDataReceived?.Invoke(Metric.RotationZ, ZData, timeStamp);
-
+                sensorTypeString = "Gyroscope";
                 break;
             case SensorType.Light:
                 OnDataReceived?.Invoke(Metric.Light, XData, timeStamp);
-
+                sensorTypeString = "Light";
                 break;
             case SensorType.Magnetometer:
                 OnDataReceived?.Invoke(Metric.MagnetometerX, XData, timeStamp);
                 OnDataReceived?.Invoke(Metric.MagnetometerY, YData, timeStamp);
                 OnDataReceived?.Invoke(Metric.MagnetometerZ, ZData, timeStamp);
+                sensorTypeString = "Magnetometer";
                 break;
             default:
+                sensorTypeString = "";
                 break;
         }
+
+        string[] SmartDotData =
+        {
+            sensorTypeString, timeStamp.ToString(), sampleCount.ToString(), XData.ToString(), YData.ToString(),
+            ZData.ToString()
+        };
+        writer.WriteData(SmartDotData);
     }
 
     /// <summary>
