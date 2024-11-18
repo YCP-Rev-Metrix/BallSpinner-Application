@@ -21,5 +21,4 @@ public partial class Database: IDatabase
             BaseAPIURL = "https://api.revmetrix.io/api";
         }
     }
-   
 }

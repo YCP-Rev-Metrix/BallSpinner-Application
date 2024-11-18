@@ -4,5 +4,5 @@ namespace RevMetrix.BallSpinner.BackEnd.Common.POCOs;
 ///</Summary>
 public class SimulatedShotList
 {
-    public SimulatedShot[] shotList { get; set; }
+    public SimulatedShot[] shots { get; set; }
 }

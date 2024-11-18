@@ -8,6 +8,7 @@ using RevMetrix.BallSpinner.BackEnd;
 using CsvHelper;
 using CsvHelper.Configuration;
 using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+using RevMetrix.BallSpinner.BackEnd.Common.Utilities;
 
 namespace RevMetrix.BallSpinner.BackEnd.Database;
 
@@ -16,6 +17,7 @@ public partial class Database : IDatabase
     ///<Summary>
     /// Uploades a user's shot from the local rev file after running a simulated shot. Returns status of HTTP request.
     /// For now, we are just passing InitialSpeed and name as an argument because that is the only ones we have.
+    /// Throws and exception if the Temp csv file is empty and/or user is not logged in.
     ///</Summary>
     public async Task<bool> UploadShot(string name, float InitialSpeed)
     {
@@ -27,14 +29,19 @@ public partial class Database : IDatabase
 
         List<SampleData> sampleData = new List<SampleData>();
         // Get sample data from temp rev file
-        string path = "./Backend/BallSpinner/TempRev.csv";
+        string path = Utilities.GetTempDir() + "/TempRev.csv";
         await GetSampleData(sampleData, path);
-        
-        ShotInfo parameters = new ShotInfo(name, InitialSpeed, null, null, null);
+        //If the csv is empty...
+        if (sampleData.Count == 0)
+        {
+            throw new Exception("No data to upload. Temporary csv is empty.");
+        }
+
+        ShotInfo parameters = new ShotInfo(name, InitialSpeed, 20, 20, 20);
         var requestObject = new
         {
-            parameters = parameters,
-            sampleData = sampleData
+            simulatedShot = parameters,
+            data = sampleData
         };
         var jsonBody = JsonConvert.SerializeObject(requestObject);
         // Create the request content

@@ -17,11 +17,17 @@ public interface IDatabase
     //Task DeleteShot();
     //Task DeleteUser();
     //Task GetListOfBallSpinners();
+    /// <summary>
+    /// Returns a list of shots for the current user
+    /// </summary>
     Task<SimulatedShotList?> GetListOfShots();
     //Task GetListOfSmartDots();
     //Task GetShotData();
     //Task RegisterSmartDot();
     //Task RegisterBallSpinner();
+    /// <summary>
+    /// Uploads a shot for the current user. The shot will be parsed from whatever is in the TempRev.csv file.
+    /// </summary>
     Task<bool> UploadShot(string name, float InitialSpeed);
     //Task GetBalls();
     ///<Summary>

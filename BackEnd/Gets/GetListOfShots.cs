@@ -4,7 +4,6 @@ using System.Xml;
 using Newtonsoft.Json;
 using RevMetrix.BallSpinner.BackEnd;
 using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
-
 namespace RevMetrix.BallSpinner.BackEnd.Database;
 
 public partial class Database : IDatabase
