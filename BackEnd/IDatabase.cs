@@ -7,6 +7,11 @@ namespace RevMetrix.BallSpinner.BackEnd;
 ///</Summary>
 public interface IDatabase
 {
+    /// <summary>
+    /// Event invoked when the user logs in or logs out
+    /// </summary>
+    event Action<bool>? OnLoginChanged;
+
     // Define database methods
     ///<Summary>
     /// Database method for logging in a user

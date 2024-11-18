@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:RevMetrix.BallSpinner.FrontEnd">
 
     <ContentPage.MenuBarItems>
-        <MenuBarItem Text="File">
+        <MenuBarItem IsEnabled="{Binding LoggedIn}" Text="File">
             <MenuFlyoutItem
                 Clicked="OnNewShotButtonClicked"
                 IsEnabled="true"
@@ -29,14 +29,14 @@
                 Text="Exit" />
         </MenuBarItem>
 
-        <MenuBarItem Text="View">
+        <MenuBarItem IsEnabled="{Binding LoggedIn}" Text="View">
             <MenuFlyoutItem
                 Clicked="OnResetButtonClicked"
                 IsEnabled="false"
                 Text="Reset" />
         </MenuBarItem>
 
-        <MenuBarItem Text="User">
+        <MenuBarItem IsEnabled="{Binding LoggedIn}" Text="User">
             <MenuFlyoutItem
                 Clicked="OnLoginButtonClicked"
                 IsEnabled="true"
@@ -47,7 +47,7 @@
                 Text="Manage Shots" />
         </MenuBarItem>
 
-        <MenuBarItem Text="Help">
+        <MenuBarItem IsEnabled="{Binding LoggedIn}" Text="Help">
             <MenuFlyoutItem
                 Clicked="OnHelpButtonClicked"
                 IsEnabled="true"
@@ -55,7 +55,7 @@
         </MenuBarItem>
     </ContentPage.MenuBarItems>
 
-    <ContentPage.ToolbarItems>
+    <ContentPage.ToolbarItems IsEnabled="{Binding LoggedIn}">
         <ToolbarItem
             Clicked="OnStartButtonClicked"
             IsEnabled="true"
@@ -100,5 +100,23 @@
 
             </StackLayout>
         </ScrollView>
+
+        <Grid IsVisible="{Binding NotLoggedIn}">
+            <BoxView
+                HorizontalOptions="FillAndExpand"
+                InputTransparent="True"
+                Opacity="0.5"
+                VerticalOptions="FillAndExpand"
+                Color="Black" />
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                <Label
+                    Margin="10"
+                    HorizontalOptions="CenterAndExpand"
+                    HorizontalTextAlignment="Center"
+                    Text="Not Connected"
+                    VerticalOptions="CenterAndExpand"
+                    VerticalTextAlignment="Center" />
+            </VerticalStackLayout>
+        </Grid>
     </Grid>
 </ContentPage>

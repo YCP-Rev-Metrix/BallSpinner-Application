@@ -28,6 +28,7 @@ public partial class Database: IDatabase
         
         // Set the users token for the session
         this.UserTokens = responseObject;
+        OnLoginChanged?.Invoke(UserTokens is not null);
 
         return responseObject;
     }

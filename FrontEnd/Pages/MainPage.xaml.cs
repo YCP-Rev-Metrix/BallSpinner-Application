@@ -15,6 +15,9 @@ public partial class MainPage : ContentPage
 
     public ObservableCollection<BallSpinnerViewModel> BallSpinners { get; } = new();
 
+    public bool NotLoggedIn => !LoggedIn;
+    public bool LoggedIn { get; private set; } = false;
+
     /// <summary/>
     public MainPage()
     {
@@ -29,6 +32,16 @@ public partial class MainPage : ContentPage
     {
         _frontEnd = frontEnd;
         _database = database;
+
+        _database.OnLoginChanged += Database_OnLoginChanged;
+    }
+
+    private void Database_OnLoginChanged(bool obj)
+    {
+        LoggedIn = obj;
+
+        OnPropertyChanged(nameof(NotLoggedIn));
+        OnPropertyChanged(nameof(LoggedIn));
     }
 
     public void RemoveBallSpinner(BallSpinnerViewModel ballSpinner)
@@ -40,6 +53,8 @@ public partial class MainPage : ContentPage
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
+
+        _database.OnLoginChanged -= Database_OnLoginChanged;
 
         foreach (var ballSpinner in BallSpinners)
         {

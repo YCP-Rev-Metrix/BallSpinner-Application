@@ -8,7 +8,10 @@ public partial class Database : IDatabase
     private DatabaseTypes dbType;
     private string BaseAPIURL;
     public Token UserTokens;
-    
+
+    /// <inheritdoc/>
+    public event Action<bool>? OnLoginChanged;
+
     public Database(DatabaseTypes dbType)
     {
         this.dbType = dbType;
