@@ -16,7 +16,7 @@ public partial class Database : IDatabase
         // If the user is not logged in, return false
         if (this.UserTokens == null)
         {
-            throw new UnauthorizedAccessException();
+            throw new UnauthorizedAccessException("You must be logged in to access the database");
         }
 
         // Set the authorization header

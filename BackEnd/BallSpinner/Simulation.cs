@@ -92,7 +92,7 @@ public class Simulation : IBallSpinner
     ///<inheritdoc/>
     public void Start()
     {
-        TimeSpan frequency = TimeSpan.FromSeconds(1 / 30f);
+        TimeSpan frequency = TimeSpan.FromSeconds(1 / 10f);
         _timer = new Timer((o) =>
         {
 

@@ -65,6 +65,12 @@ public static class MauiProgram
                             appWindow.Move(centeredPosition);
                         }
                     }
+
+                    appWindow.Closing += (window, closeEvent) =>
+                    {
+                        if(window.Title.Contains("Login")) //Ugly hack
+                            closeEvent.Cancel = true;
+                    };
                 });
             });
         });

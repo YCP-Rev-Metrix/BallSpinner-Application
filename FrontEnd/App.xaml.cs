@@ -35,6 +35,8 @@ public partial class App : Application
     {
         _mainPage = (MainPage)((AppShell)MainPage!).CurrentPage;
         _mainPage.Init(FrontEnd, BackEnd.Database);
+
+        FrontEnd.Login();
     }
 
 

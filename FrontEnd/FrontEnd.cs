@@ -137,6 +137,7 @@ public class FrontEnd : IFrontEnd
         if (_newLoginWindow != null)
         {
             Application.Current!.CloseWindow(_newLoginWindow);
+            _newLoginWindow = null;
         }
     }
 
@@ -166,6 +167,7 @@ public class FrontEnd : IFrontEnd
         if (_newInitialValuesWindow != null)
         {
             Application.Current!.CloseWindow(_newInitialValuesWindow);
+            _newInitialValuesWindow = null;
         }
     }
 

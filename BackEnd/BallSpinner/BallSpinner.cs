@@ -124,7 +124,7 @@ public class BallSpinner : IBallSpinner
         Stop();
 
         _currentVoltage = 1;
-        _motorTimer = new Timer(TimeSpan.FromSeconds(1));
+        _motorTimer = new Timer(TimeSpan.FromSeconds(0.25));
         _motorTimer.Elapsed += OnTimedEvent;
         _motorTimer.Start();
     }
@@ -146,7 +146,6 @@ public class BallSpinner : IBallSpinner
         if (_currentVoltage >= 30) //Primary motor supports up to 30, secondary motors only 12
             _currentVoltage = 0;
 
-        int v = _currentVoltage;
         if (_currentVoltage > 10)
             _connection!.SetMotorVoltages(_currentVoltage, 10, 0);
         else

@@ -2,8 +2,6 @@ using RevMetrix.BallSpinner.BackEnd;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using RevMetrix.BallSpinner.BackEnd.Database;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
-using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 

@@ -22,7 +22,7 @@ public partial class NewBallSpinnerView : ContentPage
 	public async void AddBallSpinnerButton(object sender, EventArgs args)
 	{
         var addr = IPAddr.Text;
-		if (IPAddr == null)
+		if (string.IsNullOrEmpty(addr))
 		{
 			await DisplayAlert("Alert", "You have not entered an IP address", "Fine");
 		}
