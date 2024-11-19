@@ -150,11 +150,16 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private void OnStopButtonClicked(object sender, EventArgs args)
+    private async void OnStopButtonClicked(object sender, EventArgs args)
     {
         foreach (var spinner in BallSpinners)
         {
             spinner.Stop();
+        }
+
+        if(await DisplayAlert("Notice", "Would you like to save this throw", "Yes", "No"))
+        {
+            OnSaveShotButtonClicked(sender, args);
         }
     }
 
