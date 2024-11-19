@@ -17,7 +17,7 @@
                 Text="Load Shot" />
             <MenuFlyoutItem
                 Clicked="OnSaveShotButtonClicked"
-                IsEnabled="false"
+                IsEnabled="true"
                 Text="Save Shot As..." />
             <MenuFlyoutItem
                 Clicked="OnOptionsButtonClicked"
@@ -89,13 +89,6 @@
                     Clicked="OnAddBallSpinnerButtonClicked"
                     HorizontalOptions="Center"
                     Text="Add BallSpinner"
-                    VerticalOptions="Center" />
-
-                <Button
-                    Margin="10"
-                    Clicked="RevUpThoseFryersCauseIAmSureHungryForOne"
-                    HorizontalOptions="Center"
-                    Text="Start Motor"
                     VerticalOptions="Center" />
 
             </StackLayout>
