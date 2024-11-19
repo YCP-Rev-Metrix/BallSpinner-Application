@@ -118,7 +118,7 @@ public class FrontEnd : IFrontEnd
 
         _newLoginWindow = new Window(new LoginPage(this, Backend.Database))
         {
-            Title = "LoginPage",
+            Title = "Login",
             Width = 600,
             Height = 400,
             X = 100,
@@ -148,7 +148,7 @@ public class FrontEnd : IFrontEnd
 
         _newInitialValuesWindow = new Window(new InitialValues())
         {
-            Title = "InputValuesPage",
+            Title = "Input Values",
             Width = 400,
             Height = 500,
             X = 100,
@@ -178,7 +178,7 @@ public class FrontEnd : IFrontEnd
 
         _newCloudManagementWindow = new Window(new CloudManagementPage(Backend.Database))
         {
-            Title = "InputValuesPage"
+            Title = "Cloud Management"
         };
 
         Application.Current!.OpenWindow(_newCloudManagementWindow);

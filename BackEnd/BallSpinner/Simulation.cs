@@ -153,6 +153,6 @@ public class Simulation : IBallSpinner
         float pitch = MathF.Asin(-2f * (rotation.X * rotation.Z - rotation.W * rotation.Y));
         float roll = MathF.Atan2(2f * (rotation.X * rotation.Y + rotation.W * rotation.Z),
                                   rotation.W * rotation.W + rotation.X * rotation.X - rotation.Y * rotation.Y - rotation.Z * rotation.Z);
-        return new Vector3(yaw, pitch, roll);
+        return new Vector3(yaw, pitch, roll) / ((float)Math.PI / 180);
     }
 }

@@ -133,7 +133,21 @@ function render() {
     arrowH.setDirection(dit);           // Update arrow helper's direction
     arrowH.position.copy(mesh.position);
 
+    //ball
+    let newEuler = new THREE.Euler(THREE.MathUtils.degToRad(x), THREE.MathUtils.degToRad(y), THREE.MathUtils.degToRad(z), 'XYZ');
 
+    const newQuaternion = new THREE.Quaternion().setFromEuler(newEuler);
+
+    const lerpFactor = 0.1;
+    const interpolatedQuaternion = new THREE.Quaternion().slerpQuaternions(mesh.quaternion, newQuaternion, lerpFactor);
+
+    let newMatrix = new THREE.Matrix4();
+    newMatrix.makeRotationFromQuaternion(interpolatedQuaternion);
+
+    let combinedMatrix = new THREE.Matrix4();
+    combinedMatrix.multiply(newMatrix).multiply(initialRotation);
+
+    mesh.rotation.setFromRotationMatrix(combinedMatrix);
 
     renderer.render(scene, camera);
 }
@@ -171,24 +185,6 @@ window.data = function (metric, value, time) {
 
         minZ = time;
     }
-
-    let newEuler = new THREE.Euler(THREE.MathUtils.degToRad(x), THREE.MathUtils.degToRad(y), THREE.MathUtils.degToRad(z), 'XYZ');
-    let newMatrix = new THREE.Matrix4();
-    newMatrix.makeRotationFromEuler(newEuler);
-
-    let combinedMatrix = new THREE.Matrix4();
-    combinedMatrix.multiply(newMatrix).multiply(initialRotation);
-
-    let quaternionB = new THREE.Quaternion().setFromRotationMatrix(combinedMatrix);
-
-    // Step 2: Interpolate the quaternions using slerp (spherical linear interpolation)
-    let alpha = 0.5;  // Interpolation factor (0.0 is matrixA, 1.0 is matrixB)
-    let interpolatedQuaternion = new THREE.Quaternion().slerp(quaternionA, quaternionB, alpha);
-
-    // Step 3: Convert the interpolated quaternion back to a rotation matrix
-    let interpolatedMatrix = new THREE.Matrix4().makeRotationFromQuaternion(interpolatedQuaternion);
-
-    mesh.rotation.setFromRotationMatrix(combinedMatrix);
 }
 
 function onWindowResize() {

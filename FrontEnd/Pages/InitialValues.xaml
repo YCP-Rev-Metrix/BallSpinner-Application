@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="RevMetrix.BallSpinner.FrontEnd.InitialValues"
-             Title="InitialValues">
+<ContentPage
+    x:Class="RevMetrix.BallSpinner.FrontEnd.InitialValues"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="InitialValues">
     <VerticalStackLayout>
         <Label
             Margin="0,0,0,10"
             FontAttributes="Bold"
             FontSize="24"
             HorizontalOptions="Center"
-            Text="Login/Register" />
+            Text="Input Values" />
         <HorizontalStackLayout>
             <VerticalStackLayout Margin="20">
                 <Label
@@ -46,7 +47,7 @@
                     Placeholder="lbs."
                     SemanticProperties.HeadingLevel="Level2"
                     Text="" />
-            
+
                 <Entry
                     x:Name="Speed"
                     Margin="0,0,0,10"

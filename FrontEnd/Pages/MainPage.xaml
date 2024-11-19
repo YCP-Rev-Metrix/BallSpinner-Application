@@ -55,14 +55,14 @@
         </MenuBarItem>
     </ContentPage.MenuBarItems>
 
-    <ContentPage.ToolbarItems IsEnabled="{Binding LoggedIn}">
+    <ContentPage.ToolbarItems>
         <ToolbarItem
             Clicked="OnStartButtonClicked"
-            IsEnabled="true"
+            IsEnabled="{Binding LoggedIn}"
             Text="Start" />
         <ToolbarItem
             Clicked="OnStopButtonClicked"
-            IsEnabled="true"
+            IsEnabled="{Binding LoggedIn}"
             Text="Stop" />
         <ToolbarItem
             Clicked="OnResetButtonClicked"
@@ -113,7 +113,7 @@
                     Margin="10"
                     HorizontalOptions="CenterAndExpand"
                     HorizontalTextAlignment="Center"
-                    Text="Not Connected"
+                    Text="Not logged in"
                     VerticalOptions="CenterAndExpand"
                     VerticalTextAlignment="Center" />
             </VerticalStackLayout>
