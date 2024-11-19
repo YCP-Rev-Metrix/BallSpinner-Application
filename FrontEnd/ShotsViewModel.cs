@@ -26,7 +26,8 @@ internal class ShotsViewModel
     {
         Shots.Clear();
         Random random = new Random();
-        int a = random.Next(0,4);
+        //int a = random.Next(0,4);
+        int a = 3;
 
         if (a == 0)
         {

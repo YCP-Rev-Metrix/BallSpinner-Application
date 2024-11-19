@@ -1,7 +1,9 @@
 using RevMetrix.BallSpinner.BackEnd;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
+using RevMetrix.BallSpinner.BackEnd.Common.Utilities;
 using RevMetrix.BallSpinner.BackEnd.Database;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 
@@ -84,9 +86,30 @@ public partial class MainPage : ContentPage
         throw new NotImplementedException();
     }
 
-    private void OnSaveShotButtonClicked(object sender, EventArgs args)
+    private async void OnSaveShotButtonClicked(object sender, EventArgs args)
     {
-        throw new NotImplementedException();
+        if(await DisplayAlert("Save Shot as ...", "Save to database or local drive", "Database", "Local"))
+        {
+            string name = await DisplayPromptAsync("Notice", "Please name the test");
+
+            if (name != null)
+            {
+                await _database.UploadShot(name, 0);
+            }
+        }
+        else
+        {
+            string path = Utilities.GetTempDir();
+            /*
+            var dlg = new OpenFileDialog()
+            {
+                InitialDirectory = path,
+                Filter = "Text Files (*.txt) | *.txt | All Files (*.*) | *.*",
+                RestoreDirectory = true
+            };
+            */
+            throw new NotImplementedException();
+        }
     }
 
     private void OnOptionsButtonClicked(object sender, EventArgs args)
@@ -148,21 +171,6 @@ public partial class MainPage : ContentPage
         {
             BallSpinners.Add(new BallSpinnerViewModel(this, ballSpinner));
             OnPropertyChanged(nameof(BallSpinners));
-        }
-    }
-
-    private async void RevUpThoseFryersCauseIAmSureHungryForOne(object sender, EventArgs args)
-    {
-        // Call motor run
-
-        if(await DisplayAlert("Notice", "Would you like to save this test", "Yes", "No"))
-        {
-            string name = await DisplayPromptAsync("Notice", "Please name the test");
-
-            if (name != null)
-            {
-                await _database.UploadShot(name, 20);
-            }
         }
     }
 }
