@@ -1,4 +1,3 @@
-using RevMetrix.BallSpinner.BackEnd;
 using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
 namespace RevMetrix.BallSpinner.BackEnd.Database;
 
@@ -23,5 +22,10 @@ public partial class Database : IDatabase
         {
             BaseAPIURL = "https://api.revmetrix.io/api";
         }
+    }
+
+    public void SetUserTokens(Token token)
+    {
+        this.UserTokens = token;
     }
 }

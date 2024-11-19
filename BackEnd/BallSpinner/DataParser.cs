@@ -14,9 +14,8 @@ namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 public class DataParser
 {
     private event Action<Metric, float, float>? OnDataReceived;
+    // WriteToTempRevFile writer = new WriteToTempRevFile();
     //public event SmartDotPacketRecieved;
-    // Initialize writer. On a halt connection event, dispose method must be called.
-    WriteToTempRevFile writer = new WriteToTempRevFile(Utilities.GetTempDir()+"/TempRev.csv");
     /// <summary>
     /// Takes a parsed packet, and sends it to the rev file Writer and the Simulation
     /// </summary>
@@ -60,7 +59,7 @@ public class DataParser
             sensorTypeString, timeStamp.ToString(), sampleCount.ToString(), XData.ToString(), YData.ToString(),
             ZData.ToString()
         };
-        writer.WriteData(SmartDotData);
+        //writer.WriteData(SmartDotData); // Still unimplemented
     }
 
     /// <summary>

@@ -44,4 +44,8 @@ public interface IDatabase
     /// Parses temp rev file and puts data into a SampleData list
     ///</Summary>
     public Task<List<SampleData>> GetSampleData(List<SampleData> sampleData, string path);
+    ///<Summary>
+    /// Sets user tokens for a session
+    ///</Summary>
+    public void SetUserTokens(Token token);
 }

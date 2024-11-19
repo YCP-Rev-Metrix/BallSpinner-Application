@@ -1,10 +1,7 @@
-using System.Collections;
 using System.Globalization;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Xml;
 using Newtonsoft.Json;
-using RevMetrix.BallSpinner.BackEnd;
 using CsvHelper;
 using CsvHelper.Configuration;
 using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
@@ -29,7 +26,7 @@ public partial class Database : IDatabase
 
         List<SampleData> sampleData = new List<SampleData>();
         // Get sample data from temp rev file
-        string path = Utilities.GetTempDir() + "/TempRev.csv";
+        string path = Utilities.GetTempDir() + "/TestTempRev.csv";
         await GetSampleData(sampleData, path);
         //If the csv is empty...
         if (sampleData.Count == 0)

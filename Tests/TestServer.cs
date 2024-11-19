@@ -1,11 +1,9 @@
 using System;
 using System.Net;
 using System.Text;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Xml;
 using System.Text.Json;
 using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 class TestServer
 {
@@ -22,7 +20,8 @@ class TestServer
             { "/hello", HelloHandler },
             { "/posts/Authorize", LoginHandler },
             {"/posts/Register", RegisterHandler},
-            {"/gets/GetShotsByUsername", GetShotsHandler}
+            {"/gets/GetShotsByUsername", GetShotsHandler},
+            {"/posts/InsertSimulatedShot", UploadShotsHandler}
         };
 
         // Listen asynchronously
@@ -169,18 +168,35 @@ class TestServer
     } //Still needs to be implemented
     static object GetShotsHandler(HttpListenerRequest request, HttpListenerResponse response)
     {
-        // get request info
-         Stream body = request.InputStream;
-         Encoding encoding = request.ContentEncoding;
-         StreamReader reader = new StreamReader(body, encoding);
-                
-         // Convert the body data to a string
-         string bodyData = reader.ReadToEnd();
-         // Deserialize bodyData into Credentials object
-         User user = JsonSerializer.Deserialize<User>(bodyData);
-         
-         return true;
-                
-         
+        // Get jwt token from header
+        string auth = request.Headers["Authorization"];
+        
+        string JWT = auth.Substring("Bearer ".Length).Trim();
+
+        if (JWT  == "403")
+        {
+            response.StatusCode = 403;
+            return null;
+        }
+        
+        // TODO - Test with fake SimulatedShot list return data
+
+        return null;
+    }
+
+    static object UploadShotsHandler(HttpListenerRequest request, HttpListenerResponse response)
+    {
+        // Get jwt token from header
+        string auth = request.Headers["Authorization"];
+
+        string JWT = auth.Substring("Bearer ".Length).Trim();
+
+        if (JWT == "403")
+        {
+            response.StatusCode = 403;
+            return null;
+        }
+
+        return null;
     }
 }

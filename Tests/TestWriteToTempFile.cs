@@ -1,9 +1,4 @@
-using System.Globalization;
-using RevMetrix.BallSpinner.BackEnd.BallSpinner;
-
-using Xunit;
-using CsvHelper;
-using CsvHelper.Configuration;
+using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
 
 namespace RevMetrix.BallSpinner.Tests;
 
@@ -15,34 +10,33 @@ public class TestWriteToTempFile() : TestBase
     {
         string[] dataArray = new string[6] 
         {
-            "1", "5", "43", "434.212", "4342.2", "23423"
+            "Accelerometer", "5", "43", "434.212", "4342.2", "23423"
         };
         
         TempFileWriter.WriteData(dataArray);
         
         string[] dataArray2 =
         {
-            "3", "52", "4", "112.4124", "4342412.2", "44"
+            "Gyroscope", "52", "4", "112.4124", "4342412.2", "44"
         };
                 
         TempFileWriter.WriteData(dataArray2);
-        // For now, I test this by viewing the contents of the csv
-        /*
-        // Test the contents of the test csv
-        var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-        {
-            HasHeaderRecord  = false,
-        };
-
-        using (var reader = new StreamReader(projectPath + "/TestRevFile.csv"))
-        using (var csv = new CsvReader(reader, config))
-        {
-            var records = csv.GetRecords<>();
-            int recordCount = records.Count();
-            // Make sure there are the correct number of records in the csv
-            Assert.Equal(dataArray.Length, recordCount);
-            Assert.Equal(dataArray2.Length, recordCount);
-        }
-        */
+        // Use GetSampleData to view content of file
+        List<SampleData> list = new List<SampleData>();
+        Database.GetSampleData(list, revFilePath);
+        // Test to make sure dataArray1 is parsed correctly into sample and is 1st element
+        Assert.Equal("Accelerometer", list[0].type);
+        Assert.Equal(5, list[0].count);
+        Assert.Equal(43, list[0].logtime);
+        Assert.Equal((float) 434.212, list[0].X);
+        Assert.Equal((float) 4342.2, list[0].Y);
+        Assert.Equal((float)23423, list[0].Z);
+        // Test to make sure dataArray2 is parsed correctly into sample and is 2nd element
+        Assert.Equal("Gyroscope", list[1].type);
+        Assert.Equal(52, list[1].count);
+        Assert.Equal(4, list[1].logtime);
+        Assert.Equal((float) 112.4124, list[1].X);
+        Assert.Equal((float) 4342412.2, list[1].Y);
+        Assert.Equal((float)44, list[1].Z);
     }
 }

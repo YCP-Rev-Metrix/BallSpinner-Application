@@ -27,7 +27,7 @@ public partial class Database: IDatabase
         var responseObject = JsonConvert.DeserializeObject<Token>(responseBody);
         
         // Set the users token for the session
-        this.UserTokens = responseObject;
+        SetUserTokens(responseObject);
         OnLoginChanged?.Invoke(UserTokens is not null);
 
         return responseObject;

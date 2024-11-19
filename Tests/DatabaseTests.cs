@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Xml;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using RevMetrix.BallSpinner.BackEnd.Database;
+﻿using Newtonsoft.Json;
 using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
-using RevMetrix.BallSpinner.BackEnd.Common.Utilities;
-using Xunit;
+
 
 namespace RevMetrix.BallSpinner.Tests;
 public class DatabaseTests : TestBase
@@ -90,11 +81,23 @@ public class DatabaseTests : TestBase
           // Ensure method thorws exception when server responds with 403
           await Assert.ThrowsAsync<HttpRequestException>(() => Database.RegisterUser("string", "string", "403Response", "403Response", "string", "string"));
     }
-    
+
+    [Fact]
+    private async void UploadShotTests()
+    {
+        // Test how the database method reacts to a 403
+        Token token = new Token()
+        {
+            TokenA = "403",
+            TokenB = "403"
+        };
+        Database.SetUserTokens(token);
+        await Assert.ThrowsAsync<HttpRequestException>(() => Database.UploadShot("Test", 20));
+    }
+
     [Fact]
     private async void GetSampleDataTests()
     {
-        string path = Utilities.GetTempDir() + "/TestTempRev.csv";
         string[] dataArray = new string[6] 
         {
             "Gyroscope", "5", "43", "434.212", "4342.2", "23423"
@@ -117,7 +120,7 @@ public class DatabaseTests : TestBase
         TempFileWriter.WriteData(dataArray3);
 
         List<SampleData> sample = new List<SampleData>();
-        await Database.GetSampleData(sample, path);
+        await Database.GetSampleData(sample, revFilePath);
         // Test the contents of sample to make sure it is parsed into JSON correctly
         //Assert.Empty(sample);
         // Test to make sure dataArray1 is parsed correctly into sample and is 1st element
@@ -141,5 +144,18 @@ public class DatabaseTests : TestBase
         Assert.Equal((float) 2112.4124, sample[2].X);
         Assert.Equal((float) 431112.2, sample[2].Y);
         Assert.Equal((float)765.2, sample[2].Z);
+    }
+
+    [Fact]
+    private async void GetShotsTest()
+    {
+        // Test how the database method reacts to a 403
+        Token token = new Token()
+        {
+            TokenA = "403",
+            TokenB = "403"
+        };
+        Database.SetUserTokens(token);
+        await Assert.ThrowsAsync<HttpRequestException>(() => Database.GetListOfShots());
     }
 }

@@ -100,7 +100,7 @@
                                    Text="{Binding simulatedShot.Frequency}" />
                                     <Label Grid.Column="5">
                                         <Label.Text>
-                                            <MultiBinding StringFormat="{}{0}, {1}, {2}, {3}">
+                                            <MultiBinding StringFormat="{}{0}, {1}, {2}">
                                                 <Binding Path="data[0].X" />
                                                 <Binding Path="data[0].Y" />
                                                 <Binding Path="data[0].Z" />
