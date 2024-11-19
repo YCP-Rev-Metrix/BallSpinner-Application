@@ -134,6 +134,8 @@ public class BallSpinner : IBallSpinner
     {
         _motorTimer?.Dispose();
         _motorTimer = null;
+
+        _connection?.SetMotorVoltages(0, 0, 0);
     }
     
     private void OnTimedEvent(object? source, ElapsedEventArgs e)
