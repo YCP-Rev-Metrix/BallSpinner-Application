@@ -17,7 +17,7 @@ public class Simulation : IBallSpinner
     public string MAC { get; set; } = "Simulation";
 
     ///<inheritdoc/>
-    public DataParser DataParser { get; } = new DataParser();
+    public DataParser DataParser { get; private set; } = new DataParser();
 
     ///<inheritdoc/>
     public string Name { get; set; } = "Simulation";
@@ -92,6 +92,10 @@ public class Simulation : IBallSpinner
     ///<inheritdoc/>
     public void Start()
     {
+        Stop();
+
+        DataParser.Start(Name);
+
         TimeSpan frequency = TimeSpan.FromSeconds(1 / 10f);
         _timer = new Timer((o) =>
         {
@@ -106,9 +110,7 @@ public class Simulation : IBallSpinner
 
             // Update time and calculate rotation data
             float time = (float)DateTime.UtcNow.TimeOfDay.TotalSeconds;
-            DataParser.DataReceived(Metric.RotationX, eulerAngles.X, time);
-            DataParser.DataReceived(Metric.RotationY, eulerAngles.Y, time);
-            DataParser.DataReceived(Metric.RotationZ, eulerAngles.Z, time);
+            DataParser.SendSmartDotToSubscribers(SensorType.Gyroscope, time, 0, eulerAngles.X, eulerAngles.Y, eulerAngles.Z);
 
             // Update velocity based on constant acceleration
             velocity += acceleration * (float)frequency.TotalSeconds;
@@ -123,19 +125,16 @@ public class Simulation : IBallSpinner
             Debug.WriteLine($"Acceleration: X={acceleration.X}, Y={acceleration.Y}, Z={acceleration.Z}");*/
 
             // Send updated velocity data as Acceleration metrics
-            DataParser.DataReceived(Metric.AccelerationX, acceleration.X, time);
-            DataParser.DataReceived(Metric.AccelerationY, acceleration.Y, time);
-            DataParser.DataReceived(Metric.AccelerationZ, acceleration.Z, time);
+            DataParser.SendSmartDotToSubscribers(SensorType.Accelerometer, time, 0, acceleration.X, acceleration.Y, acceleration.Z);
 
             // Send magnetometer data (where Z-Forward is north)
             Vector3 magnetometer = Vector3.TransformNormal(Vector3.UnitZ, Matrix4x4.CreateFromQuaternion(Rotation));
-            DataParser.DataReceived(Metric.MagnetometerX, magnetometer.X, time);
-            DataParser.DataReceived(Metric.MagnetometerY, magnetometer.Y, time);
-            DataParser.DataReceived(Metric.MagnetometerZ, magnetometer.Z, time);
+            DataParser.SendSmartDotToSubscribers(SensorType.Magnetometer, time, 0, magnetometer.X, magnetometer.Y, magnetometer.Z);
 
             // Send light data (where Y-Up is brightest)
             float light = Math.Max(Vector3.Dot(Vector3.TransformNormal(Vector3.UnitZ, Matrix4x4.CreateFromQuaternion(Rotation)), Vector3.UnitY), 0);
-            DataParser.DataReceived(Metric.Light, light, time);
+            DataParser.SendSmartDotToSubscribers(SensorType.Magnetometer, time, 0, light, 0, 0);
+
         }, null, frequency, frequency);
     }
 
@@ -143,6 +142,7 @@ public class Simulation : IBallSpinner
     public void Stop()
     {
         _timer?.Dispose();
+        DataParser.Stop();
     }
 
     private Vector3 GetEulerAngles(Quaternion rotation)

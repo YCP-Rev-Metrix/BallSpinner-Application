@@ -6,7 +6,7 @@ public class SampleData
 {
     public SampleData() { }
 
-    public SampleData(string? type, int? count, float? timestamp, float? x, float? y, float? z)
+    public SampleData(string? type, float? timestamp, int? count, float? x, float? y, float? z)
     {
         this.type = type;
         this.count = count;
@@ -18,9 +18,9 @@ public class SampleData
         
     public string? type { get; set; }
 
-    public int? count { get; set; }
-
     public float? logtime { get; set; }
+
+    public int? count { get; set; }
 
     public float? X { get; set; }
     public float? Y { get; set; }

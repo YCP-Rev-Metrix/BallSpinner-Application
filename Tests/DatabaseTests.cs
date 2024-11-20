@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
 
 
@@ -92,7 +93,12 @@ public class DatabaseTests : TestBase
             TokenB = "403"
         };
         Database.SetUserTokens(token);
-        await Assert.ThrowsAsync<HttpRequestException>(() => Database.UploadShot("Test", 20));
+
+        var ballSpinner = new Simulation();
+
+        await Assert.ThrowsAsync<HttpRequestException>(() => Database.UploadShot(ballSpinner, "Test", 20));
+
+        ballSpinner.Dispose();
     }
 
     [Fact]

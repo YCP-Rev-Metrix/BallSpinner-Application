@@ -13,9 +13,27 @@ namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 /// </summary>
 public class DataParser
 {
+    public string TempFilePath { get; private set; } = string.Empty;
+
     private event Action<Metric, float, float>? OnDataReceived;
-    // WriteToTempRevFile writer = new WriteToTempRevFile();
-    //public event SmartDotPacketRecieved;
+    private WriteToTempRevFile? _writer;
+
+    public void Start(string name)
+    {
+        TempFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "RevMetrix", $"{name} Temp.csv");
+        
+        Stop();
+
+        _writer = new WriteToTempRevFile(TempFilePath);
+        _writer.Start();
+    }
+
+    public void Stop()
+    {
+        _writer?.Dispose();
+        _writer = null;
+    }
+
     /// <summary>
     /// Takes a parsed packet, and sends it to the rev file Writer and the Simulation
     /// </summary>
@@ -54,12 +72,12 @@ public class DataParser
                 break;
         }
 
-        string[] SmartDotData =
+        string[] smartDotData =
         {
-            sensorTypeString, timeStamp.ToString(), sampleCount.ToString(), XData.ToString(), YData.ToString(),
-            ZData.ToString()
+            sensorTypeString, timeStamp.ToString(), sampleCount.ToString(), XData.ToString(), YData.ToString(), ZData.ToString()
         };
-        //writer.WriteData(SmartDotData); // Still unimplemented
+
+        _writer.WriteData(smartDotData);
     }
 
     /// <summary>

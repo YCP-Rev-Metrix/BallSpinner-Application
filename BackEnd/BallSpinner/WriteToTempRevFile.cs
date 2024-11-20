@@ -7,56 +7,62 @@ namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 public class WriteToTempRevFile : IDisposable
 {
     private readonly string _filePath;
-    private bool _disposed = false;
     private bool _isFileCleared = false;
+
+    private StreamWriter? _writer;
+    private CsvWriter? _csvWriter;
 
     public WriteToTempRevFile(string filePath)
     {
         _filePath = filePath;
     }
 
-    public void WriteData(string[] dataArray)
+    /// <summary>
+    /// Indicates that writing has started
+    /// </summary>
+    public void Start()
     {
-        if (_disposed)
-            throw new ObjectDisposedException(nameof(WriteToTempRevFile));
+        string? directory = Path.GetDirectoryName(_filePath);
 
-        // Clear the file only once on the first write
-        if (!_isFileCleared)
-        {
-            using (StreamWriter writer = new StreamWriter(_filePath, append: false))
-            {
-                writer.WriteLine(""); // Clear contents
-            }
-            _isFileCleared = true;
-        }
+        if (directory != null)
+            Directory.CreateDirectory(directory);
 
-        // Write data to the file
-        using (StreamWriter writer = new StreamWriter(_filePath, append: true))
-        using (CsvWriter csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-        {
-            foreach (var record in dataArray)
-            {
-                csv.WriteField(record);
-            }
-            csv.NextRecord();
-        }
+        _writer = File.CreateText(_filePath);
+        _csvWriter = new CsvWriter(_writer, CultureInfo.InvariantCulture);
     }
 
+    /// <summary>
+    /// Indicates that writing has stopped
+    /// </summary>
+    public void Stop()
+    {
+        Dispose();
+    }
+
+    /// <inheritdoc/>
     public void Dispose()
     {
-        Dispose(true);
-        GC.SuppressFinalize(this);
+        _csvWriter?.Dispose();
+
+        _writer = null;
+        _csvWriter = null;
     }
 
-    protected virtual void Dispose(bool disposing)
+    /// <summary>
+    /// Write data into the rev file
+    /// </summary>
+    public void WriteData(string[] dataArray)
     {
-        if (_disposed) return;
-        _disposed = true;
-    }
+        if (_writer == null || _csvWriter == null)
+            throw new Exception("Trying to write to temp file without opening it first");
 
-    ~WriteToTempRevFile()
-    {
-        Dispose(false);
+        foreach (var record in dataArray)
+        {
+            _csvWriter.WriteField(record);
+        }
+
+        _csvWriter.NextRecord();
+        _csvWriter.Flush();
     }
 }
 

@@ -22,7 +22,7 @@ public class BallSpinner : IBallSpinner
     public string MAC { get; set; } = "TBD";
 
     /// <inheritdoc/>
-    public DataParser DataParser { get; } = new DataParser();
+    public DataParser DataParser { get; private set; } = new DataParser();
 
     /// <inheritdoc/>
     public event Action? SendErrorToApp;
@@ -82,7 +82,7 @@ public class BallSpinner : IBallSpinner
 
         //TODO get list of smart dots and let user select
         var smartDot = await _connection.ConnectSmartDot();
-
+        
         // Subscribe to smartDotRecieved event. Will trigger when a smartdot packet is received
         _connection.SmartDotRecievedEvent += SmartDotRecievedEvent;
 
@@ -123,6 +123,8 @@ public class BallSpinner : IBallSpinner
     {
         Stop();
 
+        DataParser.Start(Name);
+
         _currentVoltage = 1;
         _motorTimer = new Timer(TimeSpan.FromSeconds(0.25));
         _motorTimer.Elapsed += OnTimedEvent;
@@ -136,8 +138,10 @@ public class BallSpinner : IBallSpinner
         _motorTimer = null;
 
         _connection?.SetMotorVoltages(0, 0, 0);
+
+        DataParser.Stop();
     }
-    
+
     private void OnTimedEvent(object? source, ElapsedEventArgs e)
     {
         if (!IsConnected())
