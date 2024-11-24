@@ -21,7 +21,7 @@ public class DataParser
     public void Start(string name)
     {
         TempFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "RevMetrix", $"{name} Temp.csv");
-        
+
         Stop();
 
         _writer = new WriteToTempRevFile(TempFilePath);
@@ -43,41 +43,47 @@ public class DataParser
         string sensorTypeString;
 
         // Invoke the event for the simulation for each axis
-        switch (sensorType)
+        if (new Random().Next(10) > 5)
         {
-            case SensorType.Accelerometer:
-                OnDataReceived?.Invoke(Metric.AccelerationX, XData, timeStamp);
-                OnDataReceived?.Invoke(Metric.AccelerationY, YData, timeStamp);
-                OnDataReceived?.Invoke(Metric.AccelerationZ, ZData, timeStamp);
-                sensorTypeString = "Accelerometer";
-                break;
-            case SensorType.Gyroscope:
-                OnDataReceived?.Invoke(Metric.RotationX, XData, timeStamp);
-                OnDataReceived?.Invoke(Metric.RotationY, YData, timeStamp);
-                OnDataReceived?.Invoke(Metric.RotationZ, ZData, timeStamp);
-                sensorTypeString = "Gyroscope";
-                break;
-            case SensorType.Light:
-                OnDataReceived?.Invoke(Metric.Light, XData, timeStamp);
-                sensorTypeString = "Light";
-                break;
-            case SensorType.Magnetometer:
-                OnDataReceived?.Invoke(Metric.MagnetometerX, XData, timeStamp);
-                OnDataReceived?.Invoke(Metric.MagnetometerY, YData, timeStamp);
-                OnDataReceived?.Invoke(Metric.MagnetometerZ, ZData, timeStamp);
-                sensorTypeString = "Magnetometer";
-                break;
-            default:
-                sensorTypeString = "";
-                break;
-        }
+            switch (sensorType)
+            {
+                case SensorType.Accelerometer:
+                    OnDataReceived?.Invoke(Metric.AccelerationX, XData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.AccelerationY, YData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.AccelerationZ, ZData, timeStamp);
+                    sensorTypeString = "Accelerometer";
+                    break;
+                case SensorType.Gyroscope:
+                    OnDataReceived?.Invoke(Metric.RotationX, XData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.RotationY, YData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.RotationZ, ZData, timeStamp);
+                    sensorTypeString = "Gyroscope";
+                    break;
+                case SensorType.Light:
+                    OnDataReceived?.Invoke(Metric.Light, XData, timeStamp);
+                    sensorTypeString = "Light";
+                    break;
+                case SensorType.Magnetometer:
+                    OnDataReceived?.Invoke(Metric.MagnetometerX, XData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.MagnetometerY, YData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.MagnetometerZ, ZData, timeStamp);
 
-        string[] smartDotData =
+                    sensorTypeString = "Magnetometer";
+                    break;
+                default:
+                    sensorTypeString = "";
+                    break;
+            }
+
+            string[] smartDotData =
         {
             sensorTypeString, timeStamp.ToString(), sampleCount.ToString(), XData.ToString(), YData.ToString(), ZData.ToString()
         };
 
-        _writer.WriteData(smartDotData);
+            _writer?.WriteData(smartDotData);
+        }
+
+
     }
 
     /// <summary>

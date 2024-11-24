@@ -31,12 +31,17 @@ public class TCP : IDisposable
     /// <summary>
     /// Fired when a SmartDot packet is recieved
     /// </summary>
-    public event SmartDotRecievedHandler? SmartDotRecievedEvent;
+    public event SmartDotRecievedHandler? SmartDotReceivedEvent;
+
+    /// <summary>
+    /// Invoked when a Smart dot address is received from the device
+    /// </summary>
+    public event Action<PhysicalAddress> SmartDotAddressReceivedEvent;
     
     private TcpClient _client;
     private IPAddress _address;
 
-    private const int BUFFER_SIZE = 1024;
+    private const int BUFFER_SIZE = 4096;
     private const ushort PORT = 8411;
 
     private readonly byte[] _receive = new byte[BUFFER_SIZE];
@@ -73,23 +78,23 @@ public class TCP : IDisposable
         var result = await task.Task;
         return (string)result;
     }
-
-
+    
     /// <summary>
-    /// Gets the name of the connected device
+    /// Connect to a smart dot module. Sending null indicates you want to start listening to packets
     /// </summary>
-    public async Task<PhysicalAddress> ConnectSmartDot()
+    public async void ConnectSmartDot(PhysicalAddress? address)
     {
-        var task = new TaskCompletionSource<object>();
-        _pendingMessages.Add((MessageType.ConnectSmartDotResponse, task));
-
         _send[0] = (byte)MessageType.ConnectSmartDot;
         _send[1] = 0;
-        _send[2] = 0;
-        await _client.Client.SendAsync(new ArraySegment<byte>(_send, 0, 3));
-
-        var result = await task.Task;
-        return (PhysicalAddress)result;
+        _send[2] = 6;
+        var bytes = address?.GetAddressBytes();
+        _send[3] = bytes != null ? bytes[0] : (byte)0;
+        _send[4] = bytes != null ? bytes[1] : (byte)0;
+        _send[5] = bytes != null ? bytes[2] : (byte)0;
+        _send[6] = bytes != null ? bytes[3] : (byte)0;
+        _send[7] = bytes != null ? bytes[4] : (byte)0;
+        _send[8] = bytes != null ? bytes[5] : (byte)0;
+        await _client.Client.SendAsync(new ArraySegment<byte>(_send, 0, 9));
     }
 
     /// <summary>
@@ -135,14 +140,14 @@ public class TCP : IDisposable
         }
     }
 
-    private (MessageType Type, int Size) GetMessageInfo(byte[] packet)
+    private (MessageType Type, int Size) GetMessageInfo(ArraySegment<byte> packet)
     {
         //Format
         //Byte 0 = Message type
         //Byte 1-2 = Message size (Maximum 65,536 bytes)
-        byte messageTypeByte = _receive[0];
+        byte messageTypeByte = packet[0];
         MessageType messageType = (MessageType)Enum.ToObject(typeof(MessageType), messageTypeByte);
-        int messageSize = _receive[2] + (_receive[1] << 8);
+        int messageSize = packet[2] + (packet[1] << 8);
 
         return (messageType, messageSize);
     }
@@ -156,53 +161,66 @@ public class TCP : IDisposable
             try
             {
                 size = await _client.Client.ReceiveAsync(_receive);
+
+                if (size == 0)
+                    continue;
+
+                int currentIndex = 0;
+                while (currentIndex < size && _receive[currentIndex] != 0)
+                {
+                    var packetFixed = new byte[3 + _receive[currentIndex + 2] + (_receive[currentIndex + 1] << 8) + 1];
+
+                    for (int i = 0; i < 3 + _receive[currentIndex + 2] + (_receive[currentIndex + 1] << 8); i++)
+                    {
+                        packetFixed[i] = _receive[currentIndex + i];
+                    }
+
+                    currentIndex += packetFixed.Length;
+
+                    var (messageType, messageSize) = GetMessageInfo(packetFixed);
+                    _receive[currentIndex] = 0;
+
+                    switch (messageType)
+                    {
+                        case MessageType.GetDeviceInfo:
+                        case MessageType.GetDeviceInfoResponse:
+
+                            string text = Encoding.UTF8.GetString(packetFixed, 3, messageSize);
+                            Debug.WriteLine(text);
+
+                            var task = TryGetResponse(messageType);
+                            task?.SetResult(text);
+
+                            break;
+
+                        case MessageType.ConnectSmartDot:
+                        case MessageType.ConnectSmartDotResponse:
+                            var physicalAddress = new PhysicalAddress(new ArraySegment<byte>(packetFixed, 3, messageSize).ToArray());
+                            SmartDotAddressReceivedEvent?.Invoke(physicalAddress);
+
+                            break;
+                        case MessageType.SmartDotDataPacket:
+                            SensorType sensorType = (SensorType)Enum.ToObject(typeof(SensorType), packetFixed[3]);
+                            int sampleCount = packetFixed[6] | (packetFixed[5] << 8) | (packetFixed[4] << 16); //3 bytes
+                            float timeStamp = BitConverter.ToSingle(packetFixed, 7); //BitConverter expects LITTLE ENDIAN
+                            float xData = BitConverter.ToSingle(packetFixed, 11);
+                            float yData = BitConverter.ToSingle(packetFixed, 15);
+                            float zData = BitConverter.ToSingle(packetFixed, 19);
+
+                            Debug.WriteLine($"{sensorType}: {xData} {yData} {zData}");
+                            SmartDotReceivedEvent?.Invoke(sensorType, timeStamp, sampleCount, xData, yData, zData);
+                            break;
+                        default:
+                            break;
+                            //throw new Exception($"Unexpected message type '{messageType}'");
+                    }
+                }
             }
             catch(Exception e)
             {
-                _client.Dispose();
+                Debug.WriteLine(e);
+                //_client.Dispose();
                 return;
-            }
-
-            if (size <= 0)
-                continue;
-
-            var (messageType, messageSize) = GetMessageInfo(_receive);
-
-            switch (messageType)
-            {
-                case MessageType.GetDeviceInfo:
-                case MessageType.GetDeviceInfoResponse:
-
-                    string text = Encoding.UTF8.GetString(_receive, 3, messageSize);
-                    Debug.WriteLine(text);
-
-                    var task = TryGetResponse(messageType);
-                    task!.SetResult(text);
-
-                    break;
-
-                case MessageType.ConnectSmartDot:
-                case MessageType.ConnectSmartDotResponse:
-                    var physicalAddress = new PhysicalAddress(new ArraySegment<byte>(_receive, 3, messageSize).ToArray());
-                    var p = physicalAddress.ToString();
-                    var task2 = TryGetResponse(messageType);
-                    task2!.SetResult(physicalAddress);
-
-                    break;
-                case MessageType.SmartDotDataPacket:
-                    SensorType sensorType = (SensorType)Enum.ToObject(typeof(SensorType), _receive[3]);
-                    int sampleCount = _receive[6] | (_receive[5] << 8) | (_receive[4] << 16); //3 bytes
-                    float timeStamp = BitConverter.ToSingle(_receive, 7); //BitConverter expects LITTLE ENDIAN
-                    float xData = BitConverter.ToSingle(_receive, 11);
-                    float yData = BitConverter.ToSingle(_receive, 15);
-                    float zData = BitConverter.ToSingle(_receive, 19);
-
-                    Debug.WriteLine($"{sensorType}: {xData} {yData} {zData}");
-                    SmartDotRecievedEvent?.Invoke(sensorType, timeStamp, sampleCount, xData, yData, zData);
-                    break;
-                default:
-                    break;
-                    //throw new Exception($"Unexpected message type '{messageType}'");
             }
         }
     }

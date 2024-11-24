@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -69,7 +71,7 @@ public class BallSpinner : IBallSpinner
         _connection = new TCP(_address);
         await _connection.Connect();
         
-        if (_connection.Connected)
+        if (_connection != null && _connection.Connected)
             OnConnected();
     }
 
@@ -80,13 +82,20 @@ public class BallSpinner : IBallSpinner
         Name = await _connection!.GetDeviceInfo();
         PropertyChanged?.Invoke(null, new PropertyChangedEventArgs(nameof(Name)));
 
-        //TODO get list of smart dots and let user select
-        var smartDot = await _connection.ConnectSmartDot();
-        
+        _connection!.ConnectSmartDot(null);
+        _connection.SmartDotAddressReceivedEvent += SmartDotAddressReceivedEvent;
+
         // Subscribe to smartDotRecieved event. Will trigger when a smartdot packet is received
-        _connection.SmartDotRecievedEvent += SmartDotRecievedEvent;
+        _connection.SmartDotReceivedEvent += SmartDotRecievedEvent;
 
         OnConnectionChanged?.Invoke(true);
+    }
+
+    private void SmartDotAddressReceivedEvent(PhysicalAddress address)
+    {
+        _connection!.ConnectSmartDot(address);
+        Debug.WriteLine("Device address: " + address.ToString());
+        _connection.SmartDotAddressReceivedEvent -= SmartDotAddressReceivedEvent;
     }
 
     private void SmartDotRecievedEvent(SensorType sensorType, float timeStamp, int sampleCount, float XData, float YData, float ZData)
@@ -152,10 +161,25 @@ public class BallSpinner : IBallSpinner
         if (_currentVoltage >= 30) //Primary motor supports up to 30, secondary motors only 12
             _currentVoltage = 0;
 
-        if (_currentVoltage > 10)
-            _connection!.SetMotorVoltages(_currentVoltage, 10, 0);
-        else
-            _connection!.SetMotorVoltages(0, 3, 5);
+        byte x, y, z;
 
+        if (_currentVoltage >= 0 && _currentVoltage <= 10)
+            y = 8;
+        else
+            y = 0;
+
+        if (_currentVoltage >= 10 && _currentVoltage <= 20)
+            z = 8;
+        else
+            z = 0;
+
+        if (_currentVoltage >= 15 && _currentVoltage <= 30)
+            x = _currentVoltage;
+        else
+            x = 0;
+
+        //x = 30;
+
+        _connection!.SetMotorVoltages(x, y, z);
     }
 }

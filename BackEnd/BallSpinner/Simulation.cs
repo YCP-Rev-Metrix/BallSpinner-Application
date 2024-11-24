@@ -133,7 +133,7 @@ public class Simulation : IBallSpinner
 
             // Send light data (where Y-Up is brightest)
             float light = Math.Max(Vector3.Dot(Vector3.TransformNormal(Vector3.UnitZ, Matrix4x4.CreateFromQuaternion(Rotation)), Vector3.UnitY), 0);
-            DataParser.SendSmartDotToSubscribers(SensorType.Magnetometer, time, 0, light, 0, 0);
+            DataParser.SendSmartDotToSubscribers(SensorType.Light, time, 0, light, 0, 0);
 
         }, null, frequency, frequency);
     }
