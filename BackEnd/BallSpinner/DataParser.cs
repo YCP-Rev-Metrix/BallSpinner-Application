@@ -20,7 +20,7 @@ public class DataParser
 
     public void Start(string name)
     {
-        TempFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "RevMetrix", $"{name} Temp.csv");
+        TempFilePath = Utilities.GetTempRevFileDir(name);
 
         Stop();
 
@@ -51,30 +51,28 @@ public class DataParser
                     OnDataReceived?.Invoke(Metric.AccelerationX, XData, timeStamp);
                     OnDataReceived?.Invoke(Metric.AccelerationY, YData, timeStamp);
                     OnDataReceived?.Invoke(Metric.AccelerationZ, ZData, timeStamp);
-                    sensorTypeString = "Accelerometer";
+                    sensorTypeString = "3";
                     break;
                 case SensorType.Gyroscope:
                     OnDataReceived?.Invoke(Metric.RotationX, XData, timeStamp);
                     OnDataReceived?.Invoke(Metric.RotationY, YData, timeStamp);
                     OnDataReceived?.Invoke(Metric.RotationZ, ZData, timeStamp);
-                    sensorTypeString = "Gyroscope";
+                    sensorTypeString = "2";
                     break;
                 case SensorType.Light:
                     OnDataReceived?.Invoke(Metric.Light, XData, timeStamp);
-                    sensorTypeString = "Light";
+                    sensorTypeString = "1";
                     break;
                 case SensorType.Magnetometer:
                     OnDataReceived?.Invoke(Metric.MagnetometerX, XData, timeStamp);
                     OnDataReceived?.Invoke(Metric.MagnetometerY, YData, timeStamp);
                     OnDataReceived?.Invoke(Metric.MagnetometerZ, ZData, timeStamp);
-
-                    sensorTypeString = "Magnetometer";
+                    sensorTypeString = "4";
                     break;
                 default:
-                    sensorTypeString = "";
+                    sensorTypeString = "0";
                     break;
             }
-
             string[] smartDotData =
         {
             sensorTypeString, timeStamp.ToString(), sampleCount.ToString(), XData.ToString(), YData.ToString(), ZData.ToString()

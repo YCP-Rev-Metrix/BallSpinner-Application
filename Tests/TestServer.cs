@@ -2,7 +2,7 @@ using System;
 using System.Net;
 using System.Text;
 using System.Text.Json;
-using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+using Common.POCOs;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 class TestServer
@@ -135,13 +135,13 @@ class TestServer
          // Convert the body data to a string
          string bodyData = reader.ReadToEnd();
          // Deserialize bodyData into Credentials object
-         User user = JsonSerializer.Deserialize<User>(bodyData);
+         UserIdentification user = JsonSerializer.Deserialize<UserIdentification>(bodyData);
                 
          // Declare token variables that will hold response token
          string tokenA = null;
          string tokenB = null;
          // Return specific tokens based on the input !IMPORTANT! NEED A MORE EFFICIENT WAY OF DOING THIS
-         if (user.username == "string" && user.password == "string")
+         if (user.Username == "string" && user.Password == "string")
             {
                 tokenA =
                     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJqdGkiOiI5ZjJhN2M3My03MDQ3LTQ2ZGItODNjNC1mYWIzZjNlYzA1Y2QiLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MjM4LyIsImF1ZCI6IlJldk1ldHJpeCIsInJvbGUiOiJ1c2VyIiwibmJmIjoxNzMwNzYzOTU4LCJleHAiOjE3MzA3Njc1NTgsImlhdCI6MTczMDc2Mzk1OH0.XcB0zrR_7FsNmfzAPcdChiYTtvYhw2aXX2cfSQJCl9s";
@@ -150,7 +150,7 @@ class TestServer
                 response.StatusCode = 200;
                 return new { tokenA = tokenA, tokenB = tokenB };
             }
-         if (user.username == "403Response" && user.password == "403Response")
+         if (user.Username == "403Response" && user.Password == "403Response")
              {
                 response.StatusCode = 403;
                 return new {

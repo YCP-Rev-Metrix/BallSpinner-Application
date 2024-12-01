@@ -1,5 +1,5 @@
 using RevMetrix.BallSpinner.BackEnd;
-using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+using Common.POCOs;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 

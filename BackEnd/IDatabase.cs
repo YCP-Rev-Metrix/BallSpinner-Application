@@ -1,5 +1,5 @@
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
-using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+using Common.POCOs;
 
 namespace RevMetrix.BallSpinner.BackEnd;
 
@@ -50,4 +50,9 @@ public interface IDatabase
     /// Sets user tokens for a session
     ///</Summary>
     public void SetUserTokens(Token token);
+    ///<Summary>
+    /// Uploads the metadata for a locally saved shot to the database for future indexing.
+    /// Throws exception on Http error. In the future, this will take/provide more detailed metadata.
+    ///</Summary>
+    public Task<bool> SaveLocalEntry(string ShotName);
 }

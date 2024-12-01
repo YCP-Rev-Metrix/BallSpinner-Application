@@ -4,7 +4,7 @@ using System.Text;
 using Newtonsoft.Json;
 using CsvHelper;
 using CsvHelper.Configuration;
-using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+using Common.POCOs;
 using RevMetrix.BallSpinner.BackEnd.Common.Utilities;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 
@@ -51,7 +51,7 @@ public partial class Database : IDatabase
         return true;
     }
     ///<Summary>
-    /// Parses temp rev file and puts data into a SampleData list
+    /// Database utility method that parses temp rev file and puts data into a SampleData list
     ///</Summary>
     public async Task<List<SampleData>> GetSampleData(List<SampleData> sampleData, string path)
     {

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
-using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+using Common.POCOs;
 
 
 namespace RevMetrix.BallSpinner.Tests;
@@ -109,7 +109,7 @@ public class DatabaseTests : TestBase
     {
         string[] dataArray = new string[6] 
         {
-            "Gyroscope", "5.0", "43", "434.212", "4342.2", "23423"
+            "2", "5.0", "43", "434.212", "4342.2", "23423"
         };
 
         TempFileWriter.Start();
@@ -117,14 +117,14 @@ public class DatabaseTests : TestBase
         
         string[] dataArray2 =
         {
-            "Accelerometer", "52.0", "4", "112.4124", "4342412.2", "44"
+            "3", "52.0", "4", "112.4124", "4342412.2", "44"
         };
                 
         TempFileWriter.WriteData(dataArray2);
 
         string[] dataArray3 =
         {
-            "Magnetometer", "532.0", "4323", "2112.4124", "431112.2", "765.2"
+            "4", "532.0", "4323", "2112.4124", "431112.2", "765.2"
         };
         
         TempFileWriter.WriteData(dataArray3);
@@ -135,26 +135,26 @@ public class DatabaseTests : TestBase
         // Test the contents of sample to make sure it is parsed into JSON correctly
         //Assert.Empty(sample);
         // Test to make sure dataArray1 is parsed correctly into sample and is 1st element
-        Assert.Equal("Gyroscope", sample[0].type);
-        Assert.Equal(43, sample[0].count);
-        Assert.Equal(5.0f, sample[0].logtime);
-        Assert.Equal((float) 434.212, sample[0].X);
-        Assert.Equal((float) 4342.2, sample[0].Y);
-        Assert.Equal((float)23423, sample[0].Z);
+        Assert.Equal("2", sample[0].Type);
+        Assert.Equal(43, sample[0].Count);
+        Assert.Equal(5.0, sample[0].Logtime);
+        Assert.Equal(434.212, sample[0].X);
+        Assert.Equal(4342.2, sample[0].Y);
+        Assert.Equal(23423, sample[0].Z);
         // Test to make sure dataArray2 is parsed correctly into sample and is 2nd element
-        Assert.Equal("Accelerometer", sample[1].type);
-        Assert.Equal(4, sample[1].count);
-        Assert.Equal(52.0f, sample[1].logtime);
-        Assert.Equal((float) 112.4124, sample[1].X);
-        Assert.Equal((float) 4342412.2, sample[1].Y);
-        Assert.Equal((float)44, sample[1].Z);
+        Assert.Equal("3", sample[1].Type);
+        Assert.Equal(4, sample[1].Count);
+        Assert.Equal(52.0, sample[1].Logtime);
+        Assert.Equal(112.4124, sample[1].X);
+        Assert.Equal(4342412.2, sample[1].Y);
+        Assert.Equal(44, sample[1].Z);
         // Test to make sure dataArray3 is parsed correctly into sample and is 3nd element
-        Assert.Equal("Magnetometer", sample[2].type);
-        Assert.Equal(4323, sample[2].count);
-        Assert.Equal(532.0f, sample[2].logtime);
-        Assert.Equal((float) 2112.4124, sample[2].X);
-        Assert.Equal((float) 431112.2, sample[2].Y);
-        Assert.Equal((float)765.2, sample[2].Z);
+        Assert.Equal("4", sample[2].Type);
+        Assert.Equal(4323, sample[2].Count);
+        Assert.Equal(532.0, sample[2].Logtime);
+        Assert.Equal(2112.4124, sample[2].X);
+        Assert.Equal(431112.2, sample[2].Y);
+        Assert.Equal(765.2, sample[2].Z);
     }
 
     [Fact]

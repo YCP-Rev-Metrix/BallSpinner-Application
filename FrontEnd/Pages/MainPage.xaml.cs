@@ -103,7 +103,25 @@ public partial class MainPage : ContentPage
                 }
                 else
                 {
-                    string path = Utilities.GetTempDir();
+                    // local option selected
+                    string name = await DisplayPromptAsync("Notice", "Please name your file");
+                    
+                    if (name != null)
+                    {
+                        try
+                        {
+                            Utilities.SaveLocalRevFile(name, ballSpinner.Name, Environment.GetEnvironmentVariable("CurrentUser"));
+                            // local save was successful, save this new local entry to database
+                            // await _database.SaveLocalEntry(name); - For now this will not work. Endpoint not implemented on cloud
+                        }
+                        catch (Exception e) 
+                        {
+                            await DisplayAlert("Error When Attempting to Save", e.Message, "Ok");
+                        }
+                    }
+                    
+                    
+                    //string path = Utilities.GetTempDir();
                     /*
                     var dlg = new OpenFileDialog()
                     {
@@ -112,7 +130,7 @@ public partial class MainPage : ContentPage
                         RestoreDirectory = true
                     };
                     */
-                    throw new NotImplementedException();
+                    //throw new NotImplementedException();
                 }
             }
         }

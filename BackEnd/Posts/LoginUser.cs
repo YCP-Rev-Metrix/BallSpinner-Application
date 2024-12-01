@@ -1,6 +1,6 @@
 using System.Text;
 using Newtonsoft.Json;
-using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+using Common.POCOs;
 namespace RevMetrix.BallSpinner.BackEnd.Database;
 
 ///<Summary>
@@ -9,7 +9,8 @@ namespace RevMetrix.BallSpinner.BackEnd.Database;
 public partial class Database: IDatabase
 {
     ///<Summary>
-    /// Placeholder (fill in this section later)
+    /// Database method used to log a user in. On success, OnLoginChanged event is invoked, session tokens are set, and
+    /// the 'CurrentUser' environment variable is set as well.
     ///</Summary>
     public async Task<Token?> LoginUser(string username, string password)
     {
@@ -29,7 +30,10 @@ public partial class Database: IDatabase
         // Set the users token for the session
         SetUserTokens(responseObject);
         OnLoginChanged?.Invoke(UserTokens is not null);
-
+        
+        // On success, set global Username property to be used in the future
+        Environment.SetEnvironmentVariable("CurrentUser", username);
+        
         return responseObject;
     }
 }
