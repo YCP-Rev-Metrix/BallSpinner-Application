@@ -102,6 +102,9 @@
       <MauiXaml Update="BallSpinnerView.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
+      <MauiXaml Update="Pages\ArsenalPage.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
       <MauiXaml Update="Pages\CloudManagementPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>

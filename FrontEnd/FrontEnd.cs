@@ -25,6 +25,7 @@ public class FrontEnd : IFrontEnd
     private Window? _newLoginWindow;
     private Window? _newInitialValuesWindow;
     private Window? _newCloudManagementWindow;
+    private Window? _newArsenalWindow;
 
     /// <summary>
     /// Called before <see cref="Backend"/> is initialized
@@ -185,6 +186,23 @@ public class FrontEnd : IFrontEnd
         _newCloudManagementWindow.Destroying += (object? sender, EventArgs e) =>
         {
             _newCloudManagementWindow = null;
+        };
+    }
+
+    public void Arsenal()
+    {
+        if (_newArsenalWindow != null)
+            return;
+
+        _newArsenalWindow = new Window(new CloudManagementPage(Backend.Database))
+        {
+            Title = "Arsenal"
+        };
+
+        Application.Current!.OpenWindow(_newArsenalWindow);
+        _newArsenalWindow.Destroying += (object? sender, EventArgs e) =>
+        {
+            _newArsenalWindow = null;
         };
     }
 }

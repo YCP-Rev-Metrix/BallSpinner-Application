@@ -45,6 +45,10 @@
                 Clicked="OnCloudManagementButtonClicked"
                 IsEnabled="true"
                 Text="Manage Shots" />
+            <MenuFlyoutItem
+                Clicked="OnArsenalButtonClicked"
+                IsEnabled="true"
+                Text="Manage Arsenal" />
         </MenuBarItem>
 
         <MenuBarItem IsEnabled="{Binding LoggedIn}" Text="Help">

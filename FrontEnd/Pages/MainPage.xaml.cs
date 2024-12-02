@@ -178,4 +178,9 @@ public partial class MainPage : ContentPage
             OnPropertyChanged(nameof(BallSpinners));
         }
     }
+
+    private void OnArsenalButtonClicked(object sender, EventArgs args)
+    {
+        _frontEnd.Arsenal();
+    }
 }
