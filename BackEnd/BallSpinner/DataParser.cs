@@ -13,9 +13,27 @@ namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 /// </summary>
 public class DataParser
 {
+    public string TempFilePath { get; private set; } = string.Empty;
+
     private event Action<Metric, float, float>? OnDataReceived;
-    // WriteToTempRevFile writer = new WriteToTempRevFile();
-    //public event SmartDotPacketRecieved;
+    private WriteToTempRevFile? _writer;
+
+    public void Start(string name)
+    {
+        TempFilePath = Utilities.GetTempRevFileDir(name);
+
+        Stop();
+
+        _writer = new WriteToTempRevFile(TempFilePath);
+        _writer.Start();
+    }
+
+    public void Stop()
+    {
+        _writer?.Dispose();
+        _writer = null;
+    }
+
     /// <summary>
     /// Takes a parsed packet, and sends it to the rev file Writer and the Simulation
     /// </summary>
@@ -25,41 +43,45 @@ public class DataParser
         string sensorTypeString;
 
         // Invoke the event for the simulation for each axis
-        switch (sensorType)
+        if (new Random().Next(10) > 5)
         {
-            case SensorType.Accelerometer:
-                OnDataReceived?.Invoke(Metric.AccelerationX, XData, timeStamp);
-                OnDataReceived?.Invoke(Metric.AccelerationY, YData, timeStamp);
-                OnDataReceived?.Invoke(Metric.AccelerationZ, ZData, timeStamp);
-                sensorTypeString = "Accelerometer";
-                break;
-            case SensorType.Gyroscope:
-                OnDataReceived?.Invoke(Metric.RotationX, XData, timeStamp);
-                OnDataReceived?.Invoke(Metric.RotationY, YData, timeStamp);
-                OnDataReceived?.Invoke(Metric.RotationZ, ZData, timeStamp);
-                sensorTypeString = "Gyroscope";
-                break;
-            case SensorType.Light:
-                OnDataReceived?.Invoke(Metric.Light, XData, timeStamp);
-                sensorTypeString = "Light";
-                break;
-            case SensorType.Magnetometer:
-                OnDataReceived?.Invoke(Metric.MagnetometerX, XData, timeStamp);
-                OnDataReceived?.Invoke(Metric.MagnetometerY, YData, timeStamp);
-                OnDataReceived?.Invoke(Metric.MagnetometerZ, ZData, timeStamp);
-                sensorTypeString = "Magnetometer";
-                break;
-            default:
-                sensorTypeString = "";
-                break;
+            switch (sensorType)
+            {
+                case SensorType.Accelerometer:
+                    OnDataReceived?.Invoke(Metric.AccelerationX, XData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.AccelerationY, YData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.AccelerationZ, ZData, timeStamp);
+                    sensorTypeString = "3";
+                    break;
+                case SensorType.Gyroscope:
+                    OnDataReceived?.Invoke(Metric.RotationX, XData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.RotationY, YData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.RotationZ, ZData, timeStamp);
+                    sensorTypeString = "2";
+                    break;
+                case SensorType.Light:
+                    OnDataReceived?.Invoke(Metric.Light, XData, timeStamp);
+                    sensorTypeString = "1";
+                    break;
+                case SensorType.Magnetometer:
+                    OnDataReceived?.Invoke(Metric.MagnetometerX, XData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.MagnetometerY, YData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.MagnetometerZ, ZData, timeStamp);
+                    sensorTypeString = "4";
+                    break;
+                default:
+                    sensorTypeString = "0";
+                    break;
+            }
+            string[] smartDotData =
+        {
+            sensorTypeString, timeStamp.ToString(), sampleCount.ToString(), XData.ToString(), YData.ToString(), ZData.ToString()
+        };
+
+            _writer?.WriteData(smartDotData);
         }
 
-        string[] SmartDotData =
-        {
-            sensorTypeString, timeStamp.ToString(), sampleCount.ToString(), XData.ToString(), YData.ToString(),
-            ZData.ToString()
-        };
-        //writer.WriteData(SmartDotData); // Still unimplemented
+
     }
 
     /// <summary>

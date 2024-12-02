@@ -1,5 +1,5 @@
 ﻿using RevMetrix.BallSpinner.BackEnd;
-using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+using Common.POCOs;
 using RevMetrix.BallSpinner.BackEnd.Database;
 using System;
 using System.Collections.Generic;

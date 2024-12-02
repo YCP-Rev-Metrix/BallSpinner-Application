@@ -1,20 +1,22 @@
 using System.Text;
 using System.Xml;
+using Common.POCOs;
 using Newtonsoft.Json;
 using RevMetrix.BallSpinner.BackEnd;
-using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+using Common.POCOs;
 
 namespace RevMetrix.BallSpinner.BackEnd.Database;
 
 public partial class Database : IDatabase
 {
     ///<Summary>
-    /// Placeholder (fill in this section later)
+    /// Database method used to register a user. On success, OnLoginChanged event is invoked, session tokens are set, and
+    /// the 'CurrentUser' environment variable is set as well. Also logs in a user on success.
     ///</Summary>
     public async Task<Token?> RegisterUser(string firstname, string lastname, string username, string password,
         string email, string phonenumber)
     {
-        User user = new User(firstname, lastname, username, password, email, phonenumber);
+        UserIdentification user = new UserIdentification(firstname, lastname, username, password, email, phonenumber);
 
         var jsonBody = JsonConvert.SerializeObject(user);
 
@@ -31,7 +33,9 @@ public partial class Database : IDatabase
         // Set the users token for the session
         SetUserTokens(responseObject);
         OnLoginChanged?.Invoke(UserTokens is not null);
-
+        // On success, set global Username property to be used in the future
+        Environment.SetEnvironmentVariable("CurrentUser", username);
+        
         return responseObject;
     }
 }

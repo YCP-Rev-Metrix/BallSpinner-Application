@@ -4,8 +4,9 @@ using System.Text;
 using Newtonsoft.Json;
 using CsvHelper;
 using CsvHelper.Configuration;
-using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+using Common.POCOs;
 using RevMetrix.BallSpinner.BackEnd.Common.Utilities;
+using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 
 namespace RevMetrix.BallSpinner.BackEnd.Database;
 
@@ -16,7 +17,7 @@ public partial class Database : IDatabase
     /// For now, we are just passing InitialSpeed and name as an argument because that is the only ones we have.
     /// Throws and exception if the Temp csv file is empty and/or user is not logged in.
     ///</Summary>
-    public async Task<bool> UploadShot(string name, float InitialSpeed)
+    public async Task<bool> UploadShot(IBallSpinner ballSpinner, string name, float InitialSpeed)
     {
         // User is not logged in. Return false
         if (this.UserTokens == null)
@@ -26,8 +27,7 @@ public partial class Database : IDatabase
 
         List<SampleData> sampleData = new List<SampleData>();
         // Get sample data from temp rev file
-        string path = Utilities.GetTempDir() + "/TestTempRev.csv";
-        await GetSampleData(sampleData, path);
+        await GetSampleData(sampleData, ballSpinner.DataParser.TempFilePath);
         //If the csv is empty...
         if (sampleData.Count == 0)
         {
@@ -51,7 +51,7 @@ public partial class Database : IDatabase
         return true;
     }
     ///<Summary>
-    /// Parses temp rev file and puts data into a SampleData list
+    /// Database utility method that parses temp rev file and puts data into a SampleData list
     ///</Summary>
     public async Task<List<SampleData>> GetSampleData(List<SampleData> sampleData, string path)
     {

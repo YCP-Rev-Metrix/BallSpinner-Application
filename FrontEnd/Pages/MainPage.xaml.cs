@@ -88,27 +88,51 @@ public partial class MainPage : ContentPage
 
     private async void OnSaveShotButtonClicked(object sender, EventArgs args)
     {
-        if(await DisplayAlert("Save Shot as ...", "Save to database or local drive", "Database", "Local"))
+        foreach (var ballSpinner in BallSpinners)
         {
-            string name = await DisplayPromptAsync("Notice", "Please name the test");
+            if (await DisplayAlert("Notice", $"Would you like to save shot for device '{ballSpinner.Name}'?", "Yes", "No"))
+            {
+                if (await DisplayAlert("Save Shot as ...", $"For device '{ballSpinner.Name}', save to database or local drive?", "Database", "Local"))
+                {
+                    string name = await DisplayPromptAsync("Notice", "Please name the test");
 
-            if (name != null)
-            {
-                await _database.UploadShot(name, 0);
+                    if (name != null)
+                    {
+                        await _database.UploadShot(ballSpinner.BallSpinner, name, 0);
+                    }
+                }
+                else
+                {
+                    // local option selected
+                    string name = await DisplayPromptAsync("Notice", "Please name your file");
+                    
+                    if (name != null)
+                    {
+                        try
+                        {
+                            Utilities.SaveLocalRevFile(name, ballSpinner.Name, Environment.GetEnvironmentVariable("CurrentUser"));
+                            // local save was successful, save this new local entry to database
+                            // await _database.SaveLocalEntry(name); - For now this will not work. Endpoint not implemented on cloud
+                        }
+                        catch (Exception e) 
+                        {
+                            await DisplayAlert("Error When Attempting to Save", e.Message, "Ok");
+                        }
+                    }
+                    
+                    
+                    //string path = Utilities.GetTempDir();
+                    /*
+                    var dlg = new OpenFileDialog()
+                    {
+                        InitialDirectory = path,
+                        Filter = "Text Files (*.txt) | *.txt | All Files (*.*) | *.*",
+                        RestoreDirectory = true
+                    };
+                    */
+                    //throw new NotImplementedException();
+                }
             }
-        }
-        else
-        {
-            string path = Utilities.GetTempDir();
-            /*
-            var dlg = new OpenFileDialog()
-            {
-                InitialDirectory = path,
-                Filter = "Text Files (*.txt) | *.txt | All Files (*.*) | *.*",
-                RestoreDirectory = true
-            };
-            */
-            throw new NotImplementedException();
         }
     }
 
@@ -157,10 +181,7 @@ public partial class MainPage : ContentPage
             spinner.Stop();
         }
 
-        if(await DisplayAlert("Notice", "Would you like to save this throw", "Yes", "No"))
-        {
-            OnSaveShotButtonClicked(sender, args);
-        }
+        OnSaveShotButtonClicked(sender, args);
     }
 
     private void OnResetButtonClicked(object sender, EventArgs args)

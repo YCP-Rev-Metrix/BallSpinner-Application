@@ -2,7 +2,7 @@ using RevMetrix.BallSpinner.BackEnd;
 using RevMetrix.BallSpinner.BackEnd.Database;
 using Xunit.Abstractions;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
-using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+using Common.POCOs;
 using RevMetrix.BallSpinner.BackEnd.Common.Utilities;
 
 namespace RevMetrix.BallSpinner.Tests;
@@ -32,7 +32,7 @@ public abstract class TestBase
             TokenB = "test"
         };
         Database.SetUserTokens(token);
-        revFilePath = Utilities.GetTempDir() + "/TestingTempRev.csv";
+        revFilePath = Utilities.GetTempRevFileDir("Tests");
         TempFileWriter = new WriteToTempRevFile(revFilePath);
         FrontEnd.Init(BackEnd);
         BackEnd.Init(FrontEnd, Database);

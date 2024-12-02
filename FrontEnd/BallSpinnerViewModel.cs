@@ -31,6 +31,8 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         }
     }
 
+    public IBallSpinner BallSpinner => _ballSpinner;
+
     private IBallSpinner _ballSpinner;
 
     public IDataViewModel LeftView { get; }

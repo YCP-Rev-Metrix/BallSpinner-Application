@@ -1,4 +1,4 @@
-using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+using Common.POCOs;
 namespace RevMetrix.BallSpinner.BackEnd.Database;
 
 public partial class Database : IDatabase
@@ -23,9 +23,12 @@ public partial class Database : IDatabase
             BaseAPIURL = "https://api.revmetrix.io/api";
         }
     }
-
+    /// <summary>
+    /// Sets user tokens for a session. Should be called after successfull login.
+    /// </summary>
+    /// <param name="token"></param>
     public void SetUserTokens(Token token)
     {
-        this.UserTokens = token;
+        UserTokens = token;
     }
 }

@@ -1,4 +1,5 @@
-using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+using RevMetrix.BallSpinner.BackEnd.BallSpinner;
+using Common.POCOs;
 
 namespace RevMetrix.BallSpinner.BackEnd;
 
@@ -33,7 +34,8 @@ public interface IDatabase
     /// <summary>
     /// Uploads a shot for the current user. The shot will be parsed from whatever is in the TempRev.csv file.
     /// </summary>
-    Task<bool> UploadShot(string name, float InitialSpeed);
+    Task<bool> UploadShot(IBallSpinner ballSpinner, string name, float InitialSpeed);
+
     //Task GetBalls();
     ///<Summary>
     /// Database method for getting a user registered
@@ -48,4 +50,9 @@ public interface IDatabase
     /// Sets user tokens for a session
     ///</Summary>
     public void SetUserTokens(Token token);
+    ///<Summary>
+    /// Uploads the metadata for a locally saved shot to the database for future indexing.
+    /// Throws exception on Http error. In the future, this will take/provide more detailed metadata.
+    ///</Summary>
+    public Task<bool> SaveLocalEntry(string ShotName);
 }

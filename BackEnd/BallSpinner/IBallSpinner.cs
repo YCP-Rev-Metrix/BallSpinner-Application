@@ -57,11 +57,6 @@ public interface IBallSpinner : INotifyPropertyChanged
     void InitializeConnection();
 
     /// <summary>
-    /// Sets the active SmartDot on the Ball Spinner device.
-    /// </summary>
-    void SetSmartDot();
-
-    /// <summary>
     /// Starts the Ball Spinner device, beginning any data transmission.
     /// </summary>
     void Start();
@@ -72,23 +67,10 @@ public interface IBallSpinner : INotifyPropertyChanged
     void Stop();
 
     /// <summary>
-    /// Sends a list of SmartDots back to the connected application.
-    /// </summary>
-    /// <returns>A list of SmartDot names as strings.</returns>
-    List<string> SendBackListOfSmartDots();
-
-    /// <summary>
-    /// Resends the last message if needed.
-    /// </summary>
-    void ResendMessage();
-
-    /// <summary>
     /// Checks if the connection to the Ball Spinner device is established.
     /// </summary>
     /// <returns>True if connected, false otherwise.</returns>
     bool IsConnected();
-
-
 }
 
 /// <summary>
