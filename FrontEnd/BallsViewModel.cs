@@ -1,4 +1,4 @@
-﻿using RevMetrix.BallSpinner.BackEnd.Common.POCOs;
+﻿using Common.POCOs;
 using RevMetrix.BallSpinner.BackEnd;
 using System;
 using System.Collections.Generic;
@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 namespace RevMetrix.BallSpinner.FrontEnd;
 internal class BallsViewModel
 {
-    public ObservableCollection<Balls> Balls { get; private set; }
+    public ObservableCollection<Ball> Balls { get; private set; }
     private IDatabase _database = null;
 
     public BallsViewModel(IDatabase database)
     {
-        Balls = new ObservableCollection<Balls>();
+        Balls = new ObservableCollection<Ball>();
         _database = database;
         UpdateCollectionContent();
     }

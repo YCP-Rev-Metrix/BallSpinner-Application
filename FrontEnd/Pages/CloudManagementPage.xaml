@@ -67,10 +67,12 @@
                 </Grid>
 
                 <ListView Grid.Row="1"
-                  Margin="0,10,0,0"
-                  ItemsSource="{Binding Shots}"
-                  VerticalScrollBarVisibility="Always"
-                  HorizontalScrollBarVisibility="Always">
+                          Margin="0,10,0,0"
+                          ItemsSource="{Binding Shots}"
+                          VerticalScrollBarVisibility="Always"
+                          HorizontalScrollBarVisibility="Always"
+                          SelectionMode="Single"
+                          ItemSelected="NewSelection">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>

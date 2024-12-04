@@ -16,4 +16,8 @@
       <PackageReference Include="RevMetrix.BallSpinner.Common.Api" Version="1.0.5" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Common\POCOs\" />
+    </ItemGroup>
+
 </Project>

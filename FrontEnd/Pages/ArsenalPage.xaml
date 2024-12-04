@@ -84,15 +84,6 @@
         </ScrollView>
 
         <HorizontalStackLayout Grid.Row="2">
-            <Button Margin="10"
-                Clicked="LoadSim"
-                Text="Load Shot" />
-            <Button Margin="10"
-                Clicked="LoadInitial"
-                Text="Load Initial Values" />
-            <Button Margin="10"
-                Clicked="Refresh"
-                Text="Refresh" />
         </HorizontalStackLayout>
 
         <HorizontalStackLayout Grid.Column="1">
