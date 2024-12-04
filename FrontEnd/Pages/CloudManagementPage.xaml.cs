@@ -8,9 +8,11 @@ public partial class CloudManagementPage : ContentPage
 {
     private ShotsViewModel ContextStore;
     public SimulatedShot Selection = null;
+    IDatabase _database;
 	public CloudManagementPage(IDatabase database)
 	{
         InitializeComponent();
+        _database = database;
         ContextStore = new ShotsViewModel(database);
         BindingContext = ContextStore;
     }
@@ -60,7 +62,7 @@ public partial class CloudManagementPage : ContentPage
         }
         else if (await DisplayAlert("Alert", "Are you sure you want to delete " + Selection.simulatedShot.Name, "Yes", "No"))
         {
-            // TODO: Kill it
+            // Kill the shot
             Refresh(sender, args);
         }
     }
