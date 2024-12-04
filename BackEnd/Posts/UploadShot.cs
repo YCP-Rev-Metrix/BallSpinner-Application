@@ -15,7 +15,8 @@ public partial class Database : IDatabase
     ///<Summary>
     /// Uploades a user's shot from the local rev file after running a simulated shot. Returns status of HTTP request.
     /// For now, we are just passing InitialSpeed and name as an argument because that is the only ones we have.
-    /// Throws and exception if the Temp csv file is empty and/or user is not logged in.
+    /// Throws and exception if the Temp csv file is empty and/or user is not logged in. Also Throws HttpException
+    /// if response indicates failure.
     ///</Summary>
     public async Task<bool> UploadShot(IBallSpinner ballSpinner, string name, float InitialSpeed)
     {

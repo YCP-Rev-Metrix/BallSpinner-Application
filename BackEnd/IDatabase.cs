@@ -50,9 +50,42 @@ public interface IDatabase
     /// Sets user tokens for a session
     ///</Summary>
     public void SetUserTokens(Token token);
+
     ///<Summary>
     /// Uploads the metadata for a locally saved shot to the database for future indexing.
     /// Throws exception on Http error. In the future, this will take/provide more detailed metadata.
+    /// Throws HttpException if response indicates failure.
     ///</Summary>
-    public Task<bool> SaveLocalEntry(string ShotName);
+    Task<bool> SaveLocalEntry(string ShotName);
+
+    /// Uploades a new bowling ball to the database for the user that is currently logged in.
+    /// Throws HttpException if response indicates failure.
+    ///</Summary>
+    Task<bool> AddBowlingBall(Ball ball);
+
+    ///<Summary>
+    /// Retrives a list containing the user's arsenal. Throws HttpException if response indicates failure.
+    ///</Summary>
+    Task<Arsenal?> GetArsenal();
+
+    ///<Summary>
+    /// Retrieves the input values that were given to a shot, for the user selected shot.
+    /// Throws HttpException if response indicates failure.
+    ///</Summary>
+    Task<ShotInfo?> GetInitialValuesForShot(string shotName);
+
+    ///<Summary>
+    /// Retrieves a list containing the user's local shots. Throws HttpException if response indicates failure.
+    ///</Summary>
+    Task<LocalShotList?> GetListOfSavedLocalShots();
+
+    ///<Summary>
+    /// Deletes the bowling ball provided by the user. Throws HttpException if response indicates failure.
+    ///</Summary>
+    Task<bool> DeleteBowlingBall(string BallName);
+
+    ///<Summary>
+    /// Deletes the SimulatedShot provided by the user. Throws HttpException if response indicates failure.
+    ///</Summary>
+    Task<bool> DeleteUserShot(string ShotName);
 }
