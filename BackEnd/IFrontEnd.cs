@@ -16,9 +16,4 @@ public interface IFrontEnd : IDisposable
     /// Does not use constructor because the front end and back end both depend on each other to get an initial object reference.
     /// </summary>
     void Init(Backend backend);
-
-    /// <summary>
-    /// Show a message to the user
-    /// </summary>
-    void Alert(string message);
 }
