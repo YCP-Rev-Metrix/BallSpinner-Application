@@ -41,29 +41,29 @@
                         <ColumnDefinition Width="200" />
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0"
-                   FontSize="18"
-                   Text="Name" />
+                           FontSize="18"
+                           Text="Name" />
                     <Label Grid.Column="1"
-                   FontSize="18"
-                   Text="Speed" />
+                           FontSize="18"
+                           Text="Speed" />
                     <Label Grid.Column="2"
-                   FontSize="18"
-                   Text="Angle" />
+                           FontSize="18"
+                           Text="Angle" />
                     <Label Grid.Column="3"
-                   FontSize="18"
-                   Text="Position" />
+                           FontSize="18"
+                           Text="Position" />
                     <Label Grid.Column="4"
-                   FontSize="18"
-                   Text="Frequency" />
+                           FontSize="18"
+                           Text="Frequency" />
                     <Label Grid.Column="5"
-                   FontSize="18"
-                   Text="Gyroscopic" />
+                           FontSize="18"
+                           Text="Count" />
                     <Label Grid.Column="6"
-                   FontSize="18"
-                   Text="Accelerometer" />
+                           FontSize="18"
+                           Text="" />
                     <Label Grid.Column="7"
-                   FontSize="18"
-                   Text="Magnetometer" />
+                           FontSize="18"
+                           Text="" />
                 </Grid>
 
                 <ListView Grid.Row="1"
@@ -91,16 +91,16 @@
                                         <ColumnDefinition Width="200" />
                                     </Grid.ColumnDefinitions>
                                     <Label Grid.Column="0" 
-                                    Text="{Binding simulatedShot.Name}" />
+                                           Text="{Binding simulatedShot.Name}" />
                                     <Label Grid.Column="1" 
-                                    Text="{Binding simulatedShot.Speed}" />
+                                           Text="{Binding simulatedShot.Speed}" />
                                     <Label Grid.Column="2" 
-                                   Text="{Binding simulatedShot.Angle}" />
+                                           Text="{Binding simulatedShot.Angle}" />
                                     <Label Grid.Column="3" 
-                                   Text="{Binding simulatedShot.Position}" />
+                                           Text="{Binding simulatedShot.Position}" />
                                     <Label Grid.Column="4" 
-                                   Text="{Binding simulatedShot.Frequency}" />
-                                    <Label Grid.Column="5">
+                                           Text="{Binding simulatedShot.Frequency}" />
+                                    <Label Grid.Column="6">
                                         <Label.Text>
                                             <MultiBinding StringFormat="{}{0}, {1}, {2}">
                                                 <Binding Path="data[0].X" />
@@ -145,6 +145,9 @@
             <Button Margin="10"
                     Clicked="Refresh"
                     Text="Refresh" />
+            <Button Margin="10"
+                    Clicked="DeleteShot"
+                    Text="Delete Selection" />
         </HorizontalStackLayout>
     </Grid>
 
