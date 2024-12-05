@@ -52,16 +52,6 @@ public class FrontEnd : IFrontEnd
         _webViewServer.Dispose();
     }
 
-    public void Alert(string message)
-    {
-        var window = new Window(new AlertPage(message))
-        {
-            Title = "Alert"
-        };
-
-        Application.Current!.OpenWindow(window);
-    }
-
     /// <summary>
     /// Opens the help window
     /// </summary>
@@ -194,7 +184,7 @@ public class FrontEnd : IFrontEnd
         if (_newArsenalWindow != null)
             return;
 
-        _newArsenalWindow = new Window(new CloudManagementPage(Backend.Database))
+        _newArsenalWindow = new Window(new ArsenalPage(Backend.Database))
         {
             Title = "Arsenal"
         };

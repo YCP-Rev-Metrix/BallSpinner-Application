@@ -27,6 +27,7 @@
                 Placeholder="Username"
                 SemanticProperties.Description="Enter Username"
                 SemanticProperties.HeadingLevel="Level2"
+                Completed="OnLoginButtonClicked"
                 Text="" />
 
             <!--  Password Entry  -->
@@ -38,6 +39,7 @@
                 Placeholder="Password"
                 SemanticProperties.Description="Enter Password"
                 SemanticProperties.HeadingLevel="Level2"
+                Completed="OnLoginButtonClicked"
                 Text="" />
 
             <!--  Login Button  -->

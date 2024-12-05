@@ -19,10 +19,13 @@ public partial class CloudManagementPage : ContentPage
 
     private void Refresh(object sender, EventArgs args)
     {
-        //Temp hardcoded update, the function for refreshing on the ShotsViewModel side will replace this
         ContextStore.UpdateCollectionContent();
-
         BindingContext = ContextStore;
+    }
+
+    private void NewSelection(object sender, SelectedItemChangedEventArgs args)
+    {
+        Selection = args.SelectedItem as SimulatedShot;
     }
 
     private void LoadSim(object sender, EventArgs args)
@@ -49,11 +52,6 @@ public partial class CloudManagementPage : ContentPage
         }
     }
 
-    private void NewSelection(object sender, SelectedItemChangedEventArgs args)
-    {
-        Selection = args.SelectedItem as SimulatedShot;
-    }
-
     private async void DeleteShot(object sender, EventArgs args)
     {
         if (Selection == null)
@@ -62,7 +60,7 @@ public partial class CloudManagementPage : ContentPage
         }
         else if (await DisplayAlert("Alert", "Are you sure you want to delete " + Selection.simulatedShot.Name, "Yes", "No"))
         {
-            // Kill the shot
+            _database.DeleteUserShot(Selection.simulatedShot.Name);
             Refresh(sender, args);
         }
     }

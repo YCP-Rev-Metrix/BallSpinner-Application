@@ -1,5 +1,6 @@
-﻿using Common.POCOs;
-using RevMetrix.BallSpinner.BackEnd;
+﻿using RevMetrix.BallSpinner.BackEnd;
+using Common.POCOs;
+using RevMetrix.BallSpinner.BackEnd.Database;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,20 +11,23 @@ using System.Threading.Tasks;
 namespace RevMetrix.BallSpinner.FrontEnd;
 internal class BallsViewModel
 {
-    public ObservableCollection<Ball> Balls { get; private set; }
+    public ObservableCollection<Ball> Arsenal { get; private set; }
     private IDatabase _database = null;
 
     public BallsViewModel(IDatabase database)
     {
-        Balls = new ObservableCollection<Ball>();
+        Arsenal = new ObservableCollection<Ball>();
         _database = database;
         UpdateCollectionContent();
     }
 
-    // The 
     public async void UpdateCollectionContent()
     {
-        Balls.Clear();
-        //Balls.Add()
+        Arsenal.Clear();
+        Arsenal list = null; //await _database.GetArsenal();
+        if (list != null)
+        {
+            foreach (var ball in list.BallList) { Arsenal.Add(ball); }
+        }
     }
 }

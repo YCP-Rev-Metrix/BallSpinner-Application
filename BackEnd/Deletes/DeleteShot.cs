@@ -11,7 +11,7 @@ public partial class Database : IDatabase
     ///<Summary>
     /// Deletes the SimulatedShot provided by the user. Throws HttpException if response indicates failure.
     ///</Summary>
-    public async Task<bool> DeleteUserShot(string ShotName)
+    public async Task<bool> DeleteUserShot(string? ShotName)
     {
         // If the user is not logged in, return false
         if (this.UserTokens == null)

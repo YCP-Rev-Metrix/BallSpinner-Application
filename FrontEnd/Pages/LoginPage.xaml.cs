@@ -71,4 +71,9 @@ public partial class LoginPage : ContentPage
             }
         }
     }
+
+    private void UsernameField_Completed(object sender, EventArgs e)
+    {
+
+    }
 }

@@ -87,5 +87,5 @@ public interface IDatabase
     ///<Summary>
     /// Deletes the SimulatedShot provided by the user. Throws HttpException if response indicates failure.
     ///</Summary>
-    Task<bool> DeleteUserShot(string ShotName);
+    Task<bool> DeleteUserShot(string? ShotName);
 }

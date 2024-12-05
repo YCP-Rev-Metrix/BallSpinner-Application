@@ -47,7 +47,7 @@
                 Text="Manage Shots" />
             <MenuFlyoutItem
                 Clicked="OnArsenalButtonClicked"
-                IsEnabled="false"
+                IsEnabled="true"
                 Text="Manage Arsenal" />
         </MenuBarItem>
 
