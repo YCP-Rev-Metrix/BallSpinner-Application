@@ -18,7 +18,7 @@
 
         <ScrollView Grid.Row="1" 
                     Margin="10,0,0,0"
-                    Orientation="Horizontal">
+                    Orientation="Both">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30" />
@@ -30,6 +30,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
+                    
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="200" />
                         <ColumnDefinition Width="100" />
@@ -40,6 +41,7 @@
                         <ColumnDefinition Width="200" />
                         <ColumnDefinition Width="200" />
                     </Grid.ColumnDefinitions>
+                    
                     <Label Grid.Column="0"
                            FontSize="18"
                            Text="Name" />
@@ -80,6 +82,7 @@
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
+                                    
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="200" />
                                         <ColumnDefinition Width="100" />
@@ -100,7 +103,7 @@
                                            Text="{Binding simulatedShot.Position}" />
                                     <Label Grid.Column="4" 
                                            Text="{Binding simulatedShot.Frequency}" />
-                                    <Label Grid.Column="6">
+                                    <Label Grid.Column="5">
                                         <Label.Text>
                                             <MultiBinding StringFormat="{}{0}, {1}, {2}">
                                                 <Binding Path="data[0].X" />
