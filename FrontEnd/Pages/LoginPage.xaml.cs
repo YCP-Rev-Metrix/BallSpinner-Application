@@ -17,12 +17,6 @@ public partial class LoginPage : ContentPage
         BindingContext = this;
     }
 
-    public void Init(FrontEnd frontEnd, IDatabase database)
-    {
-        _frontEnd = frontEnd;
-        _database = database;
-    }
-
     private async void OnRegisterButtonClicked(object sender, EventArgs args)
     {
         var username = UsernameField.Text;
@@ -70,10 +64,5 @@ public partial class LoginPage : ContentPage
                 await DisplayAlert("Alert", e.Message, "BOOOOOOOOOOOOOOOOOOOOOOOOO");
             }
         }
-    }
-
-    private void UsernameField_Completed(object sender, EventArgs e)
-    {
-
     }
 }
