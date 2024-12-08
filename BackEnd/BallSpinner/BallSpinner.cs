@@ -26,6 +26,8 @@ public class BallSpinner : IBallSpinner
     /// <inheritdoc/>
     public DataParser DataParser { get; private set; } = new DataParser();
 
+    public string SmartDotMAC { get; }
+
     /// <inheritdoc/>
     public event Action? SendErrorToApp;
 
@@ -37,6 +39,9 @@ public class BallSpinner : IBallSpinner
 
     /// <inheritdoc/>
     public event PropertyChangedEventHandler? PropertyChanged;
+
+    /// <inheritdoc/>
+    public event Action<PhysicalAddress> OnSmartDotMACAddressReceived;
 
     private TCP? _connection;
     private IPAddress _address;
@@ -91,11 +96,16 @@ public class BallSpinner : IBallSpinner
         OnConnectionChanged?.Invoke(true);
     }
 
+    /// <inheritdoc/>
+    public async void ConnectSmartDot(PhysicalAddress? address)
+    {
+        await _connection!.ConnectSmartDot(address);
+    }
+
     private void SmartDotAddressReceivedEvent(PhysicalAddress address)
     {
-        _connection!.ConnectSmartDot(address);
         Debug.WriteLine("Device address: " + address.ToString());
-        _connection.SmartDotAddressReceivedEvent -= SmartDotAddressReceivedEvent;
+        OnSmartDotMACAddressReceived?.Invoke(address);
     }
 
     private void SmartDotRecievedEvent(SensorType sensorType, float timeStamp, int sampleCount, float XData, float YData, float ZData)

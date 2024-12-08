@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +23,13 @@ public interface IBallSpinner : INotifyPropertyChanged
     /// <summary>
     /// Gets or sets the MAC address
     /// </summary>
-    string MAC { get; set; }
+    string MAC { get; }
+
+
+    /// <summary>
+    /// The MAC address of the Smart Dot Module
+    /// </summary>
+    string SmartDotMAC { get; }
 
     /// <summary>
     /// Events
@@ -44,6 +51,11 @@ public interface IBallSpinner : INotifyPropertyChanged
     /// Invoked when the device is connected or disconnected
     /// </summary>
     public event Action<bool>? OnConnectionChanged;
+
+    /// <summary>
+    /// Invoked when the device receives a signal for a potential smart dot connection
+    /// </summary>
+    public event Action<PhysicalAddress> OnSmartDotMACAddressReceived;
 
     //Methods
     /// <summary>
@@ -71,6 +83,12 @@ public interface IBallSpinner : INotifyPropertyChanged
     /// </summary>
     /// <returns>True if connected, false otherwise.</returns>
     bool IsConnected();
+
+    /// <summary>
+    /// Connect the device to a particular smart dot
+    /// When null, tells the device to request for potential smart dot devices
+    /// </summary>
+    void ConnectSmartDot(PhysicalAddress? address);
 }
 
 /// <summary>

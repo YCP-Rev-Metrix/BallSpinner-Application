@@ -1,9 +1,11 @@
 ﻿using Common.POCOs;
+using RevMetrix.BallSpinner.BackEnd;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -49,8 +51,11 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
 
     public MainPage MainPage { get; }
 
-    public BallSpinnerViewModel(MainPage mainPage, IBallSpinner ballspinner)
+    private FrontEnd _frontEnd;
+
+    public BallSpinnerViewModel(FrontEnd frontend, MainPage mainPage, IBallSpinner ballspinner)
     {
+        _frontEnd = frontend;
         MainPage = mainPage;
         _ballSpinner = ballspinner;
 
@@ -60,18 +65,23 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         TopRightView = new GraphViewModel(_ballSpinner, "Magnetometer (μT)", Metric.MagnetometerX | Metric.MagnetometerY | Metric.MagnetometerZ);
         BottomRightView = new GraphViewModel(_ballSpinner, "Light (lux)", Metric.Light);
 
-        _ballSpinner.PropertyChanged += _ballSpinner_PropertyChanged;
-        _ballSpinner.OnConnectionChanged += _ballSpinner_OnConnectionChanged;
+        _ballSpinner.PropertyChanged += BallSpinner_PropertyChanged;
+        _ballSpinner.OnConnectionChanged += BallSpinner_OnConnectionChanged;
 
-        NotConnectedFadeVisible = !_ballSpinner.IsConnected();
+        BallSpinner_OnConnectionChanged(_ballSpinner.IsConnected());
     }
 
-    private void _ballSpinner_OnConnectionChanged(bool connected)
+    private async void BallSpinner_OnConnectionChanged(bool connected)
     {
         NotConnectedFadeVisible = !connected;
+
+        if(connected && string.IsNullOrEmpty(_ballSpinner.SmartDotMAC))
+        {
+            await _frontEnd.ConnectSmartDot(_ballSpinner);
+        }
     }
 
-    private void _ballSpinner_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void BallSpinner_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         OnPropertyChanged(e.PropertyName);
     }
@@ -98,8 +108,8 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
 
     public void Dispose()
     {
-        _ballSpinner.PropertyChanged -= _ballSpinner_PropertyChanged;
-        _ballSpinner.OnConnectionChanged -= _ballSpinner_OnConnectionChanged;
+        _ballSpinner.PropertyChanged -= BallSpinner_PropertyChanged;
+        _ballSpinner.OnConnectionChanged -= BallSpinner_OnConnectionChanged;
 
         _ballSpinner.Dispose();
     }

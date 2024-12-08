@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,9 @@ public class Simulation : IBallSpinner
     public string Name { get; set; } = "Simulation";
 
     ///<inheritdoc/>
+    public string SmartDotMAC { get; } = "11:11:11:11:11:11";
+
+    ///<inheritdoc/>
     public event Action? SendErrorToApp;
 
     ///<inheritdoc/>
@@ -33,6 +37,9 @@ public class Simulation : IBallSpinner
 
     ///<inheritdoc/>
     public event PropertyChangedEventHandler? PropertyChanged;
+
+    ///<inheritdoc/>
+    public event Action<PhysicalAddress> OnSmartDotMACAddressReceived;
 
     private Timer? _timer;
 
@@ -154,5 +161,12 @@ public class Simulation : IBallSpinner
         float roll = MathF.Atan2(2f * (rotation.X * rotation.Y + rotation.W * rotation.Z),
                                   rotation.W * rotation.W + rotation.X * rotation.X - rotation.Y * rotation.Y - rotation.Z * rotation.Z);
         return new Vector3(yaw, pitch, roll) / ((float)Math.PI / 180);
+    }
+
+    /// <inheritdoc/>
+    public void ConnectSmartDot(PhysicalAddress? address)
+    {
+        if (address == null)
+            OnSmartDotMACAddressReceived?.Invoke(PhysicalAddress.Parse(SmartDotMAC));
     }
 }
