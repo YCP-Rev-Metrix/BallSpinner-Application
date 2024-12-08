@@ -18,9 +18,9 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <VerticalStackLayout>
-                            <Label Text="{Binding Name}" />
-                        </VerticalStackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="{Binding Name}" VerticalOptions="Center" />
+                        </StackLayout>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

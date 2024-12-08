@@ -21,7 +21,7 @@ internal class BallsViewModel
         UpdateCollectionContent();
     }
 
-    public void UpdateCollectionContent()
+    public async void UpdateCollectionContent()
     {
         Arsenal.Clear();
         Arsenal list = await _database.GetArsenal();

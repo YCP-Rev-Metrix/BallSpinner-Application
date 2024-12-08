@@ -20,6 +20,7 @@ public partial class SmartDotsPage : ContentPage
         _ballSpinner = spinner;
         
         InitializeComponent();
+        BindingContext = this;
 
         spinner.OnSmartDotMACAddressReceived += Spinner_OnSmartDotMACAddressReceived;
         spinner.ConnectSmartDot(null);
@@ -34,13 +35,12 @@ public partial class SmartDotsPage : ContentPage
         }
 
         MacAddresses.Add(new MacAddressPair(obj, string.Empty));
-        OnPropertyChanged(nameof(MacAddresses));
     }
 
     public struct MacAddressPair
     {
-        public PhysicalAddress MacAddress;
-        public string Name;
+        public PhysicalAddress MacAddress { get; }
+        public string Name { get; } = string.Empty;
 
         public MacAddressPair(PhysicalAddress macAddress, string name)
         {
@@ -49,16 +49,16 @@ public partial class SmartDotsPage : ContentPage
             if (name.Length > 0)
                 Name = $"{name} ({MacAddress.ToString()})";
             else
-                Name = macAddress.ToString();
+                Name = MacAddress.ToString();
         }
     }
 
     private void Connect_Clicked(object sender, EventArgs e)
     {
-        if(SmartDots.SelectedItem != null)
+        if(SmartDots.SelectedItem is MacAddressPair pair)
         {
-            /*_ballSpinner.ConnectSmartDot(obj);
-            _task.SetResult(obj);*/
+            _ballSpinner.ConnectSmartDot(pair.MacAddress);
+            _task.SetResult(pair.MacAddress);
         }
     }
 }

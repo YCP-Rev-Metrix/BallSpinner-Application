@@ -81,6 +81,11 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         }
     }
 
+    private void UpdateConnected(bool connected)
+    {
+        NotConnectedFadeVisible = !connected | string.IsNullOrEmpty(_ballSpinner.SmartDotMAC);
+    }
+
     private void BallSpinner_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         OnPropertyChanged(e.PropertyName);
