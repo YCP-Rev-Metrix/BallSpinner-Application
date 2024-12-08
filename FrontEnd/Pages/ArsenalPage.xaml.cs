@@ -35,25 +35,24 @@ public partial class ArsenalPage : ContentPage
         }
         else if (await DisplayAlert("Alert", "Are you sure you want to delete " + Selection.Name, "Yes", "No"))
         {
-            _database.DeleteUserShot(Selection.Name);
+            _database.DeleteBowlingBall(Selection.Name);
             Refresh(sender, args);
         }
     }
 
     private async void AddBall(object sender, EventArgs args)
     {
-        if (   string.IsNullOrEmpty(Name.Text) 
+        if (   string.IsNullOrEmpty(Name.Text)
+            || string.IsNullOrEmpty(Diameter.Text)
             || string.IsNullOrEmpty(Weight.Text)
-            || string.IsNullOrEmpty(Hardness.Text)
-            || string.IsNullOrEmpty(CoreType.Text)
-            || string.IsNullOrEmpty(Diameter.Text)) 
+            || string.IsNullOrEmpty(CoreType.Text))
         {
             await DisplayAlert("Alert", "To add a new ball, every field must filled.", "Fine...");
         }
         else
         {
-            Ball toAdd = new Ball(Name.Text, int.Parse(Weight.Text), int.Parse(Hardness.Text), CoreType.Text, int.Parse(Diameter.Text));
-            //Push ball
+            _database.AddBowlingBall(new Ball(Name.Text, double.Parse(Diameter.Text), double.Parse(Weight.Text), CoreType.Text));
+            Refresh(sender, args);
         }
     }
 }
