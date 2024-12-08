@@ -12,7 +12,7 @@ namespace RevMetrix.BallSpinner.FrontEnd;
 internal class BallsViewModel
 {
     public ObservableCollection<Ball> Arsenal { get; private set; }
-    private IDatabase _database = null;
+    private IDatabase _database;
 
     public BallsViewModel(IDatabase database)
     {
@@ -21,7 +21,7 @@ internal class BallsViewModel
         UpdateCollectionContent();
     }
 
-    public async void UpdateCollectionContent()
+    public void UpdateCollectionContent()
     {
         Arsenal.Clear();
         Arsenal list = null; //await _database.GetArsenal();

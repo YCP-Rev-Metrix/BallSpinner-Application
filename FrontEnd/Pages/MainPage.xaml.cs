@@ -23,8 +23,6 @@ public partial class MainPage : ContentPage
     /// <summary/>
     public MainPage()
     {
-        BallSpinners.Add(new BallSpinnerViewModel(this, new Simulation()));
-
         InitializeComponent();
 
         BindingContext = this;
@@ -36,6 +34,8 @@ public partial class MainPage : ContentPage
         _database = database;
 
         _database.OnLoginChanged += Database_OnLoginChanged;
+
+        BallSpinners.Add(new BallSpinnerViewModel(_frontEnd, this, new Simulation()));
     }
 
     private void Database_OnLoginChanged(bool obj)
@@ -195,7 +195,7 @@ public partial class MainPage : ContentPage
 
         if(ballSpinner != null)
         {
-            BallSpinners.Add(new BallSpinnerViewModel(this, ballSpinner));
+            BallSpinners.Add(new BallSpinnerViewModel(_frontEnd, this, ballSpinner));
             OnPropertyChanged(nameof(BallSpinners));
         }
     }

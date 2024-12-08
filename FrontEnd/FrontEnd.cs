@@ -4,6 +4,8 @@ using RevMetrix.BallSpinner.FrontEnd.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -130,6 +132,33 @@ public class FrontEnd : IFrontEnd
             Application.Current!.CloseWindow(_newLoginWindow);
             _newLoginWindow = null;
         }
+    }
+
+    public async Task<PhysicalAddress?> ConnectSmartDot(IBallSpinner spinner)
+    {
+        TaskCompletionSource<PhysicalAddress?> task = new TaskCompletionSource<PhysicalAddress?>();
+        var smartDotPage = new Window(new SmartDotsPage(spinner, task))
+        {
+            Title = "Connect smart dot",
+            Width = 600,
+            Height = 400,
+            X = 100,
+            Y = 100
+        };
+        Application.Current!.OpenWindow(smartDotPage);
+        smartDotPage.Destroying += (object? sender, EventArgs e) =>
+        {
+            smartDotPage = null;
+
+            if (!task.Task.IsCompleted)
+                task.SetResult(null);
+        };
+
+        var result = await task.Task;
+        if (smartDotPage != null)
+            Application.Current.CloseWindow(smartDotPage);
+
+        return result;
     }
 
     public void InitialValues()

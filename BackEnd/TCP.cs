@@ -82,7 +82,7 @@ public class TCP : IDisposable
     /// <summary>
     /// Connect to a smart dot module. Sending null indicates you want to start listening to packets
     /// </summary>
-    public async void ConnectSmartDot(PhysicalAddress? address)
+    public async Task ConnectSmartDot(PhysicalAddress? address)
     {
         _send[0] = (byte)MessageType.ConnectSmartDot;
         _send[1] = 0;
@@ -162,6 +162,34 @@ public class TCP : IDisposable
             {
                 size = await _client.Client.ReceiveAsync(_receive);
 
+                /*new byte[]
+                {
+                    138,
+0,
+19,
+71,
+0,
+0,
+0,
+244,
+139,
+206,
+78,
+0,
+64,
+178,
+194,
+0,
+128,
+70,
+194,
+0,
+0,
+245,
+193,
+
+                }.CopyTo(_receive, 0);*/
+
                 if (size == 0)
                     continue;
 
@@ -206,7 +234,7 @@ public class TCP : IDisposable
                             float xData = BitConverter.ToSingle(packetFixed, 11);
                             float yData = BitConverter.ToSingle(packetFixed, 15);
                             float zData = BitConverter.ToSingle(packetFixed, 19);
-
+                            
                             Debug.WriteLine($"{sensorType}: {xData} {yData} {zData}");
                             SmartDotReceivedEvent?.Invoke(sensorType, timeStamp, sampleCount, xData, yData, zData);
                             break;

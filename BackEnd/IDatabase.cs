@@ -58,6 +58,7 @@ public interface IDatabase
     ///</Summary>
     Task<bool> SaveLocalEntry(string ShotName);
 
+    ///<Summary>
     /// Uploades a new bowling ball to the database for the user that is currently logged in.
     /// Throws HttpException if response indicates failure.
     ///</Summary>
