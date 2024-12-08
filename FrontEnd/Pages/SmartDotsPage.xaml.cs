@@ -23,6 +23,7 @@ public partial class SmartDotsPage : ContentPage
 
         spinner.OnSmartDotMACAddressReceived += Spinner_OnSmartDotMACAddressReceived;
         spinner.ConnectSmartDot(null);
+        BindingContext = MacAddresses;
 	}
 
     private void Spinner_OnSmartDotMACAddressReceived(PhysicalAddress obj)

@@ -9,7 +9,7 @@
         <MenuBarItem IsEnabled="{Binding LoggedIn}" Text="File">
             <MenuFlyoutItem
                 Clicked="OnNewShotButtonClicked"
-                IsEnabled="false"
+                IsEnabled="true"
                 Text="New Shot" />
             <MenuFlyoutItem
                 Clicked="OnLoadShotButtonClicked"

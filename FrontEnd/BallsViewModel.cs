@@ -24,10 +24,10 @@ internal class BallsViewModel
     public void UpdateCollectionContent()
     {
         Arsenal.Clear();
-        Arsenal list = await _database.GetArsenal();
+        /* Arsenal list = _database.GetArsenal();
         if (list != null)
         {
             foreach (var ball in list.BallList) { Arsenal.Add(ball); }
-        }
+        } */
     }
 }

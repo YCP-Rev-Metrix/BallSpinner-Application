@@ -15,7 +15,7 @@ public partial class ArsenalPage : ContentPage
         ContextStore = new BallsViewModel(database);
         BindingContext = ContextStore;
     }
-
+    
     private void Refresh(object sender, EventArgs args)
     {
         ContextStore.UpdateCollectionContent();
