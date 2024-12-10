@@ -75,10 +75,15 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
     {
         NotConnectedFadeVisible = !connected;
 
-        if(connected) //&& string.IsNullOrEmpty(_ballSpinner.SmartDotMAC))
+        if(connected && string.IsNullOrEmpty(_ballSpinner.SmartDotMAC))
         {
             await _frontEnd.ConnectSmartDot(_ballSpinner);
         }
+    }
+
+    public async void ConnectSmartDot()
+    {
+        await _frontEnd.ConnectSmartDot(_ballSpinner);
     }
 
     private void UpdateConnected(bool connected)

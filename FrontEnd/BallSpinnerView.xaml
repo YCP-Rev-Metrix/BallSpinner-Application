@@ -16,10 +16,18 @@
                     <StackLayout Grid.Column="0">
                         <Label x:Name="Label" Text="{Binding Name}" />
                     </StackLayout>
-                    <StackLayout
+                    <HorizontalStackLayout
                         Grid.Column="2"
                         HeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
                         HorizontalOptions="End">
+                        <Button
+                            Margin="5,0"
+                            Padding="10,-10"
+                            Clicked="SelectSmartDotButton"
+                            HeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
+                            MaximumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
+                            MinimumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
+                            Text="Select SmartDot" />
                         <Button
                             Padding="-14,-10"
                             Clicked="OnRemoveBallSpinnerButton"
@@ -27,7 +35,7 @@
                             MaximumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
                             MinimumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
                             Text="🗙" />
-                    </StackLayout>
+                    </HorizontalStackLayout>
                 </Grid>
 
                 <Grid HeightRequest="325">

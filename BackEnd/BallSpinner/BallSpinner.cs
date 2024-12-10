@@ -164,7 +164,7 @@ public class BallSpinner : IBallSpinner
     private void OnTimedEvent(object? source, ElapsedEventArgs e)
     {
         if (!IsConnected())
-            throw new Exception("Can't update motors without connection");
+            return;
 
         _currentVoltage++;
 
