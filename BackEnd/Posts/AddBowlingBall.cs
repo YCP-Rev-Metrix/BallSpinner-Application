@@ -29,7 +29,7 @@ public partial class Database : IDatabase
         var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
         Client.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Bearer", this.UserTokens.TokenA);
-        var response = await Client.PostAsync(BaseAPIURL + "/posts/InsertBowlingBall", content);
+        var response = await Client.PostAsync(BaseAPIURL + "/posts/InsertBall", content);
         response.EnsureSuccessStatusCode();
 
         return true;

@@ -24,7 +24,7 @@ public partial class Database : IDatabase
             new AuthenticationHeaderValue("Bearer", this.UserTokens.TokenA);
         // Send the delete request. Include BallName in query parameters
         var response =
-            await Client.DeleteAsync(BaseAPIURL + $"/deletes/DeleteBowlingBall?name={Uri.EscapeDataString(BallName)}");
+            await Client.DeleteAsync(BaseAPIURL + $"/deletes/DeleteBall?ballName={Uri.EscapeDataString(BallName)}");
         response.EnsureSuccessStatusCode();
 
         return true;

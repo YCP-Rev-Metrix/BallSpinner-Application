@@ -24,7 +24,7 @@ public partial class Database : IDatabase
             new AuthenticationHeaderValue("Bearer", this.UserTokens.TokenA);
         // Send the delete request. Include ShotName in query parameters
         var response =
-            await Client.DeleteAsync(BaseAPIURL + $"/deletes/DeleteUserShot?name={Uri.EscapeDataString(ShotName)}");
+            await Client.DeleteAsync(BaseAPIURL + $"/deletes/DeleteShot?ShotName={Uri.EscapeDataString(ShotName)}");
         response.EnsureSuccessStatusCode();
 
         return true;

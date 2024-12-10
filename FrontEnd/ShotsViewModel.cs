@@ -21,13 +21,17 @@ internal class ShotsViewModel
         UpdateCollectionContent();
     }
 
-    public async void UpdateCollectionContent()
+    public async Task UpdateCollectionContent()
     {
         Shots.Clear();
         SimulatedShotList list = await _database.GetListOfShots();
         if (list != null)
         {
-            foreach (var shot in list.shots) { Shots.Add(shot); }
+            foreach (var shot in list.shots) 
+            { 
+                shot.simulatedShot.DataCount = shot.data.Count;
+                Shots.Add(shot); 
+            }
         }
     }
 }
