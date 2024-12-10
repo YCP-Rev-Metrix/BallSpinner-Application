@@ -41,8 +41,6 @@ public class PreviousThrow : IBallSpinner
     
     public event Action? SendRejection;
 
-    private Timer? _timer;
-
     private string _fileDirectory;
 
     private List<SampleData?> ShotData = null!;
@@ -53,16 +51,16 @@ public class PreviousThrow : IBallSpinner
     // Denotes whether the current previous shot has finished going through all samples
     private bool _isCompleted;
 
-    
+    private bool _running;
 
     /// <summary>
     /// Constructor for PreviousThrow class. fileDirectory should exist before creating an instance of PreviousThrow
     /// </summary>
-    public PreviousThrow(string fileDirectory, string fileName)
+    public PreviousThrow(string filePath)
     {
         InitializeConnection();
-        _fileDirectory = fileDirectory;
-        Name = "Shot: " + fileName;
+        _fileDirectory = filePath;
+        Name = "Shot: " + Path.GetFileNameWithoutExtension(filePath);
         DataParser = new DataParser();
         ShotData = new List<SampleData>();
         _isCompleted = false;
@@ -75,7 +73,7 @@ public class PreviousThrow : IBallSpinner
     /// </summary>
     public void Dispose()
     {
-        _timer?.Dispose();
+
     }
 
     ///<inheritdoc/>
@@ -116,7 +114,7 @@ public class PreviousThrow : IBallSpinner
     {
         // if the user is attempting to start the current shot after already finishing it, replay the shot from
         // the beginning 
-        if (_isCompleted)
+        if (_isCompleted || _running)
         {
             return;
             /* - This is all for the future when the reset feature works with BallSpinnerView
@@ -127,47 +125,56 @@ public class PreviousThrow : IBallSpinner
             */
         }
         SampleData? current;
-        // May need to calculate time offset
-        // every tenth of a second, plot next sample on previous shot graph
-        // Note: In the future this will need to run in real time as specified by previous shot data
-        TimeSpan frequency = TimeSpan.FromSeconds(1/10f);
-        _timer = new Timer((o) =>
+        _running = true;
+
+        double lastTime = enumerator.Current.Logtime!.Value;
+        var thread = new Thread(() =>
         {
-            // Get current element from enumerator
-            current = enumerator.Current;
-            // Light sensor
-            if (current.Type == "1")
+            while (_running & !_isCompleted)
             {
-                DataParser.DataReceived(Metric.Light, (float)current.X, (float)current.Logtime);
+                // Get current element from enumerator
+                current = enumerator.Current;
+
+                Thread.Sleep((int)Math.Abs((lastTime - current.Logtime!.Value) * 1000));
+                lastTime = current.Logtime.Value;
+
+                // Light sensor
+                if (current.Type == "1")
+                {
+                    DataParser.DataReceived(Metric.Light, (float)current.X, (float)current.Logtime);
+                }
+                // Gyroscope
+                else if (current.Type == "2")
+                {
+                    DataParser.DataReceived(Metric.RotationX, (float)current.X, (float)current.Logtime);
+                    DataParser.DataReceived(Metric.RotationY, (float)current.Y, (float)current.Logtime);
+                    DataParser.DataReceived(Metric.RotationZ, (float)current.Z, (float)current.Logtime);
+                }
+                // Accelerometer
+                else if (current.Type == "3")
+                {
+                    DataParser.DataReceived(Metric.AccelerationX, (float)current.X, (float)current.Logtime);
+                    DataParser.DataReceived(Metric.AccelerationY, (float)current.Y, (float)current.Logtime);
+                    DataParser.DataReceived(Metric.AccelerationZ, (float)current.Z, (float)current.Logtime);
+                }
+                // Magnetometer
+                else if (current.Type == "4")
+                {
+                    DataParser.DataReceived(Metric.MagnetometerX, (float)current.X, (float)current.Logtime);
+                    DataParser.DataReceived(Metric.MagnetometerY, (float)current.Y, (float)current.Logtime);
+                    DataParser.DataReceived(Metric.MagnetometerZ, (float)current.Z, (float)current.Logtime);
+                }
+                // Move iterator to next element. If at the end of collection, stop timer event
+                if (!enumerator.MoveNext())
+                {
+                    _isCompleted = true; // Set bool to denote the replay has completed
+                    Stop(); // We've made it to the end. Stop the replay
+                }
             }
-            // Gyroscope
-            else if (current.Type == "2")
-            {
-                DataParser.DataReceived(Metric.RotationX, (float)current.X, (float)current.Logtime);
-                DataParser.DataReceived(Metric.RotationY, (float)current.Y, (float)current.Logtime);
-                DataParser.DataReceived(Metric.RotationZ, (float)current.Z, (float)current.Logtime);
-            }
-            // Accelerometer
-            else if (current.Type == "3")
-            {
-                DataParser.DataReceived(Metric.AccelerationX, (float)current.X, (float)current.Logtime);
-                DataParser.DataReceived(Metric.AccelerationY, (float)current.Y, (float)current.Logtime);
-                DataParser.DataReceived(Metric.AccelerationZ, (float)current.Z, (float)current.Logtime);
-            }
-            // Magnetometer
-            else if (current.Type == "4")
-            {
-                DataParser.DataReceived(Metric.MagnetometerX, (float)current.X, (float)current.Logtime);
-                DataParser.DataReceived(Metric.MagnetometerY, (float)current.Y, (float)current.Logtime);
-                DataParser.DataReceived(Metric.MagnetometerZ, (float)current.Z, (float)current.Logtime);
-            }
-            // Move iterator to next element. If at the end of collection, stop timer event
-            if (!enumerator.MoveNext())
-            {
-                _isCompleted = true; // Set bool to denote the replay has completed
-                Stop(); // We've made it to the end. Stop the replay
-            }
-        }, null, frequency, frequency);
+
+        });
+
+        thread.Start();
     }
 
     public void ConnectSmartDot(PhysicalAddress? address)
@@ -178,6 +185,6 @@ public class PreviousThrow : IBallSpinner
     ///<inheritdoc/>
     public void Stop()
     {
-        _timer?.Dispose();
+        _running = false;
     }
 }

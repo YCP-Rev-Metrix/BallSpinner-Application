@@ -2,6 +2,7 @@ using Common.POCOs;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
 
@@ -22,20 +23,25 @@ public partial class SmartDotsPage : ContentPage
         InitializeComponent();
         BindingContext = this;
 
-        spinner.OnSmartDotMACAddressReceived += Spinner_OnSmartDotMACAddressReceived;
-        spinner.ConnectSmartDot(null);
+        Loaded += OnLoaded;
 	}
+
+    private void OnLoaded(object? sender, EventArgs e)
+    {
+        _ballSpinner.OnSmartDotMACAddressReceived += Spinner_OnSmartDotMACAddressReceived;
+        _ballSpinner.ConnectSmartDot(null);
+    }
 
     private void Spinner_OnSmartDotMACAddressReceived(PhysicalAddress obj)
     {
-        foreach (var address in MacAddresses)
-        {
-            if (address.MacAddress.Equals(obj))
-                return; //Don't add duplicates
-        }
-
         MainThread.BeginInvokeOnMainThread(() =>
         {
+            foreach (var address in MacAddresses)
+            {
+                if (address.MacAddress.Equals(obj))
+                    return; //Don't add duplicates
+            }
+
             MacAddresses.Add(new MacAddressPair(obj, string.Empty));
         });
     }

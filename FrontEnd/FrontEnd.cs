@@ -145,7 +145,11 @@ public class FrontEnd : IFrontEnd
             X = 100,
             Y = 100
         };
-        Application.Current!.OpenWindow(smartDotPage);
+        await MainThread.InvokeOnMainThreadAsync(()=>
+        {
+            Application.Current!.OpenWindow(smartDotPage);
+        });
+        
         smartDotPage.Destroying += (object? sender, EventArgs e) =>
         {
             smartDotPage = null;

@@ -28,6 +28,11 @@ public partial class BallSpinnerView : ContentView
         _viewModel.MainPage.RemoveBallSpinner(_viewModel);
     }
 
+    private void SelectSmartDotButton(object sender, EventArgs args)
+    {
+        _viewModel.ConnectSmartDot();
+    }
+
     private void DataReceived(IDataViewModel model, WebView webview, Metric metric, float value, float timeFromStart)
     {
         if (!model.Metrics.HasFlag(metric))

@@ -96,11 +96,8 @@ public partial class MainPage : ContentPage
         FileResult result = await FilePicker.Default.PickAsync(options);
         if (result != null)
         {
-            // Display table of local shots, get selected shot name
-            string fileName = Path.GetFileNameWithoutExtension(result.FileName);; // needs to be user selected filename
-            string localShotDir = Utilities.GetLocalRevFileDir(Environment.GetEnvironmentVariable("CurrentUser"), fileName);
             // Create new ballSpinner instance, display on screen
-            PreviousThrow ballSpinner = new PreviousThrow(localShotDir, fileName);
+            PreviousThrow ballSpinner = new PreviousThrow(result.FullPath);
             BallSpinnerViewModel viewModel = new BallSpinnerViewModel(_frontEnd, this, ballSpinner);
 
             BallSpinners.Add(viewModel);
