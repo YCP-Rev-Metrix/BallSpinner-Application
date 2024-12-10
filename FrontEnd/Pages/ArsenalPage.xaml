@@ -129,9 +129,15 @@
                                Keyboard="Numeric"
                                WidthRequest="200"
                                Placeholder="lbs."/>
-                        <Entry x:Name="CoreType"
-                               WidthRequest="200"
-                               Placeholder="Who knows"/>
+                        <Picker x:Name="CoreType">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Symetrical</x:String>
+                                    <x:String>Asymetrical</x:String>
+                                    <x:String>Pancake</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
                     </VerticalStackLayout>
                 </HorizontalStackLayout>
 

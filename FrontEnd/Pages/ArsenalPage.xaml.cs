@@ -35,7 +35,7 @@ public partial class ArsenalPage : ContentPage
         }
         else if (await DisplayAlert("Alert", "Are you sure you want to delete " + Selection.Name, "Yes", "No"))
         {
-            _database.DeleteBowlingBall(Selection.Name);
+            await _database.DeleteBowlingBall(Selection.Name);
             Refresh(sender, args);
         }
     }
@@ -45,13 +45,13 @@ public partial class ArsenalPage : ContentPage
         if (   string.IsNullOrEmpty(Name.Text)
             || string.IsNullOrEmpty(Diameter.Text)
             || string.IsNullOrEmpty(Weight.Text)
-            || string.IsNullOrEmpty(CoreType.Text))
+            || CoreType.SelectedIndex == -1)
         {
             await DisplayAlert("Alert", "To add a new ball, every field must filled.", "Fine...");
         }
         else
         {
-            _database.AddBowlingBall(new Ball(Name.Text, double.Parse(Diameter.Text), double.Parse(Weight.Text), CoreType.Text));
+            await _database.AddBowlingBall(new Ball(Name.Text, double.Parse(Diameter.Text), double.Parse(Weight.Text), (string?)CoreType.ItemsSource[CoreType.SelectedIndex]));
             Refresh(sender, args);
         }
     }

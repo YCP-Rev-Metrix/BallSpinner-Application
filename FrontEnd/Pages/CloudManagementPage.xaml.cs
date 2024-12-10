@@ -17,9 +17,9 @@ public partial class CloudManagementPage : ContentPage
         BindingContext = ContextStore;
     }
 
-    private void Refresh(object sender, EventArgs args)
+    private async void Refresh(object sender, EventArgs args)
     {
-        ContextStore.UpdateCollectionContent();
+        await ContextStore.UpdateCollectionContent();
         BindingContext = ContextStore;
     }
 
@@ -60,7 +60,7 @@ public partial class CloudManagementPage : ContentPage
         }
         else if (await DisplayAlert("Alert", "Are you sure you want to delete " + Selection.simulatedShot.Name, "Yes", "No"))
         {
-            _database.DeleteUserShot(Selection.simulatedShot.Name);
+            await _database.DeleteUserShot(Selection.simulatedShot.Name);
             Refresh(sender, args);
         }
     }
