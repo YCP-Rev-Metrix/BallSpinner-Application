@@ -43,7 +43,7 @@ public class DataParser
         string sensorTypeString;
 
         // Invoke the event for the simulation for each axis
-        if (new Random().Next(10) > 5)
+        if (/*new Random().Next(10) > 5*/ true)
         {
             switch (sensorType)
             {

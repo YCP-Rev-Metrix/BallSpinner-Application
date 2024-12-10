@@ -30,11 +30,14 @@ public partial class SmartDotsPage : ContentPage
     {
         foreach (var address in MacAddresses)
         {
-            if (address.MacAddress == obj)
+            if (address.MacAddress.Equals(obj))
                 return; //Don't add duplicates
         }
 
-        MacAddresses.Add(new MacAddressPair(obj, string.Empty));
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            MacAddresses.Add(new MacAddressPair(obj, string.Empty));
+        });
     }
 
     public partial class MacAddressPair
