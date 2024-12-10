@@ -1,5 +1,6 @@
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using Common.POCOs;
+using RevMetrix.BallSpinner.BackEnd.Database;
 
 namespace RevMetrix.BallSpinner.BackEnd;
 
@@ -12,7 +13,9 @@ public interface IDatabase
     /// Event invoked when the user logs in or logs out
     /// </summary>
     event Action<bool>? OnLoginChanged;
-
+    
+    private static readonly HttpClient Client;
+    
     // Define database methods
     ///<Summary>
     /// Database method for logging in a user
@@ -20,7 +23,6 @@ public interface IDatabase
     Task<Token?> LoginUser(string username, string password);
     //Task DeleteSmartDot();
     //Task DeleteBallSpinner();
-    //Task DeleteShot();
     //Task DeleteUser();
     //Task GetListOfBallSpinners();
     /// <summary>
@@ -35,8 +37,7 @@ public interface IDatabase
     /// Uploads a shot for the current user. The shot will be parsed from whatever is in the TempRev.csv file.
     /// </summary>
     Task<bool> UploadShot(IBallSpinner ballSpinner, string name, float InitialSpeed);
-
-    //Task GetBalls();
+    
     ///<Summary>
     /// Database method for getting a user registered
     ///</Summary>

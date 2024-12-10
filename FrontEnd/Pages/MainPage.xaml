@@ -13,7 +13,7 @@
                 Text="New Shot" />
             <MenuFlyoutItem
                 Clicked="OnLoadShotButtonClicked"
-                IsEnabled="false"
+                IsEnabled="true"
                 Text="Load Shot" />
             <MenuFlyoutItem
                 Clicked="OnSaveShotButtonClicked"
@@ -115,5 +115,6 @@
                     VerticalTextAlignment="Center" />
             </VerticalStackLayout>
         </Grid>
+       
     </Grid>
 </ContentPage>

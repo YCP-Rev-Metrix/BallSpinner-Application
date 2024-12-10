@@ -7,7 +7,6 @@ namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 public class WriteToTempRevFile : IDisposable
 {
     private readonly string _filePath;
-    private bool _isFileCleared = false;
 
     private StreamWriter? _writer;
     private CsvWriter? _csvWriter;

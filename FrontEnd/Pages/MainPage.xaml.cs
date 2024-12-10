@@ -3,7 +3,6 @@ using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using RevMetrix.BallSpinner.BackEnd.Common.Utilities;
 using RevMetrix.BallSpinner.BackEnd.Database;
 using System.Collections.ObjectModel;
-using System.Windows;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 
@@ -19,7 +18,6 @@ public partial class MainPage : ContentPage
 
     public bool NotLoggedIn => !LoggedIn;
     public bool LoggedIn { get; private set; } = false;
-
     /// <summary/>
     public MainPage()
     {
@@ -81,56 +79,71 @@ public partial class MainPage : ContentPage
         _frontEnd.CloudManagement();
     }
 
-    private void OnLoadShotButtonClicked(object sender, EventArgs args)
+    private async void OnLoadShotButtonClicked(object sender, EventArgs args)
     {
-        throw new NotImplementedException();
+        var customFileType = new FilePickerFileType(
+            new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.WinUI, new[] { ".csv"} }, // file extension
+                { DevicePlatform.macOS, new[] { "csv"} } // UTType values
+            });
+        
+        PickOptions options = new()
+        {
+            PickerTitle = "Please select a csv file",
+            FileTypes = customFileType,
+        };
+        FileResult result = await FilePicker.Default.PickAsync(options);
+        if (result != null)
+        {
+            // Display table of local shots, get selected shot name
+            string fileName = Path.GetFileNameWithoutExtension(result.FileName);; // needs to be user selected filename
+            string localShotDir = Utilities.GetLocalRevFileDir(Environment.GetEnvironmentVariable("CurrentUser"), fileName);
+            // Create new ballSpinner instance, display on screen
+            PreviousThrow ballSpinner = new PreviousThrow(localShotDir, fileName);
+            BallSpinnerViewModel viewModel = new BallSpinnerViewModel(_frontEnd, this, ballSpinner);
+
+            BallSpinners.Add(viewModel);
+            OnPropertyChanged(nameof(BallSpinners));
+        }
     }
 
     private async void OnSaveShotButtonClicked(object sender, EventArgs args)
     {
         foreach (var ballSpinner in BallSpinners)
         {
-            if (await DisplayAlert("Notice", $"Would you like to save shot for device '{ballSpinner.Name}'?", "Yes", "No"))
+            if (ballSpinner.BallSpinner.GetType() != typeof(PreviousThrow))
             {
-                if (await DisplayAlert("Save Shot as ...", $"For device '{ballSpinner.Name}', save to database or local drive?", "Database", "Local"))
+                if (await DisplayAlert("Notice", $"Would you like to save shot for device '{ballSpinner.Name}'?", "Yes", "No"))
                 {
-                    string name = await DisplayPromptAsync("Notice", "Please name the test");
+                    if (await DisplayAlert("Save Shot as ...", $"For device '{ballSpinner.Name}', save to database or local drive?", "Database", "Local"))
+                    {
+                        string name = await DisplayPromptAsync("Notice", "Please name the test");
 
-                    if (name != null)
-                    {
-                        await _database.UploadShot(ballSpinner.BallSpinner, name, 0);
-                    }
-                }
-                else
-                {
-                    // local option selected
-                    string name = await DisplayPromptAsync("Notice", "Please name your file");
-                    
-                    if (name != null)
-                    {
-                        try
+                        if (name != null)
                         {
-                            Utilities.SaveLocalRevFile(name, ballSpinner.Name, Environment.GetEnvironmentVariable("CurrentUser"));
-                            // local save was successful, save this new local entry to database
-                            // await _database.SaveLocalEntry(name); - For now this will not work. Endpoint not implemented on cloud
-                        }
-                        catch (Exception e) 
+                            await _database.UploadShot(ballSpinner.BallSpinner, name, 0);
+                        } 
+                    }
+                    else
+                    {
+                        // local option selected
+                        string name = await DisplayPromptAsync("Notice", "Please name your file");
+                    
+                        if (name != null)
                         {
-                            await DisplayAlert("Error When Attempting to Save", e.Message, "Ok");
+                            try
+                            {
+                                Utilities.SaveLocalRevFile(name, ballSpinner.Name, Environment.GetEnvironmentVariable("CurrentUser"));
+                                // local save was successful, save this new local entry to database
+                                // await _database.SaveLocalEntry(name); - For now this will not work. Endpoint not implemented on cloud
+                            }
+                            catch (Exception e)
+                            {
+                                await DisplayAlert("Error When Attempting to Save", e.Message, "Ok");
+                            }
                         }
                     }
-                    
-                    
-                    //string path = Utilities.GetTempDir();
-                    /*
-                    var dlg = new OpenFileDialog()
-                    {
-                        InitialDirectory = path,
-                        Filter = "Text Files (*.txt) | *.txt | All Files (*.*) | *.*",
-                        RestoreDirectory = true
-                    };
-                    */
-                    //throw new NotImplementedException();
                 }
             }
         }
