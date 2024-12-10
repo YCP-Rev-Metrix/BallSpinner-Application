@@ -24,7 +24,6 @@ public partial class SmartDotsPage : ContentPage
 
         spinner.OnSmartDotMACAddressReceived += Spinner_OnSmartDotMACAddressReceived;
         spinner.ConnectSmartDot(null);
-        BindingContext = MacAddresses;
 	}
 
     private void Spinner_OnSmartDotMACAddressReceived(PhysicalAddress obj)
@@ -38,10 +37,10 @@ public partial class SmartDotsPage : ContentPage
         MacAddresses.Add(new MacAddressPair(obj, string.Empty));
     }
 
-    public struct MacAddressPair
+    public partial class MacAddressPair
     {
         public PhysicalAddress MacAddress { get; }
-        public string Name { get; } = string.Empty;
+        public string Name { get; private set; } = string.Empty;
 
         public MacAddressPair(PhysicalAddress macAddress, string name)
         {
