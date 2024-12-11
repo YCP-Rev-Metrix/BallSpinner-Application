@@ -14,8 +14,6 @@ public interface IDatabase
     /// </summary>
     event Action<bool>? OnLoginChanged;
     
-    private static readonly HttpClient Client;
-    
     // Define database methods
     ///<Summary>
     /// Database method for logging in a user

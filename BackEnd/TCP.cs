@@ -41,7 +41,7 @@ public class TCP : IDisposable
     private TcpClient _client;
     private IPAddress _address;
 
-    private const int BUFFER_SIZE = 4096;
+    private const int BUFFER_SIZE = 16384;
     private const ushort PORT = 8411;
 
     private readonly byte[] _receive = new byte[BUFFER_SIZE];
