@@ -99,9 +99,8 @@ public class PreviousThrow : IBallSpinner
             }
         }
         // sort the data by time (ascending)
-        // NEED A BETTER WAY TO DO THIS! PREFERABLY WITH CSVHELPER
         ShotData.Sort((x, y) => Nullable.Compare(x.Logtime, y.Logtime));
-        // Initialize enumerator. Move to the first element, so the Start() method
+        // Initialize enumerator. Move to the first element.
         enumerator = ShotData.GetEnumerator();
         enumerator.MoveNext();
     }

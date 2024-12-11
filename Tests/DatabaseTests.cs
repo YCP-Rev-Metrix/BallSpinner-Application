@@ -4,6 +4,8 @@ using Common.POCOs;
 
 
 namespace RevMetrix.BallSpinner.Tests;
+// Refer to TestServer class to see documentation regarding the different token types
+// that can be used to invoke certain responses
 public class DatabaseTests : TestBase
 {
     private static readonly HttpClient Client = new HttpClient();
@@ -168,5 +170,103 @@ public class DatabaseTests : TestBase
         };
         Database.SetUserTokens(token);
         await Assert.ThrowsAsync<HttpRequestException>(() => Database.GetListOfShots());
+    }
+
+    [Fact]
+    private async void DeleteBowlingBallTests()
+    {
+        // Setup token
+        Token token = new Token();
+        token.TokenA = "jiowdenjewn";
+        token.TokenB = "iojewfownf";
+        
+        // Test to see if DeleteBowlingBall throws unauthoirzed exception if user is not logged in
+        Database.SetUserTokens(null);
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => Database.DeleteBowlingBall("test"));
+        // Make sure the method indicates success
+        Database.SetUserTokens(token);
+        bool completed = await Database.DeleteBowlingBall("test");
+        Assert.True(completed);
+        // See how method responds to http error
+        token.TokenA = "403";
+        token.TokenB = "403";
+        Database.SetUserTokens(token);
+        Assert.ThrowsAsync<HttpRequestException>(() => Database.DeleteBowlingBall("test"));
+
+    }
+    
+    [Fact]
+    private async void DeleteShotTests()
+    {
+        // Setup token
+        Token token = new Token();
+        token.TokenA = "jiowdenjewn";
+        token.TokenB = "iojewfownf";
+        
+        // Test to see if DeleteBowlingBall throws unauthoirzed exception if user is not logged in
+        Database.SetUserTokens(null);
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => Database.DeleteUserShot("test"));
+        // Make sure the method indicates success
+        Database.SetUserTokens(token);
+        bool completed = await Database.DeleteUserShot("test");
+        Assert.True(completed);
+        // See how method responds to http error
+        token.TokenA = "403";
+        token.TokenB = "403";
+        Database.SetUserTokens(token);
+        Assert.ThrowsAsync<HttpRequestException>(() => Database.DeleteUserShot("test"));
+    }
+    
+    [Fact]
+    private async void GetArsenalTests()
+    {
+        // Test to see if DeleteBowlingBall throws unauthoirzed exception if user is not logged in
+        Database.SetUserTokens(null);
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => Database.GetArsenal());
+        // Setup token
+        Token token = new Token();
+        token.TokenA = "jiowdenjewn";
+        token.TokenB = "iojewfownf";
+        Database.SetUserTokens(token);
+        Arsenal balls = await Database.GetArsenal();
+        
+        Assert.Equal(balls.BallList[0].Name, "Test");
+        Assert.Equal(balls.BallList[0].Diameter, 20.2);
+        Assert.Equal(balls.BallList[0].Weight, 11.3);
+        Assert.Equal(balls.BallList[0].CoreType, "Pancake");
+        
+        token.TokenA = "empty";
+        token.TokenB = "empty";
+        Database.SetUserTokens(token);
+        balls = await Database.GetArsenal();
+        Assert.Empty(balls.BallList);
+
+        token.TokenA = "403";
+        token.TokenB = "403";
+        Database.SetUserTokens(token);
+        Assert.ThrowsAsync<HttpRequestException>(() => Database.GetArsenal());
+
+    }
+    
+    [Fact]
+    private async void InsertBallTests()
+    {
+        Token token = new Token();
+        token.TokenA = "ewknflwk";
+        token.TokenB = "ewknflwk";
+        // Setup ball to add
+        Ball ball = new Ball("Test", 20.2, 10.5, "Pancake");
+        // Test to see if AddBowlingBall throws unauthoirzed exception if user is not logged in
+        Database.SetUserTokens(null);
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => Database.AddBowlingBall(ball));
+        // Make sure the method indicates success
+        Database.SetUserTokens(token);
+        bool completed = await Database.AddBowlingBall(ball);
+        Assert.True(completed);
+        // See how method responds to http error
+        token.TokenA = "403";
+        token.TokenB = "403";
+        Database.SetUserTokens(token);
+        Assert.ThrowsAsync<HttpRequestException>(() => Database.DeleteUserShot("test"));
     }
 }

@@ -26,12 +26,6 @@ public partial class Database : IDatabase
         response.EnsureSuccessStatusCode();
 
         var responseBody = await response.Content.ReadAsStringAsync();
-        
-        // If the user has arsenal stored in the database, return null
-        if (string.IsNullOrEmpty(responseBody))
-        {
-            return null;
-        }
 
         // User has an arsenal, Parse the JSON response
         var responseObject = JsonConvert.DeserializeObject<Arsenal>(responseBody);

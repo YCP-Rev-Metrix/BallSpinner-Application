@@ -3,13 +3,20 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using Common.POCOs;
+using RevMetrix.BallSpinner.BackEnd;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 class TestServer
+/* Token Types - Refers to the values of a JWT token that can be set by the test cases to invoke
+    * certain responses from the testserver
+    *      "403" - Return a 403 response
+    *      "empty" - Return an ampty response object
+    */
 {
+    private HttpListener listener;
     public async Task StartServer()
     {
-        HttpListener listener = new HttpListener();
+        listener = new HttpListener();
         listener.Prefixes.Add("http://localhost:8080/");
         listener.Start();
         Console.WriteLine("Listening on http://localhost:8080/");
@@ -21,7 +28,11 @@ class TestServer
             { "/posts/Authorize", LoginHandler },
             {"/posts/Register", RegisterHandler},
             {"/gets/GetShotsByUsername", GetShotsHandler},
-            {"/posts/InsertSimulatedShot", UploadShotsHandler}
+            {"/posts/InsertSimulatedShot", UploadShotsHandler},
+            {"/deletes/DeleteBall", DeleteBallHandler},
+            {"/deletes/DeleteShot", DeleteShotHandler},
+            {"/gets/GetArsenal", GetArsenalHandler},
+            {"/posts/InsertBall", InsertBallHandler},
         };
 
         // Listen asynchronously
@@ -179,7 +190,13 @@ class TestServer
             return null;
         }
         
-        // TODO - Test with fake SimulatedShot list return data
+        if (JWT == "empty")
+        {
+            return new
+            {
+                shots = Array.Empty<SimulatedShotList>()
+            };
+        }
 
         return null;
     }
@@ -197,6 +214,76 @@ class TestServer
             return null;
         }
 
+        return null;
+    }
+
+    static object DeleteBallHandler(HttpListenerRequest request, HttpListenerResponse response)
+    {
+        // Get jwt token from header
+        string auth = request.Headers["Authorization"];
+
+        string JWT = auth.Substring("Bearer ".Length).Trim();
+        if (JWT == "403")
+        {
+            response.StatusCode = 403;
+            return null;
+        }
+        response.StatusCode = 200;
+        return null;
+    }
+    
+    static object DeleteShotHandler(HttpListenerRequest request, HttpListenerResponse response)
+    {
+        // Get jwt token from header
+        string auth = request.Headers["Authorization"];
+
+        string JWT = auth.Substring("Bearer ".Length).Trim();
+        if (JWT == "403")
+        {
+            response.StatusCode = 403;
+            return null;
+        }
+        response.StatusCode = 200;
+        return null;
+    }
+    
+    static object GetArsenalHandler(HttpListenerRequest request, HttpListenerResponse response)
+    {
+        string auth = request.Headers["Authorization"];
+
+        string JWT = auth.Substring("Bearer ".Length).Trim();
+
+        if (JWT == "403")
+        {
+            response.StatusCode = 403;
+            return null;
+        }
+
+        if (JWT == "empty")
+        {
+            return new
+            {
+                BallList = Array.Empty<Arsenal>()
+            };
+        }
+
+        List<Ball> BallList = new List<Ball>();
+        BallList.Add(new Ball("Test", 20.2, 11.3, "Pancake"));
+        return new {ballList = BallList };
+    }
+        
+    static object InsertBallHandler(HttpListenerRequest request, HttpListenerResponse response)
+    {
+        // Get jwt token from header
+        string auth = request.Headers["Authorization"];
+
+        string JWT = auth.Substring("Bearer ".Length).Trim();
+        if (JWT == "403")
+        {
+            response.StatusCode = 403;
+            return null;
+        }
+        response.StatusCode = 200;
         return null;
     }
 }
