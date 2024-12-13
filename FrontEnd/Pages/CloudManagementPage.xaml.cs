@@ -58,9 +58,9 @@ public partial class CloudManagementPage : ContentPage
         {
             DisplayAlert("Alert", "No shot selected", "Ok");
         }
-        else if (await DisplayAlert("Alert", "Are you sure you want to delete " + Selection.simulatedShot.Name, "Yes", "No"))
+        else if (await DisplayAlert("Alert", "Are you sure you want to delete " + Selection.shotinfo.Name, "Yes", "No"))
         {
-            await _database.DeleteUserShot(Selection.simulatedShot.Name);
+            await _database.DeleteUserShot(Selection.shotinfo.Name);
             Refresh(sender, args);
         }
     }

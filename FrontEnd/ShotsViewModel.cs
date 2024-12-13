@@ -29,7 +29,7 @@ internal class ShotsViewModel
         {
             foreach (var shot in list.shots) 
             { 
-                shot.simulatedShot.DataCount = shot.data.Count;
+                shot.shotinfo.DataCount = shot.data.Count;
                 Shots.Add(shot); 
             }
         }

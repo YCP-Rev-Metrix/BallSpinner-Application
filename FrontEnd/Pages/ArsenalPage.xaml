@@ -47,7 +47,7 @@
                                Text="Name" />
                         <Label Grid.Column="1"
                                FontSize="18"
-                               Text="Diamiter" />
+                               Text="Diameter" />
                         <Label Grid.Column="2"
                                FontSize="18"
                                Text="Weight" />

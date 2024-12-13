@@ -84,17 +84,17 @@
                                         <ColumnDefinition Width="100" />
                                     </Grid.ColumnDefinitions>
                                     <Label Grid.Column="0" 
-                                           Text="{Binding simulatedShot.Name}" />
+                                           Text="{Binding shotinfo.Name}" />
                                     <Label Grid.Column="1" 
-                                           Text="{Binding simulatedShot.Speed}" />
+                                           Text="{Binding shotinfo.Speed}" />
                                     <Label Grid.Column="2" 
-                                           Text="{Binding simulatedShot.Angle}" />
+                                           Text="{Binding shotinfo.Angle}" />
                                     <Label Grid.Column="3" 
-                                           Text="{Binding simulatedShot.Position}" />
+                                           Text="{Binding shotinfo.Position}" />
                                     <Label Grid.Column="4" 
-                                           Text="{Binding simulatedShot.Frequency}" />
+                                           Text="{Binding shotinfo.Frequency}" />
                                     <Label Grid.Column="5"
-                                           Text="{Binding simulatedShot.DataCount}" />
+                                           Text="{Binding shotinfo.DataCount}" />
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>
