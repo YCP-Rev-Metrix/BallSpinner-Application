@@ -38,7 +38,7 @@ public partial class Database : IDatabase
         ShotInfo parameters = new ShotInfo(name, InitialSpeed, 20, 20, 20);
         var requestObject = new
         {
-            simulatedShot = parameters,
+            shotinfo = parameters,
             data = sampleData
         };
         var jsonBody = JsonConvert.SerializeObject(requestObject);
