@@ -156,7 +156,8 @@ public class BallSpinner : IBallSpinner
         _motorTimer?.Dispose();
         _motorTimer = null;
 
-        _connection?.SetMotorVoltages(0, 0, 0);
+        //_connection?.SetMotorVoltages(0, 0, 0);
+        _connection?.StopMotorInstructions();
 
         DataParser.Stop();
     }
