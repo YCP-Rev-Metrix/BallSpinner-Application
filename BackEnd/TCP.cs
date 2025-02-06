@@ -252,7 +252,7 @@ public class TCP : IDisposable
         // This needs to be refactored to send predefined instructions based on kinematic calculations
         byte[] instructions = new byte[]
         {
-            0x88, //Type
+            0x08, //Type
 
             0x00,
             0x03, //Size
@@ -295,37 +295,37 @@ public enum MessageType : byte
     /// <summary>
     /// Connect to the ball spinner
     /// </summary>
-    Connect = 0b10_00_00_01,
+    Connect = 0b00_00_00_01,
 
     /// <summary>
     /// Response from server about connecting to the ball spinner
     /// </summary>
-    ConnectResponse = 0b10_00_00_10,
+    ConnectResponse = 0b00_00_00_10,
 
     /// <summary>
     /// Request for device information
     /// </summary>
-    GetDeviceInfo = 0b10_00_00_11,
+    GetDeviceInfo = 0b00_00_00_11,
 
     /// <summary>
     /// Response from server containing device information
     /// </summary>
-    GetDeviceInfoResponse = 0b10_00_01_00,
+    GetDeviceInfoResponse = 0b00_00_01_00,
 
     /// <summary>
     /// Tell the server to connect to the smart dot module
     /// </summary>
-    ConnectSmartDot = 0x85,
+    ConnectSmartDot = 0x05,
 
     /// <summary>
     /// Response from server containing smart dot connection info
     /// </summary>
-    ConnectSmartDotResponse = 0x86,
+    ConnectSmartDotResponse = 0x06,
     
     /// <summary>
     /// Indicates a SmartDot data packet
     /// </summary>
-    SmartDotDataPacket = 0x8A,
+    SmartDotDataPacket = 0x0A,
 
     /// <summary>
     /// Send or receive raw, UTF-8 text

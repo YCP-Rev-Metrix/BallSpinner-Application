@@ -140,7 +140,7 @@ public class BallSpinner : IBallSpinner
     /// <inheritdoc/>
     public void Start()
     {
-        Stop();
+        //Stop();
 
         DataParser.Start(Name);
 
@@ -160,7 +160,7 @@ public class BallSpinner : IBallSpinner
         _connection?.StopMotorInstructions();
 
         DataParser.Stop();
-    }
+    } 
 
     private void OnTimedEvent(object? source, ElapsedEventArgs e)
     {
