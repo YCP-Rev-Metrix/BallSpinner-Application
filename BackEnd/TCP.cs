@@ -174,7 +174,8 @@ public class TCP : IDisposable
                     {
                         packetFixed[i] = _receive[currentIndex + i];
                     }
-
+                    // Check to see if multiple packets are being process at the same time
+                    Debug.WriteLine($"{BitConverter.ToString(packetFixed)}");
                     currentIndex += packetFixed.Length;
 
                     var (messageType, messageSize) = GetMessageInfo(packetFixed);
@@ -206,8 +207,12 @@ public class TCP : IDisposable
                             float xData = BitConverter.ToSingle(packetFixed, 11);
                             float yData = BitConverter.ToSingle(packetFixed, 15);
                             float zData = BitConverter.ToSingle(packetFixed, 19);
-                            
-                            Debug.WriteLine($"{sensorType}: {xData} {yData} {zData}");
+                            // Debug statement to filter out light data (it comes in too slow right now)
+                            if (sensorType == SensorType.Light) {
+                                Debug.WriteLine($"{sensorType}: {xData} {timeStamp} {sampleCount}");
+                            }
+                            // Debug statement to print incoming smartdot packet data
+                            //Debug.WriteLine($"{sensorType}: {xData} {yData} {zData}");
                             SmartDotReceivedEvent?.Invoke(sensorType, timeStamp, sampleCount, xData, yData, zData);
                             break;
                         default:
