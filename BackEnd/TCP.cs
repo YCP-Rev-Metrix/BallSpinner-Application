@@ -196,8 +196,20 @@ public class TCP : IDisposable
 
                         case MessageType.ConnectSmartDot:
                         case MessageType.ConnectSmartDotResponse:
-                            var physicalAddress = new PhysicalAddress(new ArraySegment<byte>(packetFixed, 3, messageSize).ToArray());
+
+                            //Grab the MAC bytes from the response. These are the first 6 bytes. We offset by 3 because that is our PacketType + MessageLength bytes.
+                            var MACbytes = new ArraySegment<byte>(packetFixed, 3, 6).ToArray();
+                            //offset for BLE name is 9 because 3 for message type and size + 6 for bytes of MAC address. 
+                            //Subtract the MAC address from our message size: messageSize-6
+                            var BLE_NameBytes = new ArraySegment<byte>(packetFixed, 9, messageSize-6).ToArray();
+                            
+                            var physicalAddress = new PhysicalAddress(MACbytes);
                             SmartDotAddressReceivedEvent?.Invoke(physicalAddress);
+                           
+                            Debug.WriteLine($"SmartDot MAC Address: {physicalAddress}");
+
+                            string BLEname = System.Text.Encoding.ASCII.GetString(BLE_NameBytes);
+                            Debug.WriteLine($"Random Shit in ASCII {BLEname}");
 
                             break;
                         case MessageType.SmartDotDataPacket:
@@ -271,6 +283,31 @@ public class TCP : IDisposable
         await _client.Client.SendAsync(instructions);
     }
 }
+///<summary>
+/// Send the MAC (physical) address to the PI
+///</summary>
+//public async void SendModu(byte x, byte y, byte z)
+//    {
+//        if (!_client.Connected)
+//            throw new Exception("Can't send instructions without being connected");
+
+//        // FOR NOW! This is a script that will send automated instructions for MS2
+//        // This needs to be refactored to send predefined instructions based on kinematic calculations
+//        byte[] instructions = new byte[]
+//        {
+//            0x08, //Type
+
+//            0x00,
+//            0x03, //Size
+
+//            x, //Motor x
+//            y, //Motor y
+//            z, //Motor z
+//        };
+
+//        // Send the motor instruction to the PI
+//        await _client.Client.SendAsync(instructions);
+//    }
 
 /// <summary>
 /// Types of messages that can be sent to the ball spinner
@@ -298,6 +335,7 @@ public enum MessageType : byte
     /// Response from server containing device information
     /// </summary>
     GetDeviceInfoResponse = 0b00_00_01_00,
+
 
     /// <summary>
     /// Tell the server to connect to the smart dot module
