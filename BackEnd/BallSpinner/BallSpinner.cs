@@ -104,7 +104,7 @@ public class BallSpinner : IBallSpinner
 
     private void SmartDotAddressReceivedEvent(PhysicalAddress address)
     {
-        Debug.WriteLine("Device address: " + address.ToString());
+        Debug.WriteLine("Device address: " + address.ToString() + " This has extra bytes from the product name");
         OnSmartDotMACAddressReceived?.Invoke(address);
     }
 

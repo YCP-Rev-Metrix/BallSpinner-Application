@@ -196,21 +196,10 @@ public class TCP : IDisposable
 
                         case MessageType.ConnectSmartDot:
                         case MessageType.ConnectSmartDotResponse:
+                            var physicalAddressBytes = new ArraySegment<byte>(packetFixed, 3, messageSize).ToArray();
 
-                            //Grab the MAC bytes from the response. These are the first 6 bytes. We offset by 3 because that is our PacketType + MessageLength bytes.
-                            var MACbytes = new ArraySegment<byte>(packetFixed, 3, 6).ToArray();
-                            //offset for BLE name is 9 because 3 for message type and size + 6 for bytes of MAC address. 
-                            //Subtract the MAC address from our message size: messageSize-6
-                            var BLE_NameBytes = new ArraySegment<byte>(packetFixed, 9, messageSize-6).ToArray();
-                            
-                            var physicalAddress = new PhysicalAddress(MACbytes);
+                            var physicalAddress = new PhysicalAddress(physicalAddressBytes);
                             SmartDotAddressReceivedEvent?.Invoke(physicalAddress);
-                           
-                            Debug.WriteLine($"SmartDot MAC Address: {physicalAddress}");
-
-                            string BLEname = System.Text.Encoding.ASCII.GetString(BLE_NameBytes);
-                            Debug.WriteLine($"Random Shit in ASCII {BLEname}");
-
                             break;
                         case MessageType.SmartDotDataPacket:
                             SensorType sensorType = (SensorType)Enum.ToObject(typeof(SensorType), packetFixed[3]);
