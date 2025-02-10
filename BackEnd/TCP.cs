@@ -272,31 +272,7 @@ public class TCP : IDisposable
         await _client.Client.SendAsync(instructions);
     }
 }
-///<summary>
-/// Send the MAC (physical) address to the PI
-///</summary>
-//public async void SendModu(byte x, byte y, byte z)
-//    {
-//        if (!_client.Connected)
-//            throw new Exception("Can't send instructions without being connected");
 
-//        // FOR NOW! This is a script that will send automated instructions for MS2
-//        // This needs to be refactored to send predefined instructions based on kinematic calculations
-//        byte[] instructions = new byte[]
-//        {
-//            0x08, //Type
-
-//            0x00,
-//            0x03, //Size
-
-//            x, //Motor x
-//            y, //Motor y
-//            z, //Motor z
-//        };
-
-//        // Send the motor instruction to the PI
-//        await _client.Client.SendAsync(instructions);
-//    }
 
 /// <summary>
 /// Types of messages that can be sent to the ball spinner
