@@ -271,6 +271,24 @@ public class TCP : IDisposable
         // Send the motor instruction to the PI
         await _client.Client.SendAsync(instructions);
     }
+
+    /// <summary>
+    /// Stops sending instructions to the motor
+    /// </summary>
+    public async void StopMotorInstructions()
+    {
+        if (!_client.Connected)
+            throw new Exception("Can't send instructions without being connected");
+
+        //Sends a STOP_MOTOR_INSTUCTIONS per Roberts Protocol sheet
+        byte[] instructions = new byte[]
+        {
+            0x0B, //Type
+        };
+
+        // Send the motor instruction to the PI
+        await _client.Client.SendAsync(instructions);
+    }
 }
 
 
