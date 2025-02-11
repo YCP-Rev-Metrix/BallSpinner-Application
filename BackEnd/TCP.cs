@@ -68,9 +68,9 @@ public class TCP : IDisposable
     public async Task<string> GetDeviceInfo()
     {
         var task = new TaskCompletionSource<object>();
-        _pendingMessages.Add((MessageType.GetDeviceInfoResponse, task));
+        _pendingMessages.Add((MessageType.B_A_NAME, task));
 
-        _send[0] = (byte)MessageType.GetDeviceInfo;
+        _send[0] = (byte)MessageType.A_B_NAME_REQ;
         _send[1] = 0;
         _send[2] = 0;
         await _client.Client.SendAsync(new ArraySegment<byte>(_send, 0, 3));
@@ -79,12 +79,24 @@ public class TCP : IDisposable
         return (string)result;
     }
     
+
+    ///<summary>
+    /// Tell the Ball Spinner Controller to start scanning available Smart Dot Modules. The Ball Spinner will then send their data back to this App
+    /// TO BE IMPLEMENTED
+    /// </summary>
+    public async Task ScanForSmartDots()
+    {
+        //NOT YET USED (still using ConnectSmartDot to begin listening to packets
+        _send[0] = (byte)MessageType.A_B_SCAN_FOR_SD;
+        await _client.Client.SendAsync(new ArraySegment<byte>(_send, 0, 1));
+    }
+
     /// <summary>
-    /// Connect to a smart dot module. Sending null indicates you want to start listening to packets
+    /// Choose a smart dot module to connect to. Sending null indicates you want to start listening to packets
     /// </summary>
     public async Task ConnectSmartDot(PhysicalAddress? address)
     {
-        _send[0] = (byte)MessageType.ConnectSmartDot;
+        _send[0] = (byte)MessageType.A_B_SCAN_FOR_SD;
         _send[1] = 0;
         _send[2] = 6;
         var bytes = address?.GetAddressBytes();
@@ -108,7 +120,7 @@ public class TCP : IDisposable
             byte token = (byte)new Random().Next(byte.MaxValue);
 
             //Handshake by telling BallSpinner that I want to connect
-            _send[0] = (byte)MessageType.Connect;
+            _send[0] = (byte)MessageType.A_B_INIT_HANDSHAKE;
             _send[2] = 1; //No data to send
             _send[3] = token; //Random token, BallSpinner MUST send back the same value
 
@@ -121,7 +133,7 @@ public class TCP : IDisposable
             if (receieved <= 0)
                 throw new Exception("Handshake request could not be received");
 
-            if (_receive[0] != (byte)MessageType.ConnectResponse)
+            if (_receive[0] != (byte)MessageType.B_A_INIT_HANDSHAKE_ACK)
                 throw new Exception("Host sent wrong data! Handshake failed.");
 
             if (_receive[2] != 1)
@@ -183,8 +195,8 @@ public class TCP : IDisposable
 
                     switch (messageType)
                     {
-                        case MessageType.GetDeviceInfo:
-                        case MessageType.GetDeviceInfoResponse:
+                        case MessageType.A_B_NAME_REQ:
+                        case MessageType.B_A_NAME:
 
                             string text = Encoding.UTF8.GetString(packetFixed, 3, messageSize);
                             Debug.WriteLine(text);
@@ -194,14 +206,14 @@ public class TCP : IDisposable
 
                             break;
 
-                        case MessageType.ConnectSmartDot:
-                        case MessageType.ConnectSmartDotResponse:
+                        case MessageType.A_B_SCAN_FOR_SD:
+                        case MessageType.B_A_SCANNED_SD:
                             var physicalAddressBytes = new ArraySegment<byte>(packetFixed, 3, messageSize).ToArray();
 
                             var physicalAddress = new PhysicalAddress(physicalAddressBytes);
                             SmartDotAddressReceivedEvent?.Invoke(physicalAddress);
                             break;
-                        case MessageType.SmartDotDataPacket:
+                        case MessageType.B_A_SD_SENSOR_DATA:
                             SensorType sensorType = (SensorType)Enum.ToObject(typeof(SensorType), packetFixed[3]);
                             int sampleCount = packetFixed[6] | (packetFixed[5] << 8) | (packetFixed[4] << 16); //3 bytes
                             float timeStamp = BitConverter.ToSingle(packetFixed, 7); //BitConverter expects LITTLE ENDIAN
@@ -256,9 +268,11 @@ public class TCP : IDisposable
 
         // FOR NOW! This is a script that will send automated instructions for MS2
         // This needs to be refactored to send predefined instructions based on kinematic calculations
+
+        byte type = (byte)MessageType.A_B_SEND_MOTOR_VOLTAGES;
         byte[] instructions = new byte[]
         {
-            0x08, //Type
+            type, //Type
 
             0x00,
             0x03, //Size
@@ -280,10 +294,11 @@ public class TCP : IDisposable
         if (!_client.Connected)
             throw new Exception("Can't send instructions without being connected");
 
+        byte type = (byte)MessageType.A_B_STOP_MOTOR;
         //Sends a STOP_MOTOR_INSTUCTIONS per Roberts Protocol sheet
         byte[] instructions = new byte[]
         {
-            0x0B, //Type
+            type, 
         };
 
         // Send the motor instruction to the PI
@@ -296,44 +311,57 @@ public class TCP : IDisposable
 /// Types of messages that can be sent to the ball spinner
 /// First 2 bits = Version number
 /// Last 6 bits = Message Type
+/// A_B -> App to Ball Spinner Controller
+/// B_A -> Ball Spinner Controller to App
+/// SD ->SMARTDOT(s)
 /// </summary>
 public enum MessageType : byte
 {
     /// <summary>
-    /// Connect to the ball spinner
+    /// Request connection to the Ball Spinner Controller
     /// </summary>
-    Connect = 0b00_00_00_01,
+    A_B_INIT_HANDSHAKE = 0x01,
 
     /// <summary>
-    /// Response from server about connecting to the ball spinner
+    /// Incoming acknowledgement of the connection to the Ball Spinner Controller
     /// </summary>
-    ConnectResponse = 0b00_00_00_10,
+    B_A_INIT_HANDSHAKE_ACK = 0x02,
 
     /// <summary>
-    /// Request for device information
+    /// Request for device name
     /// </summary>
-    GetDeviceInfo = 0b00_00_00_11,
+    A_B_NAME_REQ = 0x03,
 
     /// <summary>
-    /// Response from server containing device information
+    /// Response from Ball Spinner Controller containing device name
     /// </summary>
-    GetDeviceInfoResponse = 0b00_00_01_00,
+    B_A_NAME = 0x04,
 
 
     /// <summary>
-    /// Tell the server to connect to the smart dot module
+    /// Tell the Ball Spinner Controller to scan for available SmartDot modules
     /// </summary>
-    ConnectSmartDot = 0x05,
+    A_B_SCAN_FOR_SD = 0x05,
 
     /// <summary>
-    /// Response from server containing smart dot connection info
+    /// Response from server containing smart dot connection info, sent for each SmartDot module found by A_B_SCAN_FOR_SD
     /// </summary>
-    ConnectSmartDotResponse = 0x06,
+    B_A_SCANNED_SD = 0x06,
     
     /// <summary>
     /// Indicates a SmartDot data packet
     /// </summary>
-    SmartDotDataPacket = 0x0A,
+    B_A_SD_SENSOR_DATA = 0x0A,
+
+    /// <summary>
+    /// Set Motor Voltages packet type
+    /// </summary>
+    A_B_SEND_MOTOR_VOLTAGES = 0x08,
+
+    /// <summary>
+    /// Stop the motors on the BSC
+    /// </summary>
+    A_B_STOP_MOTOR = 0x08,
 
     /// <summary>
     /// Send or receive raw, UTF-8 text
