@@ -196,9 +196,10 @@ public class TCP : IDisposable
 
                         case MessageType.ConnectSmartDot:
                         case MessageType.ConnectSmartDotResponse:
-                            var physicalAddress = new PhysicalAddress(new ArraySegment<byte>(packetFixed, 3, messageSize).ToArray());
-                            SmartDotAddressReceivedEvent?.Invoke(physicalAddress);
+                            var physicalAddressBytes = new ArraySegment<byte>(packetFixed, 3, messageSize).ToArray();
 
+                            var physicalAddress = new PhysicalAddress(physicalAddressBytes);
+                            SmartDotAddressReceivedEvent?.Invoke(physicalAddress);
                             break;
                         case MessageType.SmartDotDataPacket:
                             SensorType sensorType = (SensorType)Enum.ToObject(typeof(SensorType), packetFixed[3]);
@@ -270,7 +271,26 @@ public class TCP : IDisposable
         // Send the motor instruction to the PI
         await _client.Client.SendAsync(instructions);
     }
+
+    /// <summary>
+    /// Stops sending instructions to the motor
+    /// </summary>
+    public async void StopMotorInstructions()
+    {
+        if (!_client.Connected)
+            throw new Exception("Can't send instructions without being connected");
+
+        //Sends a STOP_MOTOR_INSTUCTIONS per Roberts Protocol sheet
+        byte[] instructions = new byte[]
+        {
+            0x0B, //Type
+        };
+
+        // Send the motor instruction to the PI
+        await _client.Client.SendAsync(instructions);
+    }
 }
+
 
 /// <summary>
 /// Types of messages that can be sent to the ball spinner
@@ -298,6 +318,7 @@ public enum MessageType : byte
     /// Response from server containing device information
     /// </summary>
     GetDeviceInfoResponse = 0b00_00_01_00,
+
 
     /// <summary>
     /// Tell the server to connect to the smart dot module
