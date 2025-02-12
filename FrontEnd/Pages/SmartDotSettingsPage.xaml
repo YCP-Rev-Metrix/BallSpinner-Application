@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RevMetrix.BallSpinner.FrontEnd.Pages.SmartDotSettingsPage"
+             Title="SmartDotSettingsPage">
+    <VerticalStackLayout Margin="10">
+        <HorizontalStackLayout Margin="10">
+            <VerticalStackLayout WidthRequest="250">
+                <Label HorizontalOptions="Center"
+                       Margin="10" 
+                       TextDecorations="Underline"
+                       Text="Acceleration"/>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                           WidthRequest="110"
+                           Text="ODR:"/>
+                    <Picker x:Name="AccelrationODR">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:Int32}">
+                                <x:Int32>1</x:Int32>
+                                <x:Int32>2</x:Int32>
+                                <x:Int32>4</x:Int32>
+                                <x:Int32>6</x:Int32>
+                                <x:Int32>8</x:Int32>
+                                <x:Int32>16</x:Int32>
+                                <x:Int32>32</x:Int32>
+                                <x:Int32>64</x:Int32>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                            WidthRequest="110"
+                            Text="Sample Rate:"/>
+                    <Picker x:Name="AccelrationSampleRate">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:Int32}">
+                                <x:Int32>25</x:Int32>
+                                <x:Int32>50</x:Int32>
+                                <x:Int32>100</x:Int32>
+                                <x:Int32>200</x:Int32>
+                                <x:Int32>400</x:Int32>
+                                <x:Int32>800</x:Int32>
+                                <x:Int32>1600</x:Int32>
+                                <x:Int32>3200</x:Int32>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Label HorizontalOptions="Center"
+                       Margin="10" 
+                       TextDecorations="Underline"
+                       Text="Rotation"/>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                           WidthRequest="110"
+                           Text="ODR:"/>
+                    <Picker x:Name="RotationODR">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:Int32}">
+                                <x:Int32>1</x:Int32>
+                                <x:Int32>2</x:Int32>
+                                <x:Int32>4</x:Int32>
+                                <x:Int32>6</x:Int32>
+                                <x:Int32>8</x:Int32>
+                                <x:Int32>16</x:Int32>
+                                <x:Int32>32</x:Int32>
+                                <x:Int32>64</x:Int32>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                           WidthRequest="110"
+                           Text="Sample Rate:"/>
+                    <Picker x:Name="RotationSampleRate">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:Int32}">
+                                <x:Int32>25</x:Int32>
+                                <x:Int32>50</x:Int32>
+                                <x:Int32>100</x:Int32>
+                                <x:Int32>200</x:Int32>
+                                <x:Int32>400</x:Int32>
+                                <x:Int32>800</x:Int32>
+                                <x:Int32>1600</x:Int32>
+                                <x:Int32>3200</x:Int32>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Margin="10">
+            <VerticalStackLayout WidthRequest="250">
+                <Label HorizontalOptions="Center"
+                       Margin="10" 
+                       TextDecorations="Underline"
+                       Text="Magnatometer"/>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                           WidthRequest="110"
+                           Text="ODR:"/>
+                    <Picker x:Name="MagnatometerODR">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:Int32}">
+                                <x:Int32>1</x:Int32>
+                                <x:Int32>2</x:Int32>
+                                <x:Int32>4</x:Int32>
+                                <x:Int32>6</x:Int32>
+                                <x:Int32>8</x:Int32>
+                                <x:Int32>16</x:Int32>
+                                <x:Int32>32</x:Int32>
+                                <x:Int32>64</x:Int32>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                           WidthRequest="110"
+                           Text="Sample Rate:"/>
+                    <Picker x:Name="MagnatometerSampleRate">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:Int32}">
+                                <x:Int32>25</x:Int32>
+                                <x:Int32>50</x:Int32>
+                                <x:Int32>100</x:Int32>
+                                <x:Int32>200</x:Int32>
+                                <x:Int32>400</x:Int32>
+                                <x:Int32>800</x:Int32>
+                                <x:Int32>1600</x:Int32>
+                                <x:Int32>3200</x:Int32>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Label HorizontalOptions="Center"
+                       Margin="10" 
+                       TextDecorations="Underline"
+                       Text="Light"/>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                           WidthRequest="110"
+                           Text="ODR:"/>
+                    <Picker x:Name="LightODR">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:Int32}">
+                                <x:Int32>1</x:Int32>
+                                <x:Int32>2</x:Int32>
+                                <x:Int32>4</x:Int32>
+                                <x:Int32>6</x:Int32>
+                                <x:Int32>8</x:Int32>
+                                <x:Int32>16</x:Int32>
+                                <x:Int32>32</x:Int32>
+                                <x:Int32>64</x:Int32>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                           WidthRequest="110"
+                           Text="Sample Rate:"/>
+                    <Picker x:Name="LightSampleRate">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:Int32}">
+                                <x:Int32>25</x:Int32>
+                                <x:Int32>50</x:Int32>
+                                <x:Int32>100</x:Int32>
+                                <x:Int32>200</x:Int32>
+                                <x:Int32>400</x:Int32>
+                                <x:Int32>800</x:Int32>
+                                <x:Int32>1600</x:Int32>
+                                <x:Int32>3200</x:Int32>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>

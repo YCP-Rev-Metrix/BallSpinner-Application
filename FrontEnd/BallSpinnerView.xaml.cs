@@ -53,4 +53,9 @@ public partial class BallSpinnerView : ContentView
     {
         _viewModel.Reconnect();
     }
+
+    private void OnSettingsButtonClicked(object sender, EventArgs e)
+    {
+        _viewModel.OpenSmartDotSettings();
+    }
 }
