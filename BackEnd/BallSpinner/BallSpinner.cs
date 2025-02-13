@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using Timer = System.Timers.Timer;
+using CsvHelper.Configuration.Attributes;
 
 namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 
@@ -83,11 +84,11 @@ public class BallSpinner : IBallSpinner
     /// <summary>
     /// List of available Ranges, index 0 - XL, index 1 - GY, index 2 - MG, index 3 - LT
     /// </summary>
-    private List<List<int>> AvailableRanges = new List<List<int>>();
+    public List<List<int>> AvailableRanges = new List<List<int>>();
     /// <summary>
     /// List of available Sample Rates (Frequency), index 0 - XL, index 1 - GY, index 2 - MG, index 3 - LT
     /// </summary>
-    private List<List<int>> AvailableSampleRates = new List<List<int>>();
+    public List<List<int>> AvailableSampleRates = new List<List<int>>();
 
     /// <summary>
     /// The SmartDot's currently selected Range value for each index.
@@ -115,10 +116,7 @@ public class BallSpinner : IBallSpinner
         _address = address;
         InitializeConnection();
 
-        //Me testing shit
-        Two4BitIntToByte(1, 1);
-        Two4BitIntToByte(2, 2);
-        Two4BitIntToByte(3, 3);
+        //Me testing - brandon
         //third and 4th index are for testing special gyro output. Should get 3200 and 6400 for gyro
         //gyro should be rate == 25, 6400
         //range should be 1
@@ -179,6 +177,7 @@ public class BallSpinner : IBallSpinner
     {
         await _connection!.ConnectSmartDot(address);
     }
+
     private void SmartDotConfigReceivedEvent(byte[] data)
     {
         Debug.WriteLine("Triggered the Smart Dot COnfig Received Event!");
@@ -186,17 +185,9 @@ public class BallSpinner : IBallSpinner
 
         //Get the bits from our byte array
         BitArray bitArray = new BitArray(data);
-        //BitArray reversed = new BitArray(bitArray.Count);
 
-        //for (int i = 0; i < bitArray.Count; i++)
-        //{
-        //    reversed[i] = bitArray[bitArray.Count - 1 - i];
-        //}        //Parse two bytes at a time. 
-
-        //bitArray = reversed;
-
-
-        for (int i = 0; i < bitArray.Length; i += 16) {
+        for (int i = 0; i < bitArray.Length; i += 16)
+        {
             //If i == 16, then we are on the GY. It has a special case, where we need first 9 bits for Rate and last 7 for Range
             int firstEnd = (i == 16) ? 9 : 8;
 
@@ -209,8 +200,8 @@ public class BallSpinner : IBallSpinner
                 if (bitArray[i + j])
                 {
                     rates.Add(SAMPLE_RATES[i / 16][j]);
-                    Debug.WriteLine($"bit i = {i} i/16 = {i/16} j = {j} , array result {SAMPLE_RATES[i / 16][j]}, ");
-                    
+                    Debug.WriteLine($"bit i = {i} i/16 = {i / 16} j = {j} , array result {SAMPLE_RATES[i / 16][j]}, ");
+
                 }
             }
             //Add the list to the list of lists
@@ -228,17 +219,17 @@ public class BallSpinner : IBallSpinner
             AvailableRanges.Add(range);
 
         }
-        Debug.WriteLine("Available Sample Rates:");
-        for (int i = 0; i < AvailableSampleRates.Count; i++)
-        {
-            Debug.WriteLine($"Index {i}: " + string.Join(", ", AvailableSampleRates[i]));
-        }
+        //Debug.WriteLine("Available Sample Rates:");
+        //for (int i = 0; i < AvailableSampleRates.Count; i++)
+        //{
+        //    Debug.WriteLine($"Index {i}: " + string.Join(", ", AvailableSampleRates[i]));
+        //}
 
-        Debug.WriteLine("\nAvailable Ranges:");
-        for (int i = 0; i < AvailableRanges.Count; i++)
-        {
-            Debug.WriteLine($"Index {i}: " + string.Join(", ", AvailableRanges[i]));
-        }
+        //Debug.WriteLine("\nAvailable Ranges:");
+        //for (int i = 0; i < AvailableRanges.Count; i++)
+        //{
+        //    Debug.WriteLine($"Index {i}: " + string.Join(", ", AvailableRanges[i]));
+        //}
 
     }
     private void SmartDotAddressReceivedEvent(PhysicalAddress address)
