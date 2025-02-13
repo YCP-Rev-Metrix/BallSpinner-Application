@@ -89,6 +89,33 @@ public interface IBallSpinner : INotifyPropertyChanged
     /// When null, tells the device to request for potential smart dot devices
     /// </summary>
     void ConnectSmartDot(PhysicalAddress? address);
+
+    ///<summary>
+    /// Returns whether or not the MAC address for the associated SmartDot has been set.
+    /// If it returns true, that means we have accepted a MAC address and are "paired" 
+    /// </summary>
+    bool IsSmartDotPaired();
+
+    ///<summary>
+    /// This updates the variables used to track the current SmartDot config.
+    /// It also requests the TCP connection to send the chosen values to the BSC
+    /// </summary>
+    void SubmitSmartDotConfig(int[] Ranges, int[] SampleRates);
+
+    ///<summary>
+    /// This returns an array of booleans that will be used to compare against the received Range settings
+    /// values from B_A_RECEIVE_CONFIG_INFO and will be used to determine which options are visibile in the frontend.
+    /// This will return an array of size 8
+    /// </summary>
+    int[] GetAvailableRanges();
+
+    ///<summary>
+    /// This returns an array of booleans that will be used to compare against the received sample rate settings
+    /// values from B_A_RECEIVE_CONFIG_INFO and will be used to determine which options are visibile in the frontend.
+    /// This will return an array of size 8
+    /// </summary>
+    int[] GetAvailableSampleRates();
+
 }
 
 /// <summary>

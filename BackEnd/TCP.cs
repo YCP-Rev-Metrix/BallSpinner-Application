@@ -37,7 +37,12 @@ public class TCP : IDisposable
     /// Invoked when a Smart dot address is received from the device
     /// </summary>
     public event Action<PhysicalAddress> SmartDotAddressReceivedEvent;
-    
+
+    /// <summary>
+    /// Invoked when config options are received from SD. Sends byte array to BallSpinner for interpretation
+    /// </summary>
+    public event Action<byte[]> SmartDotConfigReceivedEvent;
+
     private TcpClient _client;
     private IPAddress _address;
 
@@ -228,6 +233,13 @@ public class TCP : IDisposable
                             //Debug.WriteLine($"{sensorType}: {xData} {yData} {zData}");
                             SmartDotReceivedEvent?.Invoke(sensorType, timeStamp, sampleCount, xData, yData, zData);
                             break;
+                        case MessageType.B_A_RECEIVE_CONFIG_INFO:
+                            var bytes = new ArraySegment<byte>(packetFixed, 3, messageSize).ToArray();
+                            Debug.WriteLine($"Config Message received, size = {messageSize}");
+                            //Call event on the Ball Spinner
+                            SmartDotConfigReceivedEvent?.Invoke(bytes);
+
+                            break;
                         default:
                             break;
                             //throw new Exception($"Unexpected message type '{messageType}'");
@@ -304,7 +316,32 @@ public class TCP : IDisposable
         // Send the motor instruction to the PI
         await _client.Client.SendAsync(instructions);
     }
+    public async void SendConfigDataAndStartTakeData(byte[] bytes)
+    {
+        if (!_client.Connected)
+            throw new Exception("Can't send config without being connected");
+
+        byte type = (byte)MessageType.A_B_START_SD_TAKE_DATA;
+        byte[] message = new byte[]
+        {
+            type,
+
+            0x00,
+            0x08,//size
+
+            //XL - Frequency(byte), Range(byte)
+            bytes[0],
+            //GY - Frequency(byte), Range(byte)
+            bytes[1],
+            //MG - Frequency(byte), Range(byte)
+            bytes[2],
+            //LT - Frequency(byte), Range(byte)
+            bytes[3],
+        };
+        await _client.Client.SendAsync(message);
+    }
 }
+
 
 
 /// <summary>
@@ -337,7 +374,6 @@ public enum MessageType : byte
     /// </summary>
     B_A_NAME = 0x04,
 
-
     /// <summary>
     /// Tell the Ball Spinner Controller to scan for available SmartDot modules
     /// </summary>
@@ -347,7 +383,18 @@ public enum MessageType : byte
     /// Response from server containing smart dot connection info, sent for each SmartDot module found by A_B_SCAN_FOR_SD
     /// </summary>
     B_A_SCANNED_SD = 0x06,
-    
+
+    /// <summary>
+    /// Receives 2 byte pairs that are used to say which values from the SmartDot Config bitmaps are valid options
+    /// </summary>
+    B_A_RECEIVE_CONFIG_INFO = 0x07,
+
+    /// <summary>
+    /// Sends 2 byte pairs that with each byte only having one 1. 
+    /// This message selects the desired config options and sends them to the Ball Spinner Controller
+    /// </summary>
+    A_B_START_SD_TAKE_DATA = 0x09,
+
     /// <summary>
     /// Indicates a SmartDot data packet
     /// </summary>
@@ -361,7 +408,7 @@ public enum MessageType : byte
     /// <summary>
     /// Stop the motors on the BSC
     /// </summary>
-    A_B_STOP_MOTOR = 0x08,
+    A_B_STOP_MOTOR = 0x0B,
 
     /// <summary>
     /// Send or receive raw, UTF-8 text

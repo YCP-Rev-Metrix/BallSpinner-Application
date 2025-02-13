@@ -186,4 +186,35 @@ public class PreviousThrow : IBallSpinner
     {
         _running = false;
     }
+    /// <inheritdoc/>
+    public bool IsSmartDotPaired()
+    {
+        if (!IsConnected())
+            return false;
+
+        if (!string.IsNullOrEmpty(SmartDotMAC))
+            return false;
+
+        return true;
+    }
+
+    /// <inheritdoc/>
+    public void SubmitSmartDotConfig(int[] ODRs, int[] SampleRates)
+    {
+        if (!IsSmartDotPaired())
+            return;
+        //tcp function for sending config message
+
+    }
+    /// <inheritdoc/>
+    public int[] GetAvailableRanges()
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <inheritidoc/>
+    public int[] GetAvailableSampleRates()
+    {
+        throw new NotImplementedException();
+    }
 }
