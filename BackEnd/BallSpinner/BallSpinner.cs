@@ -121,7 +121,7 @@ public class BallSpinner : IBallSpinner
         //gyro should be rate == 25, 6400
         //range should be 1
         byte[] data = { 3, 1, 1, 0b10_00_00_01, 2, 2, 4, 4};
-        Debug.WriteLine($"Range byte: 0b{Convert.ToString(data[0], 2).PadLeft(8, '0')}");
+       // Debug.WriteLine($"Range byte: 0b{Convert.ToString(data[0], 2).PadLeft(8, '0')}");
 
         SmartDotConfigReceivedEvent(data);
 
@@ -200,7 +200,7 @@ public class BallSpinner : IBallSpinner
                 if (bitArray[i + j])
                 {
                     rates.Add(SAMPLE_RATES[i / 16][j]);
-                    Debug.WriteLine($"bit i = {i} i/16 = {i / 16} j = {j} , array result {SAMPLE_RATES[i / 16][j]}, ");
+                   // Debug.WriteLine($"bit i = {i} i/16 = {i / 16} j = {j} , array result {SAMPLE_RATES[i / 16][j]}, ");
 
                 }
             }
