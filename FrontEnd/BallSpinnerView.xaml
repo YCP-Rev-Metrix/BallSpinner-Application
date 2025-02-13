@@ -29,6 +29,15 @@
                             MinimumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
                             Text="Select SmartDot" />
                         <Button
+                            Margin="5,0"
+                            Padding="10,-10"
+                            Clicked="OnSettingsButtonClicked"
+                            HeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
+                            MaximumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
+                            MinimumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
+                            IsVisible="True"
+                            Text="Simulation Settings" />
+                        <Button
                             Padding="-14,-10"
                             Clicked="OnRemoveBallSpinnerButton"
                             HeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
