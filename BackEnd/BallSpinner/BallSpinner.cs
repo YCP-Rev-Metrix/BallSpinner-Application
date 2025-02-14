@@ -84,11 +84,11 @@ public class BallSpinner : IBallSpinner
     /// <summary>
     /// List of available Ranges, index 0 - XL, index 1 - GY, index 2 - MG, index 3 - LT
     /// </summary>
-    public List<List<int>> AvailableRanges = new List<List<int>>();
+    public List<List<double>> AvailableRanges = new List<List<double>>();
     /// <summary>
     /// List of available Sample Rates (Frequency), index 0 - XL, index 1 - GY, index 2 - MG, index 3 - LT
     /// </summary>
-    public List<List<int>> AvailableSampleRates = new List<List<int>>();
+    public List<List<double>> AvailableSampleRates = new List<List<double>>();
 
     /// <summary>
     /// The SmartDot's currently selected Range value for each index.
@@ -193,7 +193,7 @@ public class BallSpinner : IBallSpinner
 
             //Grab the first 8 bits from the byte, 
             //Iterate through available Rates and add to that index to list if its 1 add it to available list
-            List<int> rates = new List<int>();
+            List<double> rates = new List<double>();
             for (int j = 0; j < firstEnd; j++)
             {
                 int index = i + j;
@@ -208,7 +208,7 @@ public class BallSpinner : IBallSpinner
             AvailableSampleRates.Add(rates);
 
             //Do the same for the Range
-            List<int> range = new List<int>();
+            List<double> range = new List<double>();
             for (int j = firstEnd; j < 16; j++)
             {
                 if (bitArray[i + j])
@@ -338,15 +338,15 @@ public class BallSpinner : IBallSpinner
         return result;
     }
     /// <inheritdoc/>
-    public int[] GetAvailableRanges()
+    public List<List<double>> GetAvailableRanges()
     {
-        throw new NotImplementedException();
+        return AvailableRanges;
     }
 
     /// <inheritidoc/>
-    public int[] GetAvailableSampleRates()
+    public List<List<double>> GetAvailableSampleRates()
     {
-        throw new NotImplementedException();
+        return AvailableSampleRates;
     }
     private void OnTimedEvent(object? source, ElapsedEventArgs e)
     {

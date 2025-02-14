@@ -13,40 +13,17 @@
                 <HorizontalStackLayout>
                     <Label FontSize="16"
                            WidthRequest="110"
-                           Text="ODR:"/>
-                    <Picker x:Name="AccelrationODR">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:Int32}">
-                                <x:Int32>1</x:Int32>
-                                <x:Int32>2</x:Int32>
-                                <x:Int32>4</x:Int32>
-                                <x:Int32>6</x:Int32>
-                                <x:Int32>8</x:Int32>
-                                <x:Int32>16</x:Int32>
-                                <x:Int32>32</x:Int32>
-                                <x:Int32>64</x:Int32>
-                            </x:Array>
-                        </Picker.ItemsSource>
+                           Text="Range:"/>
+                    <Picker x:Name="AccelrationODR"
+                            ItemsSource="{Binding Ranges[0]}">
                     </Picker>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
                     <Label FontSize="16"
                             WidthRequest="110"
                             Text="Sample Rate:"/>
-                    <Picker x:Name="AccelrationSampleRate">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:Int32}">
-                                <x:Int32>25</x:Int32>
-                                <x:Int32>50</x:Int32>
-                                <x:Int32>100</x:Int32>
-                                <x:Int32>200</x:Int32>
-                                <x:Int32>400</x:Int32>
-                                <x:Int32>800</x:Int32>
-                                <x:Int32>1600</x:Int32>
-                                <x:Int32>3200</x:Int32>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
+                    <Picker x:Name="AccelrationSampleRate"
+                            ItemsSource="{Binding SampleRates[0]}"/>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
             <VerticalStackLayout>
@@ -57,40 +34,16 @@
                 <HorizontalStackLayout>
                     <Label FontSize="16"
                            WidthRequest="110"
-                           Text="ODR:"/>
-                    <Picker x:Name="RotationODR">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:Int32}">
-                                <x:Int32>1</x:Int32>
-                                <x:Int32>2</x:Int32>
-                                <x:Int32>4</x:Int32>
-                                <x:Int32>6</x:Int32>
-                                <x:Int32>8</x:Int32>
-                                <x:Int32>16</x:Int32>
-                                <x:Int32>32</x:Int32>
-                                <x:Int32>64</x:Int32>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
+                           Text="Range:"/>
+                    <Picker x:Name="RotationODR"
+                            ItemsSource="{Binding Ranges[1]}"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
                     <Label FontSize="16"
                            WidthRequest="110"
                            Text="Sample Rate:"/>
-                    <Picker x:Name="RotationSampleRate">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:Int32}">
-                                <x:Int32>25</x:Int32>
-                                <x:Int32>50</x:Int32>
-                                <x:Int32>100</x:Int32>
-                                <x:Int32>200</x:Int32>
-                                <x:Int32>400</x:Int32>
-                                <x:Int32>800</x:Int32>
-                                <x:Int32>1600</x:Int32>
-                                <x:Int32>3200</x:Int32>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
+                    <Picker x:Name="RotationSampleRate"
+                            ItemsSource="{Binding SampleRates[1]}"/>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </HorizontalStackLayout>
@@ -103,40 +56,16 @@
                 <HorizontalStackLayout>
                     <Label FontSize="16"
                            WidthRequest="110"
-                           Text="ODR:"/>
-                    <Picker x:Name="MagnatometerODR">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:Int32}">
-                                <x:Int32>1</x:Int32>
-                                <x:Int32>2</x:Int32>
-                                <x:Int32>4</x:Int32>
-                                <x:Int32>6</x:Int32>
-                                <x:Int32>8</x:Int32>
-                                <x:Int32>16</x:Int32>
-                                <x:Int32>32</x:Int32>
-                                <x:Int32>64</x:Int32>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
+                           Text="Range:"/>
+                    <Picker x:Name="MagnatometerODR"
+                            ItemsSource="{Binding Ranges[2]}"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
                     <Label FontSize="16"
                            WidthRequest="110"
                            Text="Sample Rate:"/>
-                    <Picker x:Name="MagnatometerSampleRate">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:Int32}">
-                                <x:Int32>25</x:Int32>
-                                <x:Int32>50</x:Int32>
-                                <x:Int32>100</x:Int32>
-                                <x:Int32>200</x:Int32>
-                                <x:Int32>400</x:Int32>
-                                <x:Int32>800</x:Int32>
-                                <x:Int32>1600</x:Int32>
-                                <x:Int32>3200</x:Int32>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
+                    <Picker x:Name="MagnatometerSampleRate"
+                            ItemsSource="{Binding SampleRates[2]}"/>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
             <VerticalStackLayout>
@@ -147,40 +76,16 @@
                 <HorizontalStackLayout>
                     <Label FontSize="16"
                            WidthRequest="110"
-                           Text="ODR:"/>
-                    <Picker x:Name="LightODR">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:Int32}">
-                                <x:Int32>1</x:Int32>
-                                <x:Int32>2</x:Int32>
-                                <x:Int32>4</x:Int32>
-                                <x:Int32>6</x:Int32>
-                                <x:Int32>8</x:Int32>
-                                <x:Int32>16</x:Int32>
-                                <x:Int32>32</x:Int32>
-                                <x:Int32>64</x:Int32>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
+                           Text="Range:"/>
+                    <Picker x:Name="LightODR"
+                            ItemsSource="{Binding Ranges[3]}"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
                     <Label FontSize="16"
                            WidthRequest="110"
                            Text="Sample Rate:"/>
-                    <Picker x:Name="LightSampleRate">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:Int32}">
-                                <x:Int32>25</x:Int32>
-                                <x:Int32>50</x:Int32>
-                                <x:Int32>100</x:Int32>
-                                <x:Int32>200</x:Int32>
-                                <x:Int32>400</x:Int32>
-                                <x:Int32>800</x:Int32>
-                                <x:Int32>1600</x:Int32>
-                                <x:Int32>3200</x:Int32>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
+                    <Picker x:Name="LightSampleRate"
+                            ItemsSource="{Binding SampleRates[3]}"/>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </HorizontalStackLayout>

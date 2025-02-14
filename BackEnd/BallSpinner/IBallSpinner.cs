@@ -107,14 +107,13 @@ public interface IBallSpinner : INotifyPropertyChanged
     /// values from B_A_RECEIVE_CONFIG_INFO and will be used to determine which options are visibile in the frontend.
     /// This will return an array of size 8
     /// </summary>
-    int[] GetAvailableRanges();
+    List<List<double>> GetAvailableRanges();
 
     ///<summary>
     /// This returns an array of booleans that will be used to compare against the received sample rate settings
     /// values from B_A_RECEIVE_CONFIG_INFO and will be used to determine which options are visibile in the frontend.
     /// This will return an array of size 8
-    /// </summary>
-    int[] GetAvailableSampleRates();
+    List<List<double>> GetAvailableSampleRates();
 
 }
 

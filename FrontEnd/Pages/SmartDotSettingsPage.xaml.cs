@@ -1,17 +1,22 @@
+using Common.POCOs;
+using RevMetrix.BallSpinner.BackEnd.BallSpinner;
+
 namespace RevMetrix.BallSpinner.FrontEnd.Pages;
 
 public partial class SmartDotSettingsPage : ContentPage
 {
-	private FrontEnd _frontEnd = null!;
-    private BallSpinnerViewModel _viewModel = null!;
+    private IBallSpinner ContextStore;
+    private FrontEnd _frontEnd = null!;
+    private BallSpinnerViewModel _ballSpinner = null!;
+    private SmartDotSettingsViewModel _viewModel = null;
 
-    public SmartDotSettingsPage(FrontEnd frontEnd, BallSpinnerViewModel viewModel)
+    public SmartDotSettingsPage(FrontEnd frontEnd, BallSpinnerViewModel ballSpinner)
     {
         _frontEnd = frontEnd;
-        _viewModel = viewModel;
+        _viewModel = new SmartDotSettingsViewModel(ballSpinner.BallSpinner);
 
+        BindingContext = _viewModel;
         InitializeComponent();
-        _viewModel = viewModel;
     }
 
     private void OnSubmitButtonClicked(object sender, EventArgs e)
