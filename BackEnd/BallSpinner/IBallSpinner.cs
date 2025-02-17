@@ -86,9 +86,13 @@ public interface IBallSpinner : INotifyPropertyChanged
 
     /// <summary>
     /// Connect the device to a particular smart dot
-    /// When null, tells the device to request for potential smart dot devices
     /// </summary>
     void ConnectSmartDot(PhysicalAddress? address);
+
+    ///<summary>
+    /// Tell the Ball Spinner to send available smart dots
+    /// </summary>
+    void ScanForSmartDots();
 
     ///<summary>
     /// Returns whether or not the MAC address for the associated SmartDot has been set.

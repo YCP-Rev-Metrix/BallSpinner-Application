@@ -27,10 +27,11 @@ public partial class SmartDotsPage : ContentPage
         Loaded += OnLoaded;
 	}
 
+    //TODO: Comment
     private void OnLoaded(object? sender, EventArgs e)
     {
         _ballSpinner.OnSmartDotMACAddressReceived += Spinner_OnSmartDotMACAddressReceived;
-        _ballSpinner.ConnectSmartDot(null);
+        _ballSpinner.ScanForSmartDots();
     }
 
     private void Spinner_OnSmartDotMACAddressReceived(PhysicalAddress obj)
@@ -54,7 +55,7 @@ public partial class SmartDotsPage : ContentPage
             Debug.WriteLine($"SmartDot MAC Address: {physicalAddress}");
 
             string BLEname = System.Text.Encoding.ASCII.GetString(BLENameBytes);
-            Debug.WriteLine($"Random Shit in ASCII {BLEname}");
+            Debug.WriteLine($"Name in ASCII {BLEname}");
 
             foreach (var address in MacAddresses)
             {

@@ -56,7 +56,12 @@ public class BallSpinner : IBallSpinner
     /// The different config settings for the Range (+/-)
     /// </summary>
    
-    public static readonly int[] RANGE_OPTIONS = [1, 2, 4, 6, 8, 16, 32, 64];
+    public static readonly double[][] RANGE_OPTIONS = {
+        [2, 4, 8, 16,-1, -1, -1, -1],
+        [125,250,500,1000,2000, -1, -1 ,-1],
+        [2, 4, 8, 16, 8, 16, 32, 64],
+        [1, 2, 3, 4, 5, 6, 7, 8],
+    };
 
     /// <summary>
     /// The different config settings for sample rates. 
@@ -66,11 +71,12 @@ public class BallSpinner : IBallSpinner
     /// 2 - Mag
     /// 3 - Light
     /// </summary>
-    public static readonly int[][] SAMPLE_RATES = 
+    public static readonly double[][] SAMPLE_RATES = 
     { 
+        //12 should be 12.5 
+        [12.5, 25, 50, 100, 200, 400, 800, 1600],
         [25, 50, 100, 200, 400, 800, 1600, 3200, 6400],
-        [25, 50, 100, 200, 400, 800, 1600, 3200, 6400],
-        [5, 10, 15, 20, 25, -1, -1, -1, -1], 
+        [5, 10, 15, 20, 25, 100, -1, -1, -1], 
         [25, 50, 100, 200, 400, 800, 1600, 3200, 6400]
     };
 
@@ -84,11 +90,11 @@ public class BallSpinner : IBallSpinner
     /// <summary>
     /// List of available Ranges, index 0 - XL, index 1 - GY, index 2 - MG, index 3 - LT
     /// </summary>
-    public List<List<int>> AvailableRanges = new List<List<int>>();
+    public List<List<double>> AvailableRanges = new List<List<double>>();
     /// <summary>
     /// List of available Sample Rates (Frequency), index 0 - XL, index 1 - GY, index 2 - MG, index 3 - LT
     /// </summary>
-    public List<List<int>> AvailableSampleRates = new List<List<int>>();
+    public List<List<double>> AvailableSampleRates = new List<List<double>>();
 
     /// <summary>
     /// The SmartDot's currently selected Range value for each index.
@@ -123,7 +129,7 @@ public class BallSpinner : IBallSpinner
         byte[] data = { 3, 1, 1, 0b10_00_00_01, 2, 2, 4, 4};
        // Debug.WriteLine($"Range byte: 0b{Convert.ToString(data[0], 2).PadLeft(8, '0')}");
 
-        SmartDotConfigReceivedEvent(data);
+       // SmartDotConfigReceivedEvent(data);
 
     }
 
@@ -158,7 +164,7 @@ public class BallSpinner : IBallSpinner
         Name = await _connection!.GetDeviceInfo();
         PropertyChanged?.Invoke(null, new PropertyChangedEventArgs(nameof(Name)));
 
-        _connection!.ConnectSmartDot(null);
+        _connection!.ScanForSmartDots();
         _connection.SmartDotAddressReceivedEvent += SmartDotAddressReceivedEvent;
 
         // Subscribe to smartDotRecieved event. Will trigger when a smartdot packet is received
@@ -178,59 +184,97 @@ public class BallSpinner : IBallSpinner
         await _connection!.ConnectSmartDot(address);
     }
 
+    /// <inheritdoc/>
+    public async void ScanForSmartDots()
+    {
+        await _connection!.ScanForSmartDots();
+    }
+
     private void SmartDotConfigReceivedEvent(byte[] data)
     {
         Debug.WriteLine("Triggered the Smart Dot COnfig Received Event!");
         //Convert the data from the bytes and set the AvailableRange and Rate arrays
+        
+        List<double> XL_rates = new List<double>();
+        List<double> GY_rates = new List<double>();
+        List<double> MG_rates = new List<double>();
+        List<double> LT_rates = new List<double>();
 
-        //Get the bits from our byte array
-        BitArray bitArray = new BitArray(data);
+        List<double> XL_ranges = new List<double>();
+        List<double> GY_ranges = new List<double>();
+        List<double> MG_ranges = new List<double>();
+        List<double> LT_ranges = new List<double>();
 
-        for (int i = 0; i < bitArray.Length; i += 16)
+        int bitLength = 8 - 1; //8 Bits - 1 to offset for array
+
+        // Set XL_rates and XL_ranges
+        for (int i = 0; i < 8; i++)
         {
-            //If i == 16, then we are on the GY. It has a special case, where we need first 9 bits for Rate and last 7 for Range
-            int firstEnd = (i == 16) ? 9 : 8;
-
-            //Grab the first 8 bits from the byte, 
-            //Iterate through available Rates and add to that index to list if its 1 add it to available list
-            List<int> rates = new List<int>();
-            for (int j = 0; j < firstEnd; j++)
-            {
-                int index = i + j;
-                if (bitArray[i + j])
-                {
-                    rates.Add(SAMPLE_RATES[i / 16][j]);
-                   // Debug.WriteLine($"bit i = {i} i/16 = {i / 16} j = {j} , array result {SAMPLE_RATES[i / 16][j]}, ");
-
-                }
-            }
-            //Add the list to the list of lists
-            AvailableSampleRates.Add(rates);
-
-            //Do the same for the Range
-            List<int> range = new List<int>();
-            for (int j = firstEnd; j < 16; j++)
-            {
-                if (bitArray[i + j])
-                {
-                    range.Add(RANGE_OPTIONS[j - 8]);
-                }
-            }
-            AvailableRanges.Add(range);
-
+            if ((data[0] & (128 >> i)) != 0) XL_rates.Add(SAMPLE_RATES[0][bitLength - i]);
+            if ((data[1] & (128 >> i)) != 0) XL_ranges.Add(RANGE_OPTIONS[0][bitLength - i]);
         }
-        //Debug.WriteLine("Available Sample Rates:");
-        //for (int i = 0; i < AvailableSampleRates.Count; i++)
-        //{
-        //    Debug.WriteLine($"Index {i}: " + string.Join(", ", AvailableSampleRates[i]));
-        //}
 
-        //Debug.WriteLine("\nAvailable Ranges:");
-        //for (int i = 0; i < AvailableRanges.Count; i++)
-        //{
-        //    Debug.WriteLine($"Index {i}: " + string.Join(", ", AvailableRanges[i]));
-        //}
+        // Set GY_rates and GY_ranges
+        for (int i = 0; i < 8; i++)
+        {
+            //GY uses 9 bits for the rates and 7 for the range.
+            if ((data[2] & (128 >> i)) != 0) GY_rates.Add(SAMPLE_RATES[1][bitLength - i]);
 
+            if (i != 0)  //only use the 7 bits account for skipping i = 0
+                if ((data[3] & (128 >> i)) != 0) GY_ranges.Add(RANGE_OPTIONS[1][(bitLength - i)]);
+        }
+        //Grab the first bit out of the range byte and use it as the 9th bit for GY_Rates
+        if ((data[3] & 128) == 128) GY_rates.Add(SAMPLE_RATES[1][8]);
+
+        // Set MG_rates and MG_ranges
+        for (int i = 0; i < 8; i++)
+        {
+            if ((data[4] & (128 >> i)) != 0) MG_rates.Add(SAMPLE_RATES[2][bitLength - i]);
+            if ((data[5] & (128 >> i)) != 0) MG_ranges.Add(RANGE_OPTIONS[2][bitLength - i]);
+        }
+
+        // Set LT_rates and LT_ranges
+        for (int i = 0; i < 8; i++)
+        {
+            if ((data[6] & (128 >> i)) != 0) LT_rates.Add(SAMPLE_RATES[3][bitLength - i]);
+            if ((data[7] & (128 >> i)) != 0) LT_ranges.Add(RANGE_OPTIONS[3][bitLength - i]);
+        }
+
+        //Add the avaialable rates in the correct order to keep the indexing consistent
+        AvailableSampleRates.Add(XL_rates);
+        AvailableSampleRates.Add(GY_rates);
+        AvailableSampleRates.Add(MG_rates);
+        AvailableSampleRates.Add(LT_rates);
+
+        //Add the available ranges in the correct order to keep the indexing consistent
+        AvailableRanges.Add(XL_ranges);
+        AvailableRanges.Add(GY_ranges);
+        AvailableRanges.Add(MG_ranges);
+        AvailableRanges.Add(LT_ranges);
+
+        foreach (List<double> l in AvailableRanges)
+            l.Sort();
+        foreach (List<double> l in AvailableSampleRates)
+            l.Sort();
+
+        Debug.WriteLine("Available Sample Rates:");
+        for (int i = 0; i < AvailableSampleRates.Count; i++)
+        {
+            Debug.WriteLine($"Index {i}: " + string.Join(", ", AvailableSampleRates[i]));
+        }
+
+        Debug.WriteLine("\nAvailable Ranges:");
+        for (int i = 0; i < AvailableRanges.Count; i++)
+        {
+            Debug.WriteLine($"Index {i}: " + string.Join(", ", AvailableRanges[i]));
+        }
+        Debug.WriteLine("Beginning to send back an artificial message for config");
+
+        int[] r = new int[4];
+        int[] sr = new int[4];
+        r = [12, 25, 5, 25];
+        sr = [100,100,100,100];
+        SubmitSmartDotConfig(r, sr);
     }
     private void SmartDotAddressReceivedEvent(PhysicalAddress address)
     {
@@ -311,20 +355,50 @@ public class BallSpinner : IBallSpinner
     {
         if (!IsSmartDotPaired())
             throw new Exception("Smart Dot must be paired in order to send config settings");
-        
 
         //Set our current config arrays to the new values.
         CurrentRanges = Ranges;
         CurrentSampleRates = SampleRates;
 
-        //Convert the range value into a byte we can send to the pi
+        //Convert the sample rate into a 4 bit index and the range value into a 4 bit index 
+        //Pack these byte index pairs into byte array then message and send it to the pi.
         byte[] bytes = new byte[4];
         for (int i = 0; i < Ranges.Length; i++)
-            bytes[i] = Two4BitIntToByte(Ranges[i], SampleRates[i]);
+            bytes[i] = Two4BitIntToByte(GetIndexOfValue(i, Ranges[i], true), GetIndexOfValue(i, SampleRates[i], false));
 
+        //TCP send message
         _connection.SendConfigDataAndStartTakeData(bytes);
     }
 
+    ///<summary>
+    ///Takes in the chosen values from the UI for the config
+    ///index: 0 - XL, 1 - GY, 2 - MG, 3 - LT
+    ///</summary>
+    private int GetIndexOfValue(int index, double val, bool isSampleRate) 
+    {
+
+        if (isSampleRate)
+        {
+            for(int i = 0; i < SAMPLE_RATES[index].Length; i++)
+            {
+                if(val == SAMPLE_RATES[index][i])
+                {
+                    return i;
+                }
+            }
+        }
+        else //is RANGE_OPTIONS
+        {
+            for (int i = 0; i < RANGE_OPTIONS[index].Length; i++)
+            {
+                if (val == RANGE_OPTIONS[index][i])
+                {
+                    return i;
+                }
+            }
+        }
+        return 0;
+    }
     private byte Two4BitIntToByte(int index1, int index2)
     {
         if (index1 < 0 || index1 > 15 || index2 < 0 || index2 > 15)

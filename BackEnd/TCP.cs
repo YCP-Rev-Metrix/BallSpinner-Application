@@ -11,6 +11,7 @@ using System.Text.Unicode;
 using System.Threading.Tasks;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RevMetrix.BallSpinner.BackEnd;
 
@@ -97,11 +98,11 @@ public class TCP : IDisposable
     }
 
     /// <summary>
-    /// Choose a smart dot module to connect to. Sending null indicates you want to start listening to packets
+    /// Choose a smart dot module to connect to.
     /// </summary>
     public async Task ConnectSmartDot(PhysicalAddress? address)
     {
-        _send[0] = (byte)MessageType.A_B_SCAN_FOR_SD;
+        _send[0] = (byte)MessageType.A_B_CHOSEN_SD;
         _send[1] = 0;
         _send[2] = 6;
         var bytes = address?.GetAddressBytes();
@@ -237,6 +238,7 @@ public class TCP : IDisposable
                             var bytes = new ArraySegment<byte>(packetFixed, 3, messageSize).ToArray();
                             Debug.WriteLine($"Config Message received, size = {messageSize}");
                             //Call event on the Ball Spinner
+                            Console.WriteLine("Hex Output: " + BitConverter.ToString(bytes));
                             SmartDotConfigReceivedEvent?.Invoke(bytes);
 
                             break;
@@ -316,6 +318,11 @@ public class TCP : IDisposable
         // Send the motor instruction to the PI
         await _client.Client.SendAsync(instructions);
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+
     public async void SendConfigDataAndStartTakeData(byte[] bytes)
     {
         if (!_client.Connected)
@@ -385,9 +392,14 @@ public enum MessageType : byte
     B_A_SCANNED_SD = 0x06,
 
     /// <summary>
+    /// Send the chosen smart dot MAC address to the BSC to confirm the choice.
+    /// </summary>
+    A_B_CHOSEN_SD = 0x07,
+
+    /// <summary>
     /// Receives 2 byte pairs that are used to say which values from the SmartDot Config bitmaps are valid options
     /// </summary>
-    B_A_RECEIVE_CONFIG_INFO = 0x07,
+    B_A_RECEIVE_CONFIG_INFO = 0x08,
 
     /// <summary>
     /// Sends 2 byte pairs that with each byte only having one 1. 
@@ -403,7 +415,7 @@ public enum MessageType : byte
     /// <summary>
     /// Set Motor Voltages packet type
     /// </summary>
-    A_B_SEND_MOTOR_VOLTAGES = 0x08,
+    A_B_SEND_MOTOR_VOLTAGES = 0x0C,
 
     /// <summary>
     /// Stop the motors on the BSC
