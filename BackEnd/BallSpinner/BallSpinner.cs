@@ -364,7 +364,7 @@ public class BallSpinner : IBallSpinner
         //Pack these byte index pairs into byte array then message and send it to the pi.
         byte[] bytes = new byte[4];
         for (int i = 0; i < Ranges.Length; i++)
-            bytes[i] = Two4BitIntToByte(GetIndexOfValue(i, Ranges[i], true), GetIndexOfValue(i, SampleRates[i], false));
+            bytes[i] = Two4BitIntToByte(GetIndexOfValue(i, SampleRates[i], false), GetIndexOfValue(i, Ranges[i], true));
 
         //TCP send message
         _connection.SendConfigDataAndStartTakeData(bytes);
