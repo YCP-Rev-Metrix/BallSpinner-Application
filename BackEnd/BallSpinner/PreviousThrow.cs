@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Net.NetworkInformation;
 using Common.POCOs;
+using System.Data.Common;
 
 namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 /// <summary>
@@ -208,6 +209,10 @@ public class PreviousThrow : IBallSpinner
     }
     /// <inheritdoc/>
     public List<List<double>> GetAvailableRanges()
+    {
+        throw new NotImplementedException();
+    }
+    public async void ScanForSmartDots()
     {
         throw new NotImplementedException();
     }

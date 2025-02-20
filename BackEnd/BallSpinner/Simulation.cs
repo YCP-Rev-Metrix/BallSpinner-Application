@@ -200,4 +200,9 @@ public class Simulation : IBallSpinner
     {
         throw new NotImplementedException();
     }
+    public async void ScanForSmartDots()
+    {
+        throw new NotImplementedException();
+    }
+
 }
