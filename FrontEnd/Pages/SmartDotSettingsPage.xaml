@@ -14,7 +14,7 @@
                     <Label FontSize="16"
                            WidthRequest="110"
                            Text="Range:"/>
-                    <Picker x:Name="AccelrationODR"
+                    <Picker x:Name="AccelrationRange"
                             ItemsSource="{Binding Ranges[0]}">
                     </Picker>
                 </HorizontalStackLayout>
@@ -35,7 +35,7 @@
                     <Label FontSize="16"
                            WidthRequest="110"
                            Text="Range:"/>
-                    <Picker x:Name="RotationODR"
+                    <Picker x:Name="RotationRange"
                             ItemsSource="{Binding Ranges[1]}"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
@@ -57,7 +57,7 @@
                     <Label FontSize="16"
                            WidthRequest="110"
                            Text="Range:"/>
-                    <Picker x:Name="MagnatometerODR"
+                    <Picker x:Name="MagnatometerRange"
                             ItemsSource="{Binding Ranges[2]}"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
@@ -77,7 +77,7 @@
                     <Label FontSize="16"
                            WidthRequest="110"
                            Text="Range:"/>
-                    <Picker x:Name="LightODR"
+                    <Picker x:Name="LightRange"
                             ItemsSource="{Binding Ranges[3]}"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
