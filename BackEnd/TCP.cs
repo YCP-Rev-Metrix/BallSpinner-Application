@@ -93,7 +93,7 @@ public class TCP : IDisposable
     public async Task ScanForSmartDots()
     {
         //NOT YET USED (still using ConnectSmartDot to begin listening to packets
-        _send[0] = (byte)MessageType.A_B_SCAN_FOR_SD;
+        _send[0] = (byte)MessageType.A_B_START_SCAN_FOR_SD;
         await _client.Client.SendAsync(new ArraySegment<byte>(_send, 0, 1));
     }
 
@@ -212,7 +212,7 @@ public class TCP : IDisposable
 
                             break;
 
-                        case MessageType.A_B_SCAN_FOR_SD:
+                        case MessageType.A_B_START_SCAN_FOR_SD:
                         case MessageType.B_A_SCANNED_SD:
                             var physicalAddressBytes = new ArraySegment<byte>(packetFixed, 3, messageSize).ToArray();
 
@@ -283,7 +283,7 @@ public class TCP : IDisposable
         // FOR NOW! This is a script that will send automated instructions for MS2
         // This needs to be refactored to send predefined instructions based on kinematic calculations
 
-        byte type = (byte)MessageType.A_B_SEND_MOTOR_VOLTAGES;
+        byte type = (byte)MessageType.A_B_MOTOR_INSTRUCTIONS;
         byte[] instructions = new byte[]
         {
             type, //Type
@@ -318,17 +318,34 @@ public class TCP : IDisposable
         // Send the motor instruction to the PI
         await _client.Client.SendAsync(instructions);
     }
+    /// <summary>
+    /// Send a message to disconnect the BSC from the App.
+    /// </summary>
+    public async void DisconnectFromBSC()
+    {
+        if (!_client.Connected)
+            throw new Exception("Can't send disconnect without being connected");
+
+        byte type = (byte)MessageType.A_B_DISCONNECT_FROM_BSC;
+        //Sends a STOP_MOTOR_INSTUCTIONS per Roberts Protocol sheet
+        byte[] instructions = new byte[]
+        {
+            type,
+        };
+
+        // Send the disconnect message to the PI
+        await _client.Client.SendAsync(instructions);
+    }
 
     /// <summary>
-    /// 
+    /// Send indices of chosen data config of the SD to the BSC
     /// </summary>
-
-    public async void SendConfigDataAndStartTakeData(byte[] bytes)
+    public async void SendConfigData(byte[] bytes)
     {
         if (!_client.Connected)
             throw new Exception("Can't send config without being connected");
 
-        byte type = (byte)MessageType.A_B_START_SD_TAKE_DATA;
+        byte type = (byte)MessageType.A_B_RECEIVE_CONFIG_INFO;
         byte[] message = new byte[]
         {
             type,
@@ -346,6 +363,30 @@ public class TCP : IDisposable
             bytes[3],
         };
         await _client.Client.SendAsync(message);
+    }
+
+    ///<summary>
+    /// Set the SD to take/send data. Pass in true to take data and false to stop.
+    /// </summary>
+    public async void ToggleSDTakeData(bool shouldTakeData)
+    {
+        if (!_client.Connected)
+            throw new Exception("Can't send instructions without being connected");
+
+        byte type = (byte)MessageType.A_B_SD_TOGGLE_TAKE_DATA;
+        //Sends a STOP_MOTOR_INSTUCTIONS per Roberts Protocol sheet
+
+        //Set our data byte to be all 1s or 0s
+        byte data = shouldTakeData ? (byte)255 : (byte)0;
+
+        byte[] instructions = new byte[]
+        {
+            type,
+            data,
+        };
+
+        // Send the motor instruction to the PI
+        await _client.Client.SendAsync(instructions);
     }
 }
 
@@ -384,7 +425,7 @@ public enum MessageType : byte
     /// <summary>
     /// Tell the Ball Spinner Controller to scan for available SmartDot modules
     /// </summary>
-    A_B_SCAN_FOR_SD = 0x05,
+    A_B_START_SCAN_FOR_SD = 0x05,
 
     /// <summary>
     /// Response from server containing smart dot connection info, sent for each SmartDot module found by A_B_SCAN_FOR_SD
@@ -405,22 +446,32 @@ public enum MessageType : byte
     /// Sends 2 byte pairs that with each byte only having one 1. 
     /// This message selects the desired config options and sends them to the Ball Spinner Controller
     /// </summary>
-    A_B_START_SD_TAKE_DATA = 0x09,
+    A_B_RECEIVE_CONFIG_INFO = 0x09,
 
     /// <summary>
     /// Indicates a SmartDot data packet
     /// </summary>
-    B_A_SD_SENSOR_DATA = 0x0A,
+    B_A_SD_SENSOR_DATA = 0x0B,
 
     /// <summary>
     /// Set Motor Voltages packet type
     /// </summary>
-    A_B_SEND_MOTOR_VOLTAGES = 0x0C,
+    A_B_MOTOR_INSTRUCTIONS = 0x0C,
 
     /// <summary>
     /// Stop the motors on the BSC
     /// </summary>
-    A_B_STOP_MOTOR = 0x0B,
+    A_B_STOP_MOTOR = 0x0D,
+
+    ///<summary>
+    /// Disconnect from the BSC
+    /// </summary>
+    A_B_DISCONNECT_FROM_BSC = 0x0E,
+
+    ///<summary>
+    /// Enable or disable SD taking/sending data.
+    /// </summary>
+    A_B_SD_TOGGLE_TAKE_DATA = 0x0F,
 
     /// <summary>
     /// Send or receive raw, UTF-8 text
