@@ -272,11 +272,12 @@ public class BallSpinner : IBallSpinner
         }
         Debug.WriteLine("Beginning to send back an artificial message for config");
 
-        double[] r = new double[4];
-        double[] sr = new double[4];
-        r = [4, 250 , 8, 3];
-        sr = [1600,6400,10,100];
-        SubmitSmartDotConfig(r, sr);
+        //Testing
+        //double[] r = new double[4];
+        //double[] sr = new double[4];
+        //r = [4, 250 , 8, 3];
+        //sr = [1600,6400,10,100];
+        //SubmitSmartDotConfig(r, sr);
     }
     private void SmartDotAddressReceivedEvent(PhysicalAddress address)
     {
@@ -352,6 +353,22 @@ public class BallSpinner : IBallSpinner
         return true;
     }
 
+    /// <summary>
+    /// Called from the ballspinner object to disconnect from the BSC
+    /// </summary>
+    public void DisconnectFromBSC()
+    {
+        _connection.DisconnectFromBSC();
+    }
+
+    /// <summary>
+    /// Called from the ballspinner object to toggle the SD taking data
+    /// </summary>
+    /// <param name="shouldTakeData"></param>
+    public void ToggleSDTakeData(bool shouldTakeData)
+    {
+        _connection.ToggleSDTakeData(shouldTakeData);
+    }
     /// <inheritdoc/>
     public void SubmitSmartDotConfig(double[] Ranges, double[] SampleRates)
     {
@@ -383,7 +400,7 @@ public class BallSpinner : IBallSpinner
 
   
         //TCP send message
-        _connection.SendConfigDataAndStartTakeData(bytes);
+        _connection.SendConfigData(bytes);
     }
 
     ///<summary>
