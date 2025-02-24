@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using System.Timers;
 using Timer = System.Timers.Timer;
 using CsvHelper.Configuration.Attributes;
+using Microsoft.Maui;
+using Newtonsoft.Json.Linq;
 
 namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 
@@ -104,7 +106,7 @@ public class BallSpinner : IBallSpinner
     /// 2 - Mag
     /// 3 - Light
     /// </summary>
-    private int[] CurrentRanges = new int[4];
+    private double[] CurrentRanges = new double[4];
 
     /// <summary>
     /// The SmartDot's currently selected sample rate value for each index. 
@@ -114,7 +116,7 @@ public class BallSpinner : IBallSpinner
     /// 2 - Mag
     /// 3 - Light 
     /// </summary>
-    private int[] CurrentSampleRates = new int[4];
+    private double[] CurrentSampleRates = new double[4];
 
     /// <summary />
     public BallSpinner(IPAddress address)
@@ -270,10 +272,10 @@ public class BallSpinner : IBallSpinner
         }
         Debug.WriteLine("Beginning to send back an artificial message for config");
 
-        int[] r = new int[4];
-        int[] sr = new int[4];
-        r = [12, 25, 5, 25];
-        sr = [100,100,100,100];
+        double[] r = new double[4];
+        double[] sr = new double[4];
+        r = [4, 250 , 8, 3];
+        sr = [1600,6400,10,100];
         SubmitSmartDotConfig(r, sr);
     }
     private void SmartDotAddressReceivedEvent(PhysicalAddress address)
@@ -351,7 +353,7 @@ public class BallSpinner : IBallSpinner
     }
 
     /// <inheritdoc/>
-    public void SubmitSmartDotConfig(int[] Ranges, int[] SampleRates)
+    public void SubmitSmartDotConfig(double[] Ranges, double[] SampleRates)
     {
         if (!IsSmartDotPaired())
             throw new Exception("Smart Dot must be paired in order to send config settings");
@@ -364,8 +366,22 @@ public class BallSpinner : IBallSpinner
         //Pack these byte index pairs into byte array then message and send it to the pi.
         byte[] bytes = new byte[4];
         for (int i = 0; i < Ranges.Length; i++)
-            bytes[i] = Two4BitIntToByte(GetIndexOfValue(i, Ranges[i], true), GetIndexOfValue(i, SampleRates[i], false));
+        {
+            Debug.WriteLine($"Value of SampleRates[i] == {SampleRates[i]}");
+            int sampleRateIndex = GetIndexOfValue(i, SampleRates[i], true);
+            Debug.WriteLine($"Value of Ranges[i] == {Ranges[i]}");
+            int rangeIndex = GetIndexOfValue(i, Ranges[i], false);
 
+            Debug.WriteLine($"Axis {i}: SampleRateIndex={sampleRateIndex}, RangeIndex={rangeIndex}");
+
+            bytes[i] = Two4BitIntToByte(sampleRateIndex, rangeIndex);
+        }
+        for (int i = 0; i < bytes.Length; i++)
+        {
+            Debug.WriteLine($"BYTE: [{i}]");
+        }
+
+  
         //TCP send message
         _connection.SendConfigDataAndStartTakeData(bytes);
     }
@@ -374,30 +390,18 @@ public class BallSpinner : IBallSpinner
     ///Takes in the chosen values from the UI for the config
     ///index: 0 - XL, 1 - GY, 2 - MG, 3 - LT
     ///</summary>
-    private int GetIndexOfValue(int index, double val, bool isSampleRate) 
+    private int GetIndexOfValue(int index, double value, bool isSampleRate)
     {
+        double[] lookupArray = isSampleRate ? SAMPLE_RATES[index] : RANGE_OPTIONS[index];
 
-        if (isSampleRate)
+        for (int i = 0; i < lookupArray.Length; i++)
         {
-            for(int i = 0; i < SAMPLE_RATES[index].Length; i++)
-            {
-                if(val == SAMPLE_RATES[index][i])
-                {
-                    return i;
-                }
-            }
+            if (lookupArray[i] == value)
+                return i; // Return the index when a match is found
         }
-        else //is RANGE_OPTIONS
-        {
-            for (int i = 0; i < RANGE_OPTIONS[index].Length; i++)
-            {
-                if (val == RANGE_OPTIONS[index][i])
-                {
-                    return i;
-                }
-            }
-        }
-        return 0;
+
+        Debug.WriteLine($"Value {value} not found in {(isSampleRate ? "SAMPLE_RATES" : "RANGE_OPTIONS")}[{index}]");
+        return -1; // Return -1 if value is not found
     }
     private byte Two4BitIntToByte(int index1, int index2)
     {
@@ -408,7 +412,7 @@ public class BallSpinner : IBallSpinner
 
 
         //Print as binary
-        Debug.WriteLine($"Range byte: 0b{Convert.ToString(result, 2).PadLeft(8, '0')}");
+        Debug.WriteLine($" {result} Range byte: 0b{Convert.ToString(result, 2).PadLeft(8, '0')}");
         return result;
     }
     /// <inheritdoc/>

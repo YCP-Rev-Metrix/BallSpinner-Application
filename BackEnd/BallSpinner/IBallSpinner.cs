@@ -104,7 +104,7 @@ public interface IBallSpinner : INotifyPropertyChanged
     /// This updates the variables used to track the current SmartDot config.
     /// It also requests the TCP connection to send the chosen values to the BSC
     /// </summary>
-    void SubmitSmartDotConfig(int[] Ranges, int[] SampleRates);
+    void SubmitSmartDotConfig(double[] Ranges, double[] SampleRates);
 
     ///<summary>
     /// This returns an array of booleans that will be used to compare against the received Range settings
