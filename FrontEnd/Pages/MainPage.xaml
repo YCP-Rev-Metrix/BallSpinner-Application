@@ -6,18 +6,18 @@
     xmlns:local="clr-namespace:RevMetrix.BallSpinner.FrontEnd">
 
     <ContentPage.MenuBarItems>
-        <MenuBarItem IsEnabled="{Binding LoggedIn}" Text="File">
+        <MenuBarItem Text="File">
             <MenuFlyoutItem
                 Clicked="OnNewShotButtonClicked"
                 IsEnabled="true"
                 Text="New Shot" />
             <MenuFlyoutItem
                 Clicked="OnLoadShotButtonClicked"
-                IsEnabled="true"
+                IsEnabled="{Binding LoggedIn}"
                 Text="Load Shot" />
             <MenuFlyoutItem
                 Clicked="OnSaveShotButtonClicked"
-                IsEnabled="true"
+                IsEnabled="{Binding LoggedIn}"
                 Text="Save Shot As..." />
             <MenuFlyoutItem
                 Clicked="OnOptionsButtonClicked"
@@ -29,29 +29,29 @@
                 Text="Exit" />
         </MenuBarItem>
 
-        <MenuBarItem IsEnabled="{Binding LoggedIn}" Text="View">
+        <MenuBarItem Text="View">
             <MenuFlyoutItem
                 Clicked="OnResetButtonClicked"
                 IsEnabled="false"
                 Text="Reset" />
         </MenuBarItem>
 
-        <MenuBarItem IsEnabled="{Binding LoggedIn}" Text="User">
+        <MenuBarItem Text="User">
             <MenuFlyoutItem
                 Clicked="OnLoginButtonClicked"
                 IsEnabled="true"
                 Text="Login" />
             <MenuFlyoutItem
                 Clicked="OnCloudManagementButtonClicked"
-                IsEnabled="true"
+                IsEnabled="{Binding LoggedIn}"
                 Text="Manage Shots" />
             <MenuFlyoutItem
                 Clicked="OnArsenalButtonClicked"
-                IsEnabled="true"
+                IsEnabled="{Binding LoggedIn}"
                 Text="Manage Arsenal" />
         </MenuBarItem>
 
-        <MenuBarItem IsEnabled="{Binding LoggedIn}" Text="Help">
+        <MenuBarItem Text="Help">
             <MenuFlyoutItem
                 Clicked="OnHelpButtonClicked"
                 IsEnabled="true"
@@ -62,12 +62,13 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem
             Clicked="OnStartButtonClicked"
-            IsEnabled="{Binding LoggedIn}"
             Text="Start" />
+            <!--IsEnabled="{Binding LoggedIn} />"-->
         <ToolbarItem
             Clicked="OnStopButtonClicked"
-            IsEnabled="{Binding LoggedIn}"
             Text="Stop" />
+            <!--IsEnabled="{Binding LoggedIn} />"-->
+            
         <ToolbarItem
             Clicked="OnResetButtonClicked"
             IsEnabled="false"
@@ -98,7 +99,7 @@
             </StackLayout>
         </ScrollView>
 
-        <Grid IsVisible="{Binding NotLoggedIn}">
+        <!-- <Grid IsVisible="{Binding NotLoggedIn}">
             <BoxView
                 HorizontalOptions="FillAndExpand"
                 InputTransparent="True"
@@ -114,7 +115,7 @@
                     VerticalOptions="CenterAndExpand"
                     VerticalTextAlignment="Center" />
             </VerticalStackLayout>
-        </Grid>
+        </Grid> -->
        
     </Grid>
 </ContentPage>
