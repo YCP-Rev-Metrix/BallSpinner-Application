@@ -208,7 +208,7 @@ public class PreviousThrow : IBallSpinner
 
     }
     /// <inheritdoc/>
-    public int[] GetAvailableRanges()
+    public List<List<double>> GetAvailableRanges()
     {
         throw new NotImplementedException();
     }
@@ -218,7 +218,7 @@ public class PreviousThrow : IBallSpinner
     }
 
     /// <inheritidoc/>
-    public int[] GetAvailableSampleRates()
+    public List<List<double>> GetAvailableSampleRates()
     {
         throw new NotImplementedException();
     }

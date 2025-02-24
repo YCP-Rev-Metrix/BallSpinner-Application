@@ -442,15 +442,15 @@ public class BallSpinnerClass : IBallSpinner
         return result;
     }
     /// <inheritdoc/>
-    public int[] GetAvailableRanges()
+    public List<List<double>> GetAvailableRanges()
     {
-        throw new NotImplementedException();
+        return AvailableRanges;
     }
 
     /// <inheritidoc/>
-    public int[] GetAvailableSampleRates()
+    public List<List<double>> GetAvailableSampleRates()
     {
-        throw new NotImplementedException();
+        return AvailableSampleRates;
     }
     private void OnTimedEvent(object? source, ElapsedEventArgs e)
     {
