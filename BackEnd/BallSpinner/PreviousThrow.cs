@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Net.NetworkInformation;
 using Common.POCOs;
+using System.Data.Common;
 
 namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 /// <summary>
@@ -185,5 +186,40 @@ public class PreviousThrow : IBallSpinner
     public void Stop()
     {
         _running = false;
+    }
+    /// <inheritdoc/>
+    public bool IsSmartDotPaired()
+    {
+        if (!IsConnected())
+            return false;
+
+        if (!string.IsNullOrEmpty(SmartDotMAC))
+            return false;
+
+        return true;
+    }
+
+    /// <inheritdoc/>
+    public void SubmitSmartDotConfig(double[] ODRs, double[] SampleRates)
+    {
+        if (!IsSmartDotPaired())
+            return;
+        //tcp function for sending config message
+
+    }
+    /// <inheritdoc/>
+    public List<List<double>> GetAvailableRanges()
+    {
+        throw new NotImplementedException();
+    }
+    public async void ScanForSmartDots()
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <inheritidoc/>
+    public List<List<double>> GetAvailableSampleRates()
+    {
+        throw new NotImplementedException();
     }
 }

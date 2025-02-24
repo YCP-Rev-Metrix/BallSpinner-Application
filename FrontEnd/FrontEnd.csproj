@@ -1,5 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+	<PropertyGroup>
+		<GenerateProgramFile>false</GenerateProgramFile>
+	</PropertyGroup>
+	
     <PropertyGroup>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">net8.0-maccatalyst</TargetFrameworks>
         <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0;</TargetFrameworks>
@@ -69,10 +73,22 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-        <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+        <PackageReference Include="coverlet.collector" Version="6.0.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="LiveChartsCore.SkiaSharpView.Maui" Version="2.0.0-rc5.1" />
+        <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.100" />
+        <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.100" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
         <PackageReference Include="RevMetrix.BallSpinner.Common.Api" Version="1.1.4" />
+        <PackageReference Include="RevMetrix.Client.Api" Version="1.0.15" />
+        <PackageReference Include="xunit" Version="2.5.3" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
@@ -114,6 +130,9 @@
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
       <MauiXaml Update="Pages\NewBallSpinnerView.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="Pages\SmartDotSettingsPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
       <MauiXaml Update="Pages\SmartDotsPage.xaml">

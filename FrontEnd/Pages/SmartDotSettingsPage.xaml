@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RevMetrix.BallSpinner.FrontEnd.Pages.SmartDotSettingsPage"
+             Title="SmartDotSettingsPage">
+    <VerticalStackLayout Margin="10">
+        <HorizontalStackLayout Margin="10">
+            <VerticalStackLayout WidthRequest="250">
+                <Label HorizontalOptions="Center"
+                       Margin="10" 
+                       TextDecorations="Underline"
+                       Text="Acceleration"/>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                           WidthRequest="110"
+                           Text="Range:"/>
+                    <Picker x:Name="AccelrationRange"
+                            ItemsSource="{Binding Ranges[0]}">
+                    </Picker>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                            WidthRequest="110"
+                            Text="Sample Rate:"/>
+                    <Picker x:Name="AccelrationSampleRate"
+                            ItemsSource="{Binding SampleRates[0]}"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Label HorizontalOptions="Center"
+                       Margin="10" 
+                       TextDecorations="Underline"
+                       Text="Rotation"/>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                           WidthRequest="110"
+                           Text="Range:"/>
+                    <Picker x:Name="RotationRange"
+                            ItemsSource="{Binding Ranges[1]}"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                           WidthRequest="110"
+                           Text="Sample Rate:"/>
+                    <Picker x:Name="RotationSampleRate"
+                            ItemsSource="{Binding SampleRates[1]}"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Margin="10">
+            <VerticalStackLayout WidthRequest="250">
+                <Label HorizontalOptions="Center"
+                       Margin="10" 
+                       TextDecorations="Underline"
+                       Text="Magnatometer"/>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                           WidthRequest="110"
+                           Text="Range:"/>
+                    <Picker x:Name="MagnatometerRange"
+                            ItemsSource="{Binding Ranges[2]}"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                           WidthRequest="110"
+                           Text="Sample Rate:"/>
+                    <Picker x:Name="MagnatometerSampleRate"
+                            ItemsSource="{Binding SampleRates[2]}"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Label HorizontalOptions="Center"
+                       Margin="10" 
+                       TextDecorations="Underline"
+                       Text="Light"/>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                           WidthRequest="110"
+                           Text="Range:"/>
+                    <Picker x:Name="LightRange"
+                            ItemsSource="{Binding Ranges[3]}"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                           WidthRequest="110"
+                           Text="Sample Rate:"/>
+                    <Picker x:Name="LightSampleRate"
+                            ItemsSource="{Binding SampleRates[3]}"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>

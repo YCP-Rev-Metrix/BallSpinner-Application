@@ -123,4 +123,13 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
 
         _ballSpinner.Dispose();
     }
+
+    public void OpenSmartDotSettings()
+    {
+        _frontEnd.SmartDotSettings(this);
+    }
+    
+    //TODO: Function call to Backend to get ODR & sample rates
+
+    //TODO: Function call to Backend to pass selected sample rates
 }

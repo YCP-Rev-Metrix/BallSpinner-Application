@@ -169,4 +169,40 @@ public class Simulation : IBallSpinner
         if (address == null)
             OnSmartDotMACAddressReceived?.Invoke(PhysicalAddress.Parse(SmartDotMAC));
     }
+    /// <inheritdoc/>
+    public bool IsSmartDotPaired()
+    {
+        if (!IsConnected())
+            return false;
+
+        if (!string.IsNullOrEmpty(SmartDotMAC))
+            return false;
+
+        return true;
+    }
+
+    /// <inheritdoc/>
+    public void SubmitSmartDotConfig(double[] ODRs, double[] SampleRates)
+    {
+        if (!IsSmartDotPaired())
+            return;
+        //tcp function for sending config message
+
+    }
+    /// <inheritdoc/>
+    public List<List<double>> GetAvailableRanges()
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <inheritidoc/>
+    public List<List<double>> GetAvailableSampleRates()
+    {
+        throw new NotImplementedException();
+    }
+    public async void ScanForSmartDots()
+    {
+        throw new NotImplementedException();
+    }
+
 }
