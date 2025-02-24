@@ -68,7 +68,7 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         _ballSpinner.PropertyChanged += BallSpinner_PropertyChanged;
         _ballSpinner.OnConnectionChanged += BallSpinner_OnConnectionChanged;
 
-        BallSpinner_OnConnectionChanged(_ballSpinner.IsConnected());
+        //BallSpinner_OnConnectionChanged(_ballSpinner.IsConnected()); Caused double smartdot connection screen
     }
 
     private async void BallSpinner_OnConnectionChanged(bool connected)
