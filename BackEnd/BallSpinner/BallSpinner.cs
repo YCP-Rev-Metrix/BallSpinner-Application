@@ -20,7 +20,7 @@ namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 /// <summary>
 /// The real, physical ball spinner device
 /// </summary>
-public class BallSpinner : IBallSpinner
+public class BallSpinnerClass : IBallSpinner
 {
     /// <inheritdoc/>
     public string Name { get; set; } = "Real Device";
@@ -119,7 +119,7 @@ public class BallSpinner : IBallSpinner
     private double[] CurrentSampleRates = new double[4];
 
     /// <summary />
-    public BallSpinner(IPAddress address)
+    public BallSpinnerClass(IPAddress address)
     {
         _address = address;
         InitializeConnection();
@@ -158,7 +158,16 @@ public class BallSpinner : IBallSpinner
         if (_connection != null && _connection.Connected)
             OnConnected();
     }
-
+    /// <summary>
+    /// Get a reference to the TCP connection
+    /// </summary>
+    /// <returns></returns>
+    public TCP GetConnection()
+    {
+        if(IsConnected())
+            return _connection;
+        return null;
+    }
     private async void OnConnected()
     {
         PropertyChanged?.Invoke(null, new PropertyChangedEventArgs("Connected"));
