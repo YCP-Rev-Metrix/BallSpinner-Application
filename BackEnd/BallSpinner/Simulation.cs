@@ -182,7 +182,7 @@ public class Simulation : IBallSpinner
     }
 
     /// <inheritdoc/>
-    public void SubmitSmartDotConfig(double[] ODRs, double[] SampleRates)
+    public void SubmitSmartDotConfig(double[] ODRs, double[] SampleRates, bool XL_OFF, bool GY_OFF, bool MAG_OFF, bool LT_OFF)
     {
         if (!IsSmartDotPaired())
             return;
