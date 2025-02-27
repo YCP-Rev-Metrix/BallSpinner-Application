@@ -11,6 +11,7 @@ using System.Text.Unicode;
 using System.Threading.Tasks;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RevMetrix.BallSpinner.BackEnd;
 
@@ -37,7 +38,12 @@ public class TCP : IDisposable
     /// Invoked when a Smart dot address is received from the device
     /// </summary>
     public event Action<PhysicalAddress> SmartDotAddressReceivedEvent;
-    
+
+    /// <summary>
+    /// Invoked when config options are received from SD. Sends byte array to BallSpinner for interpretation
+    /// </summary>
+    public event Action<byte[]> SmartDotConfigReceivedEvent;
+
     private TcpClient _client;
     private IPAddress _address;
 
@@ -68,9 +74,9 @@ public class TCP : IDisposable
     public async Task<string> GetDeviceInfo()
     {
         var task = new TaskCompletionSource<object>();
-        _pendingMessages.Add((MessageType.GetDeviceInfoResponse, task));
+        _pendingMessages.Add((MessageType.B_A_NAME, task));
 
-        _send[0] = (byte)MessageType.GetDeviceInfo;
+        _send[0] = (byte)MessageType.A_B_NAME_REQ;
         _send[1] = 0;
         _send[2] = 0;
         await _client.Client.SendAsync(new ArraySegment<byte>(_send, 0, 3));
@@ -79,12 +85,24 @@ public class TCP : IDisposable
         return (string)result;
     }
     
+
+    ///<summary>
+    /// Tell the Ball Spinner Controller to start scanning available Smart Dot Modules. The Ball Spinner will then send their data back to this App
+    /// TO BE IMPLEMENTED
+    /// </summary>
+    public async Task ScanForSmartDots()
+    {
+        //NOT YET USED (still using ConnectSmartDot to begin listening to packets
+        _send[0] = (byte)MessageType.A_B_START_SCAN_FOR_SD;
+        await _client.Client.SendAsync(new ArraySegment<byte>(_send, 0, 1));
+    }
+
     /// <summary>
-    /// Connect to a smart dot module. Sending null indicates you want to start listening to packets
+    /// Choose a smart dot module to connect to.
     /// </summary>
     public async Task ConnectSmartDot(PhysicalAddress? address)
     {
-        _send[0] = (byte)MessageType.ConnectSmartDot;
+        _send[0] = (byte)MessageType.A_B_CHOSEN_SD;
         _send[1] = 0;
         _send[2] = 6;
         var bytes = address?.GetAddressBytes();
@@ -108,7 +126,7 @@ public class TCP : IDisposable
             byte token = (byte)new Random().Next(byte.MaxValue);
 
             //Handshake by telling BallSpinner that I want to connect
-            _send[0] = (byte)MessageType.Connect;
+            _send[0] = (byte)MessageType.A_B_INIT_HANDSHAKE;
             _send[2] = 1; //No data to send
             _send[3] = token; //Random token, BallSpinner MUST send back the same value
 
@@ -121,7 +139,7 @@ public class TCP : IDisposable
             if (receieved <= 0)
                 throw new Exception("Handshake request could not be received");
 
-            if (_receive[0] != (byte)MessageType.ConnectResponse)
+            if (_receive[0] != (byte)MessageType.B_A_INIT_HANDSHAKE_ACK)
                 throw new Exception("Host sent wrong data! Handshake failed.");
 
             if (_receive[2] != 1)
@@ -183,8 +201,8 @@ public class TCP : IDisposable
 
                     switch (messageType)
                     {
-                        case MessageType.GetDeviceInfo:
-                        case MessageType.GetDeviceInfoResponse:
+                        case MessageType.A_B_NAME_REQ:
+                        case MessageType.B_A_NAME:
 
                             string text = Encoding.UTF8.GetString(packetFixed, 3, messageSize);
                             Debug.WriteLine(text);
@@ -194,13 +212,14 @@ public class TCP : IDisposable
 
                             break;
 
-                        case MessageType.ConnectSmartDot:
-                        case MessageType.ConnectSmartDotResponse:
-                            var physicalAddress = new PhysicalAddress(new ArraySegment<byte>(packetFixed, 3, messageSize).ToArray());
-                            SmartDotAddressReceivedEvent?.Invoke(physicalAddress);
+                        case MessageType.A_B_START_SCAN_FOR_SD:
+                        case MessageType.B_A_SCANNED_SD:
+                            var physicalAddressBytes = new ArraySegment<byte>(packetFixed, 3, messageSize).ToArray();
 
+                            var physicalAddress = new PhysicalAddress(physicalAddressBytes);
+                            SmartDotAddressReceivedEvent?.Invoke(physicalAddress);
                             break;
-                        case MessageType.SmartDotDataPacket:
+                        case MessageType.B_A_SD_SENSOR_DATA:
                             SensorType sensorType = (SensorType)Enum.ToObject(typeof(SensorType), packetFixed[3]);
                             int sampleCount = packetFixed[6] | (packetFixed[5] << 8) | (packetFixed[4] << 16); //3 bytes
                             float timeStamp = BitConverter.ToSingle(packetFixed, 7); //BitConverter expects LITTLE ENDIAN
@@ -214,6 +233,14 @@ public class TCP : IDisposable
                             // Debug statement to print incoming smartdot packet data
                             //Debug.WriteLine($"{sensorType}: {xData} {yData} {zData}");
                             SmartDotReceivedEvent?.Invoke(sensorType, timeStamp, sampleCount, xData, yData, zData);
+                            break;
+                        case MessageType.B_A_RECEIVE_CONFIG_INFO:
+                            var bytes = new ArraySegment<byte>(packetFixed, 3, messageSize).ToArray();
+                            Debug.WriteLine($"Config Message received, size = {messageSize}");
+                            //Call event on the Ball Spinner
+                            Console.WriteLine("Hex Output: " + BitConverter.ToString(bytes));
+                            SmartDotConfigReceivedEvent?.Invoke(bytes);
+
                             break;
                         default:
                             break;
@@ -255,9 +282,11 @@ public class TCP : IDisposable
 
         // FOR NOW! This is a script that will send automated instructions for MS2
         // This needs to be refactored to send predefined instructions based on kinematic calculations
+
+        byte type = (byte)MessageType.A_B_MOTOR_INSTRUCTIONS;
         byte[] instructions = new byte[]
         {
-            0x08, //Type
+            type, //Type
 
             0x00,
             0x03, //Size
@@ -270,49 +299,179 @@ public class TCP : IDisposable
         // Send the motor instruction to the PI
         await _client.Client.SendAsync(instructions);
     }
+
+    /// <summary>
+    /// Stops sending instructions to the motor
+    /// </summary>
+    public async void StopMotorInstructions()
+    {
+        if (!_client.Connected)
+            throw new Exception("Can't send instructions without being connected");
+
+        byte type = (byte)MessageType.A_B_STOP_MOTOR;
+        //Sends a STOP_MOTOR_INSTUCTIONS per Roberts Protocol sheet
+        byte[] instructions = new byte[]
+        {
+            type, 
+        };
+
+        // Send the motor instruction to the PI
+        await _client.Client.SendAsync(instructions);
+    }
+    /// <summary>
+    /// Send a message to disconnect the BSC from the App.
+    /// </summary>
+    public async void DisconnectFromBSC()
+    {
+        if (!_client.Connected)
+            throw new Exception("Can't send disconnect without being connected");
+
+        byte type = (byte)MessageType.A_B_DISCONNECT_FROM_BSC;
+        //Sends a STOP_MOTOR_INSTUCTIONS per Roberts Protocol sheet
+        byte[] instructions = new byte[]
+        {
+            type,
+        };
+
+        // Send the disconnect message to the PI
+        await _client.Client.SendAsync(instructions);
+    }
+
+    /// <summary>
+    /// Send indices of chosen data config of the SD to the BSC
+    /// </summary>
+    public async void SendConfigData(byte[] bytes)
+    {
+        if (!_client.Connected)
+            throw new Exception("Can't send config without being connected");
+
+        byte type = (byte)MessageType.A_B_RECEIVE_CONFIG_INFO;
+        byte[] message = new byte[]
+        {
+            type,
+
+            0x00,
+            0x08,//size
+
+            //XL - Frequency(byte), Range(byte)
+            bytes[0],
+            //GY - Frequency(byte), Range(byte)
+            bytes[1],
+            //MG - Frequency(byte), Range(byte)
+            bytes[2],
+            //LT - Frequency(byte), Range(byte)
+            bytes[3],
+        };
+        await _client.Client.SendAsync(message);
+    }
+
+    ///<summary>
+    /// Set the SD to take/send data. Pass in true to take data and false to stop.
+    /// </summary>
+    public async void ToggleSDTakeData(bool shouldTakeData)
+    {
+        if (!_client.Connected)
+            throw new Exception("Can't send instructions without being connected");
+
+        byte type = (byte)MessageType.A_B_SD_TOGGLE_TAKE_DATA;
+        //Sends a STOP_MOTOR_INSTUCTIONS per Roberts Protocol sheet
+
+        //Set our data byte to be all 1s or 0s
+        byte data = shouldTakeData ? (byte)255 : (byte)0;
+
+        byte[] instructions = new byte[]
+        {
+            type,
+            data,
+        };
+
+        // Send the motor instruction to the PI
+        await _client.Client.SendAsync(instructions);
+    }
 }
+
+
 
 /// <summary>
 /// Types of messages that can be sent to the ball spinner
 /// First 2 bits = Version number
 /// Last 6 bits = Message Type
+/// A_B -> App to Ball Spinner Controller
+/// B_A -> Ball Spinner Controller to App
+/// SD ->SMARTDOT(s)
 /// </summary>
 public enum MessageType : byte
 {
     /// <summary>
-    /// Connect to the ball spinner
+    /// Request connection to the Ball Spinner Controller
     /// </summary>
-    Connect = 0b00_00_00_01,
+    A_B_INIT_HANDSHAKE = 0x01,
 
     /// <summary>
-    /// Response from server about connecting to the ball spinner
+    /// Incoming acknowledgement of the connection to the Ball Spinner Controller
     /// </summary>
-    ConnectResponse = 0b00_00_00_10,
+    B_A_INIT_HANDSHAKE_ACK = 0x02,
 
     /// <summary>
-    /// Request for device information
+    /// Request for device name
     /// </summary>
-    GetDeviceInfo = 0b00_00_00_11,
+    A_B_NAME_REQ = 0x03,
 
     /// <summary>
-    /// Response from server containing device information
+    /// Response from Ball Spinner Controller containing device name
     /// </summary>
-    GetDeviceInfoResponse = 0b00_00_01_00,
+    B_A_NAME = 0x04,
 
     /// <summary>
-    /// Tell the server to connect to the smart dot module
+    /// Tell the Ball Spinner Controller to scan for available SmartDot modules
     /// </summary>
-    ConnectSmartDot = 0x05,
+    A_B_START_SCAN_FOR_SD = 0x05,
 
     /// <summary>
-    /// Response from server containing smart dot connection info
+    /// Response from server containing smart dot connection info, sent for each SmartDot module found by A_B_SCAN_FOR_SD
     /// </summary>
-    ConnectSmartDotResponse = 0x06,
-    
+    B_A_SCANNED_SD = 0x06,
+
+    /// <summary>
+    /// Send the chosen smart dot MAC address to the BSC to confirm the choice.
+    /// </summary>
+    A_B_CHOSEN_SD = 0x07,
+
+    /// <summary>
+    /// Receives 2 byte pairs that are used to say which values from the SmartDot Config bitmaps are valid options
+    /// </summary>
+    B_A_RECEIVE_CONFIG_INFO = 0x08,
+
+    /// <summary>
+    /// Sends 2 byte pairs that with each byte only having one 1. 
+    /// This message selects the desired config options and sends them to the Ball Spinner Controller
+    /// </summary>
+    A_B_RECEIVE_CONFIG_INFO = 0x09,
+
     /// <summary>
     /// Indicates a SmartDot data packet
     /// </summary>
-    SmartDotDataPacket = 0x0A,
+    B_A_SD_SENSOR_DATA = 0x0B,
+
+    /// <summary>
+    /// Set Motor Voltages packet type
+    /// </summary>
+    A_B_MOTOR_INSTRUCTIONS = 0x0C,
+
+    /// <summary>
+    /// Stop the motors on the BSC
+    /// </summary>
+    A_B_STOP_MOTOR = 0x0D,
+
+    ///<summary>
+    /// Disconnect from the BSC
+    /// </summary>
+    A_B_DISCONNECT_FROM_BSC = 0x0E,
+
+    ///<summary>
+    /// Enable or disable SD taking/sending data.
+    /// </summary>
+    A_B_SD_TOGGLE_TAKE_DATA = 0x0F,
 
     /// <summary>
     /// Send or receive raw, UTF-8 text

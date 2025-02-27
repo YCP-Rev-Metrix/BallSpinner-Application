@@ -70,11 +70,14 @@ public static class MauiProgram
                         }
                     }
 
+                    //This is just a hard coded way to prevent the login page from being closed on the system
+                    /*
                     appWindow.Closing += (window, closeEvent) =>
                     {
                         if(window.Title.Contains("Login")) //Ugly hack
                             closeEvent.Cancel = true;
                     };
+                    */
                 });
             });
         });

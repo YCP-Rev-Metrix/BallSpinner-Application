@@ -4,6 +4,7 @@ using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
@@ -68,7 +69,7 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         _ballSpinner.PropertyChanged += BallSpinner_PropertyChanged;
         _ballSpinner.OnConnectionChanged += BallSpinner_OnConnectionChanged;
 
-        BallSpinner_OnConnectionChanged(_ballSpinner.IsConnected());
+        //BallSpinner_OnConnectionChanged(_ballSpinner.IsConnected()); Caused double smartdot connection screen
     }
 
     private async void BallSpinner_OnConnectionChanged(bool connected)
@@ -121,6 +122,31 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         _ballSpinner.PropertyChanged -= BallSpinner_PropertyChanged;
         _ballSpinner.OnConnectionChanged -= BallSpinner_OnConnectionChanged;
 
+        DisconnectFromBSC();
+
         _ballSpinner.Dispose();
     }
+    private void DisconnectFromBSC()
+    {
+        //If the ballspinner is TCP connection based as a BallSpinnerClass then we need to disconnect it when we turn off 
+        BallSpinnerClass bs = BallSpinner as BallSpinnerClass;
+        if (BallSpinner is BallSpinnerClass spinner)
+        {
+            TCP conn = spinner.GetConnection();
+            if (conn != null)
+            {
+                conn.DisconnectFromBSC();
+                Debug.WriteLine("Sent Disconnect REquest from bsa to bsc");
+            }
+
+        }
+    }
+    public void OpenSmartDotSettings()
+    {
+        _frontEnd.SmartDotSettings(this);
+    }
+    
+    //TODO: Function call to Backend to get ODR & sample rates
+
+    //TODO: Function call to Backend to pass selected sample rates
 }

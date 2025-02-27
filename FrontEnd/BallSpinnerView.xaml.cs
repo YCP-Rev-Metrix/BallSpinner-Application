@@ -1,4 +1,8 @@
+using RevMetrix.BallSpinner.BackEnd;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
+using RevMetrix.BallSpinner.BackEnd.BallSpinner;
+using System.Diagnostics;
+
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 
@@ -24,7 +28,7 @@ public partial class BallSpinnerView : ContentView
     }
 
     private void OnRemoveBallSpinnerButton(object sender, EventArgs args)
-    {
+    {       
         _viewModel.MainPage.RemoveBallSpinner(_viewModel);
     }
 
@@ -52,5 +56,10 @@ public partial class BallSpinnerView : ContentView
     private void Reconnect_Clicked(object sender, EventArgs e)
     {
         _viewModel.Reconnect();
+    }
+
+    private void OnSettingsButtonClicked(object sender, EventArgs e)
+    {
+        _viewModel.OpenSmartDotSettings();
     }
 }

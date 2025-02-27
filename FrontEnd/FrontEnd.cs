@@ -28,6 +28,7 @@ public class FrontEnd : IFrontEnd
     private Window? _newInitialValuesWindow;
     private Window? _newCloudManagementWindow;
     private Window? _newArsenalWindow;
+    private Window? _newSmartDotSettingsWindow;
 
     /// <summary>
     /// Called before <see cref="Backend"/> is initialized
@@ -145,11 +146,14 @@ public class FrontEnd : IFrontEnd
             X = 100,
             Y = 100
         };
-        await MainThread.InvokeOnMainThreadAsync(()=>
+        Application.Current!.OpenWindow(smartDotPage);
+
+        /*await MainThread.InvokeOnMainThreadAsync(() =>
         {
+            Console.WriteLine("Opening SmartDotsPage");
             Application.Current!.OpenWindow(smartDotPage);
-        });
-        
+        }); This broke the smartdot connection*/
+
         smartDotPage.Destroying += (object? sender, EventArgs e) =>
         {
             smartDotPage = null;
@@ -182,7 +186,7 @@ public class FrontEnd : IFrontEnd
         Application.Current!.OpenWindow(_newInitialValuesWindow);
         _newInitialValuesWindow.Destroying += (object? sender, EventArgs e) =>
         {
-            _newCloudManagementWindow = null;
+            _newInitialValuesWindow = null;
         };
     }
 
@@ -227,5 +231,35 @@ public class FrontEnd : IFrontEnd
         {
             _newArsenalWindow = null;
         };
+    }
+
+    public void SmartDotSettings(BallSpinnerViewModel viewModel)
+    {
+        if (_newSmartDotSettingsWindow != null)
+            return;
+
+        _newSmartDotSettingsWindow = new Window(new SmartDotSettingsPage(this, viewModel))
+        {
+            Title = "Simulation Settings",
+            Width = 500,
+            Height = 400,
+            X = 100,
+            Y = 100
+        };
+
+        Application.Current!.OpenWindow(_newSmartDotSettingsWindow);
+        _newSmartDotSettingsWindow.Destroying += (object? sender, EventArgs e) =>
+        {
+            _newSmartDotSettingsWindow = null;
+        };
+    }
+
+    public void CloseSmartDotSettings()
+    {
+        if (_newSmartDotSettingsWindow != null)
+        {
+            Application.Current!.CloseWindow(_newSmartDotSettingsWindow);
+            _newSmartDotSettingsWindow = null;
+        }
     }
 }

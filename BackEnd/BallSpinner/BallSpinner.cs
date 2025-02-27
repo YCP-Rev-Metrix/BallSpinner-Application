@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Common.POCOs;
+using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -9,13 +11,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using Timer = System.Timers.Timer;
+using CsvHelper.Configuration.Attributes;
+using Microsoft.Maui;
+using Newtonsoft.Json.Linq;
 
 namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 
 /// <summary>
 /// The real, physical ball spinner device
 /// </summary>
-public class BallSpinner : IBallSpinner
+public class BallSpinnerClass : IBallSpinner
 {
     /// <inheritdoc/>
     public string Name { get; set; } = "Real Device";
@@ -49,11 +54,85 @@ public class BallSpinner : IBallSpinner
     private byte _currentVoltage = 0;
     private Timer? _motorTimer;
 
+    /// <summary>
+    /// The different config settings for the Range (+/-)
+    /// </summary>
+   
+    public static readonly double[][] RANGE_OPTIONS = {
+        [2, 4, 8, 16,-1, -1, -1, -1],
+        [125,250,500,1000,2000, -1, -1 ,-1],
+        [2, 4, 8, 16, 8, 16, 32, 64],
+        [1, 2, 3, 4, 5, 6, 7, 8],
+    };
+
+    /// <summary>
+    /// The different config settings for sample rates. 
+    ///Each index corresponds to an axis measurements
+    /// 0 - Accelerometer
+    /// 1 - Gyro
+    /// 2 - Mag
+    /// 3 - Light
+    /// </summary>
+    public static readonly double[][] SAMPLE_RATES = 
+    { 
+        //12 should be 12.5 
+        [12.5, 25, 50, 100, 200, 400, 800, 1600],
+        [25, 50, 100, 200, 400, 800, 1600, 3200, 6400],
+        [5, 10, 15, 20, 25, 100, -1, -1, -1], 
+        [25, 50, 100, 200, 400, 800, 1600, 3200, 6400]
+    };
+
+    // Each index corresponds to an axis measurements
+    // 0 - Accelerometer
+    // 1 - Gyro
+    // 2 - Mag
+    // 3 - Light
+    // This applies to all of the indicies for the four arrays below
+
+    /// <summary>
+    /// List of available Ranges, index 0 - XL, index 1 - GY, index 2 - MG, index 3 - LT
+    /// </summary>
+    public List<List<double>> AvailableRanges = new List<List<double>>();
+    /// <summary>
+    /// List of available Sample Rates (Frequency), index 0 - XL, index 1 - GY, index 2 - MG, index 3 - LT
+    /// </summary>
+    public List<List<double>> AvailableSampleRates = new List<List<double>>();
+
+    /// <summary>
+    /// The SmartDot's currently selected Range value for each index.
+    /// Each index corresponds to an axis measurements
+    /// 0 - Accelerometer
+    /// 1 - Gyro
+    /// 2 - Mag
+    /// 3 - Light
+    /// </summary>
+    private double[] CurrentRanges = new double[4];
+
+    /// <summary>
+    /// The SmartDot's currently selected sample rate value for each index. 
+    /// Each index corresponds to an axis measurements
+    /// 0 - Accelerometer
+    /// 1 - Gyro
+    /// 2 - Mag
+    /// 3 - Light 
+    /// </summary>
+    private double[] CurrentSampleRates = new double[4];
+
     /// <summary />
-    public BallSpinner(IPAddress address)
+    public BallSpinnerClass(IPAddress address)
     {
         _address = address;
         InitializeConnection();
+
+        //Me testing - brandon
+        //third and 4th index are for testing special gyro output. Should get 3200 and 6400 for gyro
+        //gyro should be rate == 25, 6400
+        //range should be 1
+        byte[] data = { 3, 1, 1, 0b10_00_00_01, 2, 2, 4, 4};
+       // Debug.WriteLine($"Range byte: 0b{Convert.ToString(data[0], 2).PadLeft(8, '0')}");
+
+       // SmartDotConfigReceivedEvent(data);
+
     }
 
     /// <inheritdoc/>
@@ -79,7 +158,16 @@ public class BallSpinner : IBallSpinner
         if (_connection != null && _connection.Connected)
             OnConnected();
     }
-
+    /// <summary>
+    /// Get a reference to the TCP connection
+    /// </summary>
+    /// <returns></returns>
+    public TCP GetConnection()
+    {
+        if(IsConnected())
+            return _connection;
+        return null;
+    }
     private async void OnConnected()
     {
         PropertyChanged?.Invoke(null, new PropertyChangedEventArgs("Connected"));
@@ -87,13 +175,18 @@ public class BallSpinner : IBallSpinner
         Name = await _connection!.GetDeviceInfo();
         PropertyChanged?.Invoke(null, new PropertyChangedEventArgs(nameof(Name)));
 
-        _connection!.ConnectSmartDot(null);
+        _connection!.ScanForSmartDots();
         _connection.SmartDotAddressReceivedEvent += SmartDotAddressReceivedEvent;
 
         // Subscribe to smartDotRecieved event. Will trigger when a smartdot packet is received
         _connection.SmartDotReceivedEvent += SmartDotRecievedEvent;
 
+        //subscribe to SmartDotConfigReceivedEvent. Will trigger when config packet is received
+        _connection.SmartDotConfigReceivedEvent += SmartDotConfigReceivedEvent;
+
         OnConnectionChanged?.Invoke(true);
+
+
     }
 
     /// <inheritdoc/>
@@ -102,9 +195,102 @@ public class BallSpinner : IBallSpinner
         await _connection!.ConnectSmartDot(address);
     }
 
+    /// <inheritdoc/>
+    public async void ScanForSmartDots()
+    {
+        await _connection!.ScanForSmartDots();
+    }
+
+    private void SmartDotConfigReceivedEvent(byte[] data)
+    {
+        Debug.WriteLine("Triggered the Smart Dot COnfig Received Event!");
+        //Convert the data from the bytes and set the AvailableRange and Rate arrays
+        
+        List<double> XL_rates = new List<double>();
+        List<double> GY_rates = new List<double>();
+        List<double> MG_rates = new List<double>();
+        List<double> LT_rates = new List<double>();
+
+        List<double> XL_ranges = new List<double>();
+        List<double> GY_ranges = new List<double>();
+        List<double> MG_ranges = new List<double>();
+        List<double> LT_ranges = new List<double>();
+
+        int bitLength = 8 - 1; //8 Bits - 1 to offset for array
+
+        // Set XL_rates and XL_ranges
+        for (int i = 0; i < 8; i++)
+        {
+            if ((data[0] & (128 >> i)) != 0) XL_rates.Add(SAMPLE_RATES[0][bitLength - i]);
+            if ((data[1] & (128 >> i)) != 0) XL_ranges.Add(RANGE_OPTIONS[0][bitLength - i]);
+        }
+
+        // Set GY_rates and GY_ranges
+        for (int i = 0; i < 8; i++)
+        {
+            //GY uses 9 bits for the rates and 7 for the range.
+            if ((data[2] & (128 >> i)) != 0) GY_rates.Add(SAMPLE_RATES[1][bitLength - i]);
+
+            if (i != 0)  //only use the 7 bits account for skipping i = 0
+                if ((data[3] & (128 >> i)) != 0) GY_ranges.Add(RANGE_OPTIONS[1][(bitLength - i)]);
+        }
+        //Grab the first bit out of the range byte and use it as the 9th bit for GY_Rates
+        if ((data[3] & 128) == 128) GY_rates.Add(SAMPLE_RATES[1][8]);
+
+        // Set MG_rates and MG_ranges
+        for (int i = 0; i < 8; i++)
+        {
+            if ((data[4] & (128 >> i)) != 0) MG_rates.Add(SAMPLE_RATES[2][bitLength - i]);
+            if ((data[5] & (128 >> i)) != 0) MG_ranges.Add(RANGE_OPTIONS[2][bitLength - i]);
+        }
+
+        // Set LT_rates and LT_ranges
+        for (int i = 0; i < 8; i++)
+        {
+            if ((data[6] & (128 >> i)) != 0) LT_rates.Add(SAMPLE_RATES[3][bitLength - i]);
+            if ((data[7] & (128 >> i)) != 0) LT_ranges.Add(RANGE_OPTIONS[3][bitLength - i]);
+        }
+
+        //Add the avaialable rates in the correct order to keep the indexing consistent
+        AvailableSampleRates.Add(XL_rates);
+        AvailableSampleRates.Add(GY_rates);
+        AvailableSampleRates.Add(MG_rates);
+        AvailableSampleRates.Add(LT_rates);
+
+        //Add the available ranges in the correct order to keep the indexing consistent
+        AvailableRanges.Add(XL_ranges);
+        AvailableRanges.Add(GY_ranges);
+        AvailableRanges.Add(MG_ranges);
+        AvailableRanges.Add(LT_ranges);
+
+        foreach (List<double> l in AvailableRanges)
+            l.Sort();
+        foreach (List<double> l in AvailableSampleRates)
+            l.Sort();
+
+        Debug.WriteLine("Available Sample Rates:");
+        for (int i = 0; i < AvailableSampleRates.Count; i++)
+        {
+            Debug.WriteLine($"Index {i}: " + string.Join(", ", AvailableSampleRates[i]));
+        }
+
+        Debug.WriteLine("\nAvailable Ranges:");
+        for (int i = 0; i < AvailableRanges.Count; i++)
+        {
+            Debug.WriteLine($"Index {i}: " + string.Join(", ", AvailableRanges[i]));
+        }
+        Debug.WriteLine("Beginning to send back an artificial message for config");
+
+        //Testing
+        //double[] r = new double[4];
+        //double[] sr = new double[4];
+        //r = [4, 250 , 8, 3];
+        //sr = [1600,6400,10,100];
+        //SubmitSmartDotConfig(r, sr);
+    }
     private void SmartDotAddressReceivedEvent(PhysicalAddress address)
     {
-        Debug.WriteLine("Device address: " + address.ToString());
+        Debug.WriteLine("Device address: " + address.ToString() + " This has extra bytes from the product name");
         OnSmartDotMACAddressReceived?.Invoke(address);
     }
 
@@ -112,6 +298,7 @@ public class BallSpinner : IBallSpinner
     {
         DataParser.SendSmartDotToSubscribers(sensorType, timeStamp, sampleCount, XData, YData, ZData);
     }
+    
 
     /// <inheritdoc/>
     public bool IsConnected()
@@ -140,7 +327,7 @@ public class BallSpinner : IBallSpinner
     /// <inheritdoc/>
     public void Start()
     {
-        Stop();
+        //Stop();
 
         DataParser.Start(Name);
 
@@ -148,6 +335,7 @@ public class BallSpinner : IBallSpinner
         _motorTimer = new Timer(TimeSpan.FromSeconds(0.25));
         _motorTimer.Elapsed += OnTimedEvent;
         _motorTimer.Start();
+
     }
 
     /// <inheritdoc/>
@@ -156,11 +344,114 @@ public class BallSpinner : IBallSpinner
         _motorTimer?.Dispose();
         _motorTimer = null;
 
-        _connection?.SetMotorVoltages(0, 0, 0);
+        //_connection?.SetMotorVoltages(0, 0, 0);
+        _connection?.StopMotorInstructions();
 
         DataParser.Stop();
     }
 
+    /// <inheritdoc/>
+    public bool IsSmartDotPaired()
+    {
+        if (!IsConnected())
+            return false;
+
+        if (!string.IsNullOrEmpty(SmartDotMAC))
+            return false;
+        
+        return true;
+    }
+
+    /// <summary>
+    /// Called from the ballspinner object to disconnect from the BSC
+    /// </summary>
+    public void DisconnectFromBSC()
+    {
+        _connection.DisconnectFromBSC();
+    }
+
+    /// <summary>
+    /// Called from the ballspinner object to toggle the SD taking data
+    /// </summary>
+    /// <param name="shouldTakeData"></param>
+    public void ToggleSDTakeData(bool shouldTakeData)
+    {
+        _connection.ToggleSDTakeData(shouldTakeData);
+    }
+    /// <inheritdoc/>
+    public void SubmitSmartDotConfig(double[] Ranges, double[] SampleRates)
+    {
+        if (!IsSmartDotPaired())
+            throw new Exception("Smart Dot must be paired in order to send config settings");
+
+        //Set our current config arrays to the new values.
+        CurrentRanges = Ranges;
+        CurrentSampleRates = SampleRates;
+
+        //Convert the sample rate into a 4 bit index and the range value into a 4 bit index 
+        //Pack these byte index pairs into byte array then message and send it to the pi.
+        byte[] bytes = new byte[4];
+        for (int i = 0; i < Ranges.Length; i++)
+        {
+            Debug.WriteLine($"Value of SampleRates[i] == {SampleRates[i]}");
+            int sampleRateIndex = GetIndexOfValue(i, SampleRates[i], true);
+            Debug.WriteLine($"Value of Ranges[i] == {Ranges[i]}");
+            int rangeIndex = GetIndexOfValue(i, Ranges[i], false);
+
+            Debug.WriteLine($"Axis {i}: SampleRateIndex={sampleRateIndex}, RangeIndex={rangeIndex}");
+
+            bytes[i] = Two4BitIntToByte(sampleRateIndex, rangeIndex);
+        }
+        for (int i = 0; i < bytes.Length; i++)
+        {
+            Debug.WriteLine($"BYTE: [{i}]");
+        }
+
+  
+        //TCP send message
+        _connection.SendConfigData(bytes);
+    }
+
+    ///<summary>
+    ///Takes in the chosen values from the UI for the config
+    ///index: 0 - XL, 1 - GY, 2 - MG, 3 - LT
+    ///</summary>
+    private int GetIndexOfValue(int index, double value, bool isSampleRate)
+    {
+        double[] lookupArray = isSampleRate ? SAMPLE_RATES[index] : RANGE_OPTIONS[index];
+
+        for (int i = 0; i < lookupArray.Length; i++)
+        {
+            if (lookupArray[i] == value)
+                return i; // Return the index when a match is found
+        }
+
+        Debug.WriteLine($"Value {value} not found in {(isSampleRate ? "SAMPLE_RATES" : "RANGE_OPTIONS")}[{index}]");
+        return -1; // Return -1 if value is not found
+    }
+    private byte Two4BitIntToByte(int index1, int index2)
+    {
+        if (index1 < 0 || index1 > 15 || index2 < 0 || index2 > 15)
+            throw new ArgumentOutOfRangeException("Both numbers must be between 0 and 15.");
+
+        byte result = (byte)((index1 << 4) | index2);
+
+
+        //Print as binary
+        Debug.WriteLine($" {result} Range byte: 0b{Convert.ToString(result, 2).PadLeft(8, '0')}");
+        return result;
+    }
+    /// <inheritdoc/>
+    public List<List<double>> GetAvailableRanges()
+    {
+        return AvailableRanges;
+    }
+
+    /// <inheritidoc/>
+    public List<List<double>> GetAvailableSampleRates()
+    {
+        return AvailableSampleRates;
+    }
     private void OnTimedEvent(object? source, ElapsedEventArgs e)
     {
         if (!IsConnected())
