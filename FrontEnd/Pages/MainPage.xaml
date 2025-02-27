@@ -3,8 +3,8 @@
     x:Class="RevMetrix.BallSpinner.FrontEnd.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:RevMetrix.BallSpinner.FrontEnd">
-
+    xmlns:local="clr-namespace:RevMetrix.BallSpinner.FrontEnd;assembly=FrontEnd"
+    xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui">
     <ContentPage.MenuBarItems>
         <MenuBarItem IsEnabled="{Binding LoggedIn}" Text="File">
             <MenuFlyoutItem
@@ -73,8 +73,9 @@
             IsEnabled="false"
             Text="Reset" />
     </ContentPage.ToolbarItems>
-
-    <Grid>
+    <ContentPage.Content>
+        <Grid>
+            <!--
         <ScrollView VerticalScrollBarVisibility="Always">
             <StackLayout>
                 <CollectionView
@@ -114,7 +115,11 @@
                     VerticalOptions="CenterAndExpand"
                     VerticalTextAlignment="Center" />
             </VerticalStackLayout>
+        </Grid>-->
+            <lvc:CartesianChart 
+                HeightRequest="300"
+                Series="{Binding Series}">
+            </lvc:CartesianChart>
         </Grid>
-       
-    </Grid>
+    </ContentPage.Content>
 </ContentPage>

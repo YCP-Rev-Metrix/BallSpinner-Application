@@ -23,7 +23,7 @@ public partial class MainPage : ContentPage
     {
         InitializeComponent();
 
-        BindingContext = this;
+        BindingContext = new RevMetrix.BallSpinner.FrontEnd.TestChart2();
     }
 
     public void Init(FrontEnd frontEnd, IDatabase database)
