@@ -20,7 +20,9 @@ namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 /// <summary>
 /// The real, physical ball spinner device
 /// </summary>
-public class BallSpinner : IBallSpinner
+public class BallSpinnerClass : IBallSpinner 
+//Name was changed from BallSpinner to BallSpinnerClass to workaround the namespace having
+//the identical name. This allows us to cast to BallSpinner in other files.
 {
     /// <inheritdoc/>
     public string Name { get; set; } = "Real Device";
@@ -119,7 +121,7 @@ public class BallSpinner : IBallSpinner
     private double[] CurrentSampleRates = new double[4];
 
     /// <summary />
-    public BallSpinner(IPAddress address)
+    public BallSpinnerClass(IPAddress address)
     {
         _address = address;
         InitializeConnection();
@@ -158,7 +160,16 @@ public class BallSpinner : IBallSpinner
         if (_connection != null && _connection.Connected)
             OnConnected();
     }
-
+    /// <summary>
+    /// Get a reference to the TCP connection
+    /// </summary>
+    /// <returns></returns>
+    public TCP GetConnection()
+    {
+        if(IsConnected())
+            return _connection;
+        return null;
+    }
     private async void OnConnected()
     {
         PropertyChanged?.Invoke(null, new PropertyChangedEventArgs("Connected"));
@@ -275,9 +286,9 @@ public class BallSpinner : IBallSpinner
         //Testing
         //double[] r = new double[4];
         //double[] sr = new double[4];
-        //r = [4, 250 , 8, 3];
-        //sr = [1600,6400,10,100];
-        //SubmitSmartDotConfig(r, sr);
+        //r = [4, 250, 8, 3];
+        //sr = [1600, 6400, 10, 100];
+        //SubmitSmartDotConfig(r, sr, true, false, false ,true);
     }
     private void SmartDotAddressReceivedEvent(PhysicalAddress address)
     {
@@ -370,7 +381,7 @@ public class BallSpinner : IBallSpinner
         _connection.ToggleSDTakeData(shouldTakeData);
     }
     /// <inheritdoc/>
-    public void SubmitSmartDotConfig(double[] Ranges, double[] SampleRates)
+    public void SubmitSmartDotConfig(double[] Ranges, double[] SampleRates, bool XL_OFF, bool GY_OFF, bool MAG_OFF, bool LT_OFF)
     {
         if (!IsSmartDotPaired())
             throw new Exception("Smart Dot must be paired in order to send config settings");
@@ -393,12 +404,16 @@ public class BallSpinner : IBallSpinner
 
             bytes[i] = Two4BitIntToByte(sampleRateIndex, rangeIndex);
         }
+
+        if (XL_OFF) bytes[0] = 255;
+        if (GY_OFF) bytes[1] = 255; 
+        if (MAG_OFF) bytes[2] = 255;
+        if (LT_OFF) bytes[3] = 255;
         for (int i = 0; i < bytes.Length; i++)
         {
-            Debug.WriteLine($"BYTE: [{i}]");
-        }
+            Debug.WriteLine($"BYTE: [{i}] == {bytes[i]}");
 
-  
+        }
         //TCP send message
         _connection.SendConfigData(bytes);
     }

@@ -146,11 +146,14 @@ public class FrontEnd : IFrontEnd
             X = 100,
             Y = 100
         };
-        await MainThread.InvokeOnMainThreadAsync(()=>
+        Application.Current!.OpenWindow(smartDotPage);
+
+        /*await MainThread.InvokeOnMainThreadAsync(() =>
         {
+            Console.WriteLine("Opening SmartDotsPage");
             Application.Current!.OpenWindow(smartDotPage);
-        });
-        
+        }); This broke the smartdot connection*/
+
         smartDotPage.Destroying += (object? sender, EventArgs e) =>
         {
             smartDotPage = null;

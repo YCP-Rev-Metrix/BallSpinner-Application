@@ -30,7 +30,7 @@ public partial class NewBallSpinnerView : ContentPage
 		{
 			try
 			{
-				_task.SetResult(new BackEnd.BallSpinner.BallSpinner(IPAddress.Parse(addr)));
+				_task.SetResult(new BackEnd.BallSpinner.BallSpinnerClass(IPAddress.Parse(addr)));
 			}
             catch (Exception e)
             {

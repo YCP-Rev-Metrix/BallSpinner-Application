@@ -1,4 +1,8 @@
+using RevMetrix.BallSpinner.BackEnd;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
+using RevMetrix.BallSpinner.BackEnd.BallSpinner;
+using System.Diagnostics;
+
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 
@@ -24,7 +28,7 @@ public partial class BallSpinnerView : ContentView
     }
 
     private void OnRemoveBallSpinnerButton(object sender, EventArgs args)
-    {
+    {       
         _viewModel.MainPage.RemoveBallSpinner(_viewModel);
     }
 
