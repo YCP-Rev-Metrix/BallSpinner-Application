@@ -13,6 +13,14 @@
                 <HorizontalStackLayout>
                     <Label FontSize="16"
                            WidthRequest="110"
+                           Text="Enabled: " />
+                    <CheckBox x:Name="AccelerationEnabled"
+                              IsChecked="True"
+                              CheckedChanged="OnEnabledToggleChanged" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                           WidthRequest="110"
                            Text="Range:"/>
                     <Picker x:Name="AccelrationRange"
                             ItemsSource="{Binding Ranges[0]}">
@@ -31,6 +39,14 @@
                        Margin="10" 
                        TextDecorations="Underline"
                        Text="Rotation"/>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                           WidthRequest="110"
+                           Text="Enabled: " />
+                    <CheckBox x:Name="RotationEnabled"
+                              IsChecked="True"
+                              CheckedChanged="OnEnabledToggleChanged" />
+                </HorizontalStackLayout>
                 <HorizontalStackLayout>
                     <Label FontSize="16"
                            WidthRequest="110"
@@ -56,6 +72,14 @@
                 <HorizontalStackLayout>
                     <Label FontSize="16"
                            WidthRequest="110"
+                           Text="Enabled: " />
+                    <CheckBox x:Name="MagnatometerEnabled"
+                              IsChecked="True"
+                              CheckedChanged="OnEnabledToggleChanged" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                           WidthRequest="110"
                            Text="Range:"/>
                     <Picker x:Name="MagnatometerRange"
                             ItemsSource="{Binding Ranges[2]}"/>
@@ -76,6 +100,14 @@
                 <HorizontalStackLayout>
                     <Label FontSize="16"
                            WidthRequest="110"
+                           Text="Enabled: " />
+                    <CheckBox x:Name="LightEnabled"
+                              IsChecked="True"
+                              CheckedChanged="OnEnabledToggleChanged" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label FontSize="16"
+                           WidthRequest="110"
                            Text="Range:"/>
                     <Picker x:Name="LightRange"
                             ItemsSource="{Binding Ranges[3]}"/>
@@ -89,5 +121,10 @@
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </HorizontalStackLayout>
+
+        <Button
+            Clicked="OnSubmitButtonClicked"
+            Text="Submit" />
+
     </VerticalStackLayout>
 </ContentPage>
