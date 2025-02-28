@@ -22,10 +22,10 @@ public class InitialValuesModel
         List<double> y = new List<double>();
 
         // generate t (which is also resolution of curve)
-        for (double i = 0; i <= 1; i += 0.001)
+        for (double i = 0; i <= 1; i += 0.005)
         {
             //Assume x = t = 100s
-            x.Add(i);
+            x.Add(i*100);
             //Y from 0 to 800
             y.Add(i *800);
             t.Add(i);
@@ -38,7 +38,7 @@ public class InitialValuesModel
 
         //Hardcoded to generate data for testing
         double P1x = 0  /*pointInit.x*/, P1y = 0 /*pointInit.y*/;
-        double P3x = 50 /*inflectPoint.x*/, P3y = 400 /*inflectPoint.y*/;
+        double P3x = 70 /*inflectPoint.x*/, P3y = 50 /*inflectPoint.y*/;
         
         //Hardcoded to generate data for testing
         double P5x = 100, P5y = 800;
