@@ -71,7 +71,7 @@ public class InitialValuesModel
                     4 * tThird * ti * P2y +
                     6 * Math.Pow(oneMinusT, 2) * Math.Pow(ti, 2) * P3y +
                     4 * oneMinusT * Math.Pow(ti, 3) * P4y +
-                    tFourth * P5y);
+                    Math.Pow(ti, 4) * P5y);
         }
 
         result.Add(BezierXAxis);
