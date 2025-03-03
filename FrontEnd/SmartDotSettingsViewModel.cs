@@ -25,6 +25,7 @@ internal class SmartDotSettingsViewModel
 
         BuildRanges();
         BuildSampleRates();
+        BuildEnables([false, false, false, false]);
     }
 
     public void BuildRanges()
