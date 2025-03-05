@@ -18,11 +18,11 @@ public partial class MainPage : ContentPage
 
     public bool NotLoggedIn => !LoggedIn;
     public bool LoggedIn { get; private set; } = false;
+
     /// <summary/>
     public MainPage()
     {
         InitializeComponent();
-
         BindingContext = this;
     }
 
@@ -87,12 +87,13 @@ public partial class MainPage : ContentPage
                 { DevicePlatform.WinUI, new[] { ".csv"} }, // file extension
                 { DevicePlatform.macOS, new[] { "csv"} } // UTType values
             });
-        
+
         PickOptions options = new()
         {
             PickerTitle = "Please select a csv file",
             FileTypes = customFileType,
         };
+
         FileResult result = await FilePicker.Default.PickAsync(options);
         if (result != null)
         {
@@ -120,13 +121,13 @@ public partial class MainPage : ContentPage
                         if (name != null)
                         {
                             await _database.UploadShot(ballSpinner.BallSpinner, name, 0);
-                        } 
+                        }
                     }
                     else
                     {
                         // local option selected
                         string name = await DisplayPromptAsync("Notice", "Please name your file");
-                    
+
                         if (name != null)
                         {
                             try
@@ -171,11 +172,11 @@ public partial class MainPage : ContentPage
     {
         foreach (var spinner in BallSpinners)
         {
-            if(spinner.NotConnectedFadeVisible)
+            if (spinner.NotConnectedFadeVisible)
             {
                 DisplayAlert("Can't start", "All ball spinners must be connected.", "Okay");
                 return;
-            }    
+            }
         }
 
         foreach (var spinner in BallSpinners)
@@ -203,7 +204,7 @@ public partial class MainPage : ContentPage
     {
         var ballSpinner = await _frontEnd.AddBallSpinner();
 
-        if(ballSpinner != null)
+        if (ballSpinner != null)
         {
             BallSpinners.Add(new BallSpinnerViewModel(_frontEnd, this, ballSpinner));
             OnPropertyChanged(nameof(BallSpinners));
