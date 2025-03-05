@@ -99,7 +99,7 @@
             </StackLayout>
         </ScrollView>
 
-        <!-- <Grid IsVisible="{Binding NotLoggedIn}">
+        <Grid IsVisible="{Binding NotLoggedIn}">
             <BoxView
                 HorizontalOptions="FillAndExpand"
                 InputTransparent="True"

@@ -76,7 +76,13 @@ public static class MauiProgram
                     */
                 });
             });
+
         });
+        builder.ConfigureMauiHandlers(handlers =>
+            {
+                handlers.AddHandler<OpenGLView, OpenGLViewHandler>();
+
+            });
 #endif
 
         return builder.Build();
