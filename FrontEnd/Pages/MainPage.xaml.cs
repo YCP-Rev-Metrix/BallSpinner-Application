@@ -1,3 +1,6 @@
+using LiveChartsCore.SkiaSharpView.Drawing.Geometries;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore;
 using RevMetrix.BallSpinner.BackEnd;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using RevMetrix.BallSpinner.BackEnd.Common.Utilities;
@@ -13,7 +16,10 @@ public partial class MainPage : ContentPage
 {
     private FrontEnd _frontEnd = null!;
     private IDatabase _database = null!;
-
+    public ISeries[] AccelerationChartValues { get; set; }
+    public ISeries[] RotationChartValues{ get; set; }
+    public ISeries[] MagnetometerChartValues { get; set; }
+    public ISeries[] LightChartValues { get; set; }
     public ObservableCollection<BallSpinnerViewModel> BallSpinners { get; } = new();
 
     public bool NotLoggedIn => !LoggedIn;
@@ -23,7 +29,8 @@ public partial class MainPage : ContentPage
     {
         InitializeComponent();
 
-        BindingContext = new RevMetrix.BallSpinner.FrontEnd.TestChart2();
+        //BindingContext = new RevMetrix.BallSpinner.FrontEnd.TestChart2();
+        BindingContext = this;
     }
 
     public void Init(FrontEnd frontEnd, IDatabase database)

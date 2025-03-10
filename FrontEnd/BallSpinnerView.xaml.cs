@@ -1,3 +1,6 @@
+using LiveChartsCore.SkiaSharpView.Drawing.Geometries;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore;
 using RevMetrix.BallSpinner.BackEnd;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
@@ -8,6 +11,7 @@ namespace RevMetrix.BallSpinner.FrontEnd;
 
 public partial class BallSpinnerView : ContentView
 {
+    
     private BallSpinnerViewModel _viewModel = null!;
 
 	public BallSpinnerView()
@@ -18,13 +22,14 @@ public partial class BallSpinnerView : ContentView
     protected override void OnBindingContextChanged()
     {
         base.OnBindingContextChanged();
-
         _viewModel = (BallSpinnerViewModel)BindingContext;
         _viewModel.LeftView.DataReceived += (metric, value, timeFromStart) => { DataReceived(_viewModel.LeftView, LeftView, metric, value, timeFromStart); };
-        _viewModel.TopMiddleView.DataReceived += (metric, value, timeFromStart) => { DataReceived(_viewModel.TopMiddleView, TopMiddleView, metric, value, timeFromStart); };
+        
+        /*_viewModel.TopMiddleView.DataReceived += (metric, value, timeFromStart) => { DataReceived(_viewModel.TopMiddleView, TopMiddleView, metric, value, timeFromStart); };
         _viewModel.TopRightView.DataReceived += (metric, value, timeFromStart) => { DataReceived(_viewModel.TopRightView, TopRightView, metric, value, timeFromStart); };
         _viewModel.BottomMiddleView.DataReceived += (metric, value, timeFromStart) => { DataReceived(_viewModel.BottomMiddleView, BottomMiddleView, metric, value, timeFromStart); };
         _viewModel.BottomRightView.DataReceived += (metric, value, timeFromStart) => { DataReceived(_viewModel.BottomRightView, BottomRightView, metric, value, timeFromStart); };
+    */
     }
 
     private void OnRemoveBallSpinnerButton(object sender, EventArgs args)

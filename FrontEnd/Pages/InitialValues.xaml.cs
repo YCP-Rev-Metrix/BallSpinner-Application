@@ -16,7 +16,7 @@ public partial class InitialValues : ContentPage
 
         BindingContext = new InitialValuesChart(axes[0], axes[1], axes[2], axes[3]);
         //BindingContext = this;
-        for(int i = 0; i <= 100; i+=10) //delete this loop when done, currently it is for outputting bezier values to console.
+        for(int i = 0; i <= 100; i+=5) //delete this loop when done, currently it is for outputting bezier values to console.
         {
             Console.Out.WriteLine("X = " + axes[2][i] + " , Y = " + axes[3][i]);
         }

@@ -9,7 +9,7 @@
         <Border>
             <VerticalStackLayout>
                 <Grid>
-                    <!--<Grid.ColumnDefinitions>
+                    <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
@@ -45,10 +45,7 @@
                             MaximumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
                             MinimumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
                             Text="🗙" />
-                    </HorizontalStackLayout>-->
-                    <lvc:CartesianChart
-                    Series="{Binding Series}">
-                    </lvc:CartesianChart>
+                    </HorizontalStackLayout>
                 </Grid>
 
                 <Grid HeightRequest="325">
@@ -84,11 +81,17 @@
                                     Grid.Row="0"
                                     Padding="3,0,0,0"
                                     Text="{Binding TopMiddleView.Name}" />
-                                <WebView
+                                <!--<WebView
                                     x:Name="TopMiddleView"
                                     Grid.Row="1"
                                     InputTransparent="True"
-                                    Source="{Binding TopMiddleView.Source}" />
+                                    Source="{Binding TopMiddleView.Source}" />-->
+                                <lvc:CartesianChart
+                                    InputTransparent="True"
+                                    Series="{Binding Series}"
+                                    x:Name="TopMiddleView"
+                                    Grid.Row="1">
+                                </lvc:CartesianChart>
                             </Grid>
                         </Border>
                         <Border Grid.Row="0" Grid.Column="1">
@@ -101,11 +104,17 @@
                                     Grid.Row="0"
                                     Padding="3,0,0,0"
                                     Text="{Binding BottomMiddleView.Name}" />
-                                <WebView
+                                <!--<WebView
                                     x:Name="BottomMiddleView"
                                     Grid.Row="1"
                                     InputTransparent="True"
-                                    Source="{Binding BottomMiddleView.Source}" />
+                                    Source="{Binding BottomMiddleView.Source}" />-->
+                                <lvc:CartesianChart
+                                    x:Name="BottomMiddleView"
+                                    Grid.Row="1"
+                                    InputTransparent="True"
+                                    Series="{Binding Series}">
+                                </lvc:CartesianChart>
                             </Grid>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="0">
@@ -118,11 +127,17 @@
                                     Grid.Row="0"
                                     Padding="3,0,0,0"
                                     Text="{Binding TopRightView.Name}" />
-                                <WebView
+                                <!--<WebView
                                     x:Name="TopRightView"
                                     Grid.Row="1"
                                     InputTransparent="True"
-                                    Source="{Binding TopRightView.Source}" />
+                                    Source="{Binding TopRightView.Source}" />-->
+                                <lvc:CartesianChart
+                                    x:Name="TopRightView"
+                                    Grid.Row="1"
+                                    InputTransparent="True"
+                                    Series="{Binding Series}">
+                                </lvc:CartesianChart>
                             </Grid>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="1">
@@ -135,11 +150,17 @@
                                     Grid.Row="0"
                                     Padding="3,0,0,0"
                                     Text="{Binding BottomRightView.Name}" />
-                                <WebView
+                                <!--<WebView
                                     x:Name="BottomRightView"
                                     Grid.Row="1"
                                     InputTransparent="True"
-                                    Source="{Binding BottomRightView.Source}" />
+                                    Source="{Binding BottomRightView.Source}" />-->
+                                <lvc:CartesianChart
+                                    x:Name="BottomRightView"
+                                    Grid.Row="1"
+                                    InputTransparent="True"
+                                    Series="{Binding Series}">
+                                </lvc:CartesianChart>
                             </Grid>
                         </Border>
                     </Grid>

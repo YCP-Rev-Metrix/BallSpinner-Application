@@ -22,7 +22,7 @@ public class InitialValuesModel
         List<double> y = new List<double>();
 
         // generate t (which is also resolution of curve)
-        for (double i = 0; i <= 1; i += 0.005)
+        for (double i = 0; i <= 1; i += 0.003)
         {
             //Assume x = t = 100s
             x.Add(i*100);
@@ -71,7 +71,7 @@ public class InitialValuesModel
                     4 * tThird * ti * P2y +
                     6 * Math.Pow(oneMinusT, 2) * Math.Pow(ti, 2) * P3y +
                     4 * oneMinusT * Math.Pow(ti, 3) * P4y +
-                    tFourth * P5y);
+                    Math.Pow(ti, 4) * P5y);
         }
 
         result.Add(BezierXAxis);

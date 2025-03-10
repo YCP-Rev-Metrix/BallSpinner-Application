@@ -75,13 +75,14 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid>
-            <!--
-        <ScrollView VerticalScrollBarVisibility="Always">
+
+            <ScrollView VerticalScrollBarVisibility="Always">
             <StackLayout>
                 <CollectionView
                     ItemsSource="{Binding BallSpinners}"
                     ItemsUpdatingScrollMode="KeepLastItemInView"
-                    VerticalScrollBarVisibility="Never">
+                    VerticalScrollBarVisibility="Never"
+                    x:Name="BallSpinnerContainer">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <local:BallSpinnerView />
@@ -99,27 +100,26 @@
             </StackLayout>
         </ScrollView>
 
-        <Grid IsVisible="{Binding NotLoggedIn}">
-            <BoxView
+            <Grid IsVisible="{Binding NotLoggedIn}">
+                <BoxView
                 HorizontalOptions="FillAndExpand"
                 InputTransparent="True"
                 Opacity="0.5"
                 VerticalOptions="FillAndExpand"
                 Color="Black" />
-            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                <Label
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label
                     Margin="10"
                     HorizontalOptions="CenterAndExpand"
                     HorizontalTextAlignment="Center"
                     Text="Not logged in"
                     VerticalOptions="CenterAndExpand"
                     VerticalTextAlignment="Center" />
-            </VerticalStackLayout>
-        </Grid>-->
-            <lvc:CartesianChart 
-                HeightRequest="300"
+                </VerticalStackLayout>
+            </Grid>
+            <!--<lvc:CartesianChart
                 Series="{Binding Series}">
-            </lvc:CartesianChart>
+            </lvc:CartesianChart>-->
         </Grid>
     </ContentPage.Content>
 </ContentPage>
