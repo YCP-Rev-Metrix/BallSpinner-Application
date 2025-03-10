@@ -37,7 +37,7 @@ public class FrontEnd : IFrontEnd
     {
         Console.WriteLine("FrontEnd Pre-Init");
 
-        _webViewServer = new WebViewServer();
+        //_webViewServer = new WebViewServer();
     }
 
     /// <summary>

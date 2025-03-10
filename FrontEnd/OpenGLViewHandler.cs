@@ -14,22 +14,27 @@ public class OpenGLViewHandler : ViewHandler<OpenGLView, SwapChainPanel>
     public static IPropertyMapper<OpenGLView, OpenGLViewHandler> OpenGLViewMapper =
         new PropertyMapper<OpenGLView, OpenGLViewHandler>();
 
+    // Create the SwapChainPanel for rendering
     protected override SwapChainPanel CreatePlatformView()
     {
         return new SwapChainPanel();
     }
 
-    //protected override void ConnectHandler(OpenGLView view)
-    //{
-    //    base.ConnectHandler(view);
-    //    view.RedrawRequested += OnRedrawRequested;
-    //}
+    // ✅ Correct method for setup
+    protected override void ConnectHandler(SwapChainPanel platformView)
+    {
+        base.ConnectHandler(platformView);
+        if (VirtualView != null)
+            VirtualView.RedrawRequested += OnRedrawRequested;
+    }
 
-    //protected override void DisconnectHandler(OpenGLView view)
-    //{
-    //    base.DisconnectHandler(view);
-    //    view.RedrawRequested -= OnRedrawRequested;
-    //}
+    // ✅ Correct method for cleanup
+    protected override void DisconnectHandler(SwapChainPanel platformView)
+    {
+        base.DisconnectHandler(platformView);
+        if (VirtualView != null)
+            VirtualView.RedrawRequested -= OnRedrawRequested;
+    }
 
     private void OnRedrawRequested(object? sender, EventArgs e)
     {
@@ -38,13 +43,12 @@ public class OpenGLViewHandler : ViewHandler<OpenGLView, SwapChainPanel>
             InitializeOpenGL();
             _initialized = true;
         }
-
         RenderOpenGL();
     }
 
     private void InitializeOpenGL()
     {
-        GL.ClearColor(0.1f, 0.2f, 0.3f, 1.0f);
+        GL.ClearColor(1.0f, 0.2f, 0.3f, 1.0f); // Set background color
     }
 
     private void RenderOpenGL()
