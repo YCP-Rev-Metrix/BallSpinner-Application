@@ -43,6 +43,17 @@ public class Simulation : IBallSpinner
 
     private Timer? _timer;
 
+    public List<double> accelXValues = new List<double>();
+    public List<double> accelYValues = new List<double>();
+    public List<double> accelZValues = new List<double>();
+    public List<double> rotatXValues = new List<double>();
+    public List<double> rotatYValues = new List<double>();
+    public List<double> rotatZValues = new List<double>();
+    public List<double> magneXValues = new List<double>();
+    public List<double> magneYValues = new List<double>();
+    public List<double> magneZValues = new List<double>();
+    public List<double> lightValues = new List<double>();
+
     // New position and speed properties
 
 
@@ -141,6 +152,7 @@ public class Simulation : IBallSpinner
             // Send light data (where Y-Up is brightest)
             float light = Math.Max(Vector3.Dot(Vector3.TransformNormal(Vector3.UnitZ, Matrix4x4.CreateFromQuaternion(Rotation)), Vector3.UnitY), 0);
             DataParser.SendSmartDotToSubscribers(SensorType.Light, time, 0, light, 0, 0);
+            UpdateCharts();
 
         }, null, frequency, frequency);
     }
@@ -203,6 +215,20 @@ public class Simulation : IBallSpinner
     public async void ScanForSmartDots()
     {
         throw new NotImplementedException();
+    }
+
+    private void UpdateCharts()
+    {
+        accelXValues.Add((double)Metric.AccelerationX);
+        accelYValues.Add((double)Metric.AccelerationY);
+        accelZValues.Add((double)Metric.AccelerationZ);
+        rotatXValues.Add((double)Metric.RotationX);
+        rotatYValues.Add((double)Metric.RotationY);
+        rotatZValues.Add((double)Metric.RotationZ);
+        magneXValues.Add((double)Metric.MagnetometerX);
+        magneYValues.Add((double)Metric.MagnetometerY);
+        magneZValues.Add((double)Metric.MagnetometerZ);
+        lightValues.Add((double)Metric.Light);
     }
 
 }

@@ -88,7 +88,7 @@
                                     Source="{Binding TopMiddleView.Source}" />-->
                                 <lvc:CartesianChart
                                     InputTransparent="True"
-                                    Series="{Binding Series}"
+                                    Series="{Binding AccelerationSeries}"
                                     x:Name="TopMiddleView"
                                     Grid.Row="1">
                                 </lvc:CartesianChart>
@@ -113,7 +113,7 @@
                                     x:Name="BottomMiddleView"
                                     Grid.Row="1"
                                     InputTransparent="True"
-                                    Series="{Binding Series}">
+                                    Series="{Binding RotationSeries}">
                                 </lvc:CartesianChart>
                             </Grid>
                         </Border>
@@ -136,7 +136,7 @@
                                     x:Name="TopRightView"
                                     Grid.Row="1"
                                     InputTransparent="True"
-                                    Series="{Binding Series}">
+                                    Series="{Binding MagnetometerSeries}">
                                 </lvc:CartesianChart>
                             </Grid>
                         </Border>
@@ -159,7 +159,7 @@
                                     x:Name="BottomRightView"
                                     Grid.Row="1"
                                     InputTransparent="True"
-                                    Series="{Binding Series}">
+                                    Series="{Binding LightSeries}">
                                 </lvc:CartesianChart>
                             </Grid>
                         </Border>
