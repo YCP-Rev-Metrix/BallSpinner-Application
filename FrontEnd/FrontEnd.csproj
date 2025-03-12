@@ -164,7 +164,6 @@
 
     <ItemGroup>
       <Compile Remove="Resources\Raw\Pages\Charts\TestChart.cs" />
-      <Compile Remove="TestChart.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -176,12 +175,6 @@
         <Folder Include="Resources\Raw\Pages\Simulation\Assets\" />
         <Folder Include="Resources\Raw\Pages\Simulation\Textures\" />
 	    <MauiCss Remove="Resources\Raw\Pages\Style.css" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <MauiAsset Include="TestChart.cs">
-        <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
-      </MauiAsset>
     </ItemGroup>
 
    

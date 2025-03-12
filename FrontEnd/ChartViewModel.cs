@@ -6,7 +6,7 @@ using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 
-public class TestChart2 : GraphDataViewModel
+public class ChartViewModel : GraphDataViewModel
 {
     public string Name { get; set; }
     private IBallSpinner _ballSpinner;
@@ -34,7 +34,7 @@ public class TestChart2 : GraphDataViewModel
 
     public Action<Metric, float, float>? DataReceived { get; set; }
 
-    public TestChart2(IBallSpinner ballSpinner, string name, Metric metrics) : base(ballSpinner)
+    public ChartViewModel(IBallSpinner ballSpinner, string name, Metric metrics) : base(ballSpinner)
     {
         Name = name ?? string.Empty;
         Metrics = metrics;

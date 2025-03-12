@@ -78,28 +78,28 @@
         <Grid>
 
             <ScrollView VerticalScrollBarVisibility="Always">
-            <StackLayout>
-                <CollectionView
+                <StackLayout>
+                    <CollectionView
                     ItemsSource="{Binding BallSpinners}"
                     ItemsUpdatingScrollMode="KeepLastItemInView"
                     VerticalScrollBarVisibility="Never"
                     x:Name="BallSpinnerContainer">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <local:BallSpinnerView />
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <local:BallSpinnerView />
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
-                <Button
+                    <Button
                     Margin="10"
                     Clicked="OnAddBallSpinnerButtonClicked"
                     HorizontalOptions="Center"
                     Text="Add BallSpinner"
                     VerticalOptions="Center" />
 
-            </StackLayout>
-        </ScrollView>
+                </StackLayout>
+            </ScrollView>
 
             <Grid IsVisible="{Binding NotLoggedIn}">
                 <BoxView
@@ -108,18 +108,19 @@
                 Opacity="0.5"
                 VerticalOptions="FillAndExpand"
                 Color="Black" />
-                        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                            <Label
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label
                     Margin="10"
                     HorizontalOptions="CenterAndExpand"
                     HorizontalTextAlignment="Center"
                     Text="Not logged in"
                     VerticalOptions="CenterAndExpand"
                     VerticalTextAlignment="Center" />
-                        </VerticalStackLayout>
-        </Grid>
-        <!--<lvc:CartesianChart
+                </VerticalStackLayout>
+            </Grid>
+            <!--<lvc:CartesianChart
                 Series="{Binding Series}">
             </lvc:CartesianChart>-->
-
+        </Grid>
+    </ContentPage.Content>
 </ContentPage>

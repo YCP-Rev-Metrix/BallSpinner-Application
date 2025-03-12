@@ -112,10 +112,10 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         BottomMiddleView = new GraphViewModel(_ballSpinner, "Rotation (°)", Metric.RotationX | Metric.RotationY | Metric.RotationZ);
         TopRightView = new GraphViewModel(_ballSpinner, "Magnetometer (μT)", Metric.MagnetometerX | Metric.MagnetometerY | Metric.MagnetometerZ);
         BottomRightView = new GraphViewModel(_ballSpinner, "Light (lux)", Metric.Light);*/
-        TopMiddleView = new TestChart2(_ballSpinner, "Acceleration (g)", Metric.AccelerationX | Metric.AccelerationY | Metric.AccelerationZ);
-        BottomMiddleView = new TestChart2(_ballSpinner, "Rotation (°)", Metric.RotationX | Metric.RotationY | Metric.RotationZ);
-        TopRightView = new TestChart2(_ballSpinner, "Magnetometer (μT)", Metric.MagnetometerX | Metric.MagnetometerY | Metric.MagnetometerZ);
-        BottomRightView = new TestChart2(_ballSpinner, "Light (lux)", Metric.Light);
+        TopMiddleView = new ChartViewModel(_ballSpinner, "Acceleration (g)", Metric.AccelerationX | Metric.AccelerationY | Metric.AccelerationZ);
+        BottomMiddleView = new ChartViewModel(_ballSpinner, "Rotation (°)", Metric.RotationX | Metric.RotationY | Metric.RotationZ);
+        TopRightView = new ChartViewModel(_ballSpinner, "Magnetometer (μT)", Metric.MagnetometerX | Metric.MagnetometerY | Metric.MagnetometerZ);
+        BottomRightView = new ChartViewModel(_ballSpinner, "Light (lux)", Metric.Light);
         //SetAllSeries();
         _ballSpinner.PropertyChanged += BallSpinner_PropertyChanged;
         _ballSpinner.OnConnectionChanged += BallSpinner_OnConnectionChanged;
