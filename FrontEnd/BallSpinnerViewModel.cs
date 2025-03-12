@@ -40,7 +40,7 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
     public LineSeries<double> magneYSeries = new LineSeries<double>();
     public LineSeries<double> magneZSeries = new LineSeries<double>();
     public LineSeries<double> lightSeries = new LineSeries<double>();
-    const int maxDataPoints = 75; //maximum values for the graphs
+    const int maxDataPoints = 50; //maximum values for the graphs
     private readonly DispatcherTimer _timer = new DispatcherTimer();
 
     public bool NotConnectedFadeVisible
