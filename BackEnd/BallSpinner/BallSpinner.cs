@@ -281,7 +281,8 @@ public class BallSpinnerClass : IBallSpinner
         {
             Debug.WriteLine($"Index {i}: " + string.Join(", ", AvailableRanges[i]));
         }
-        Debug.WriteLine("Beginning to send back an artificial message for config");
+       
+        //Debug.WriteLine("Beginning to send back an artificial message for config");
 
         //Testing
         //double[] r = new double[4];
