@@ -14,6 +14,8 @@ internal class SmartDotSettingsViewModel
     public ObservableCollection<List<double>> Ranges { get; private set; }
     public ObservableCollection<List<double>> SampleRates { get; private set; }
 
+    public List<bool> Enables { get; private set; }
+
     public SmartDotSettingsViewModel(IBallSpinner ballSpinner)
     {
         _ballSpinner = ballSpinner;
@@ -23,6 +25,7 @@ internal class SmartDotSettingsViewModel
 
         BuildRanges();
         BuildSampleRates();
+        BuildEnables([false, false, false, false]);
     }
 
     public void BuildRanges()
@@ -68,6 +71,16 @@ internal class SmartDotSettingsViewModel
                     }
                 }
             }
+        }
+    }
+
+    public void BuildEnables(bool[] enables)
+    {
+        Enables.Clear();
+
+        foreach(bool val in enables)
+        {
+            Enables.Add(val);
         }
     }
 }

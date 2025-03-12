@@ -90,6 +90,9 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
 
     public IDataViewModel BottomRightView { get; }
 
+    public bool IsSimulation { get; }
+    public bool NotSimulation { get; }
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public MainPage MainPage { get; }
@@ -100,6 +103,9 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         _frontEnd = frontend;
         MainPage = mainPage;
         _ballSpinner = ballspinner;
+        IsSimulation = _ballSpinner.GetType() == typeof(Simulation);
+        NotSimulation = !IsSimulation;
+        NotConnectedFadeVisible = !IsSimulation;
 
         LeftView = new BallViewModel(_ballSpinner);
         /*TopMiddleView = new GraphViewModel(_ballSpinner, "Acceleration (g)", Metric.AccelerationX | Metric.AccelerationY | Metric.AccelerationZ);

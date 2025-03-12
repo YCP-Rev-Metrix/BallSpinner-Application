@@ -36,7 +36,7 @@
                             HeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
                             MaximumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
                             MinimumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
-                            IsVisible="True"
+                            IsVisible="{Binding NotSimulation}"
                             Text="Simulation Settings" />
                         <Button
                             Padding="-14,-10"

@@ -242,7 +242,7 @@ public class FrontEnd : IFrontEnd
         {
             Title = "Simulation Settings",
             Width = 500,
-            Height = 400,
+            Height = 500,
             X = 100,
             Y = 100
         };

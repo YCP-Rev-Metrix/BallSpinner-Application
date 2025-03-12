@@ -20,7 +20,9 @@ namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 /// <summary>
 /// The real, physical ball spinner device
 /// </summary>
-public class BallSpinnerClass : IBallSpinner
+public class BallSpinnerClass : IBallSpinner 
+//Name was changed from BallSpinner to BallSpinnerClass to workaround the namespace having
+//the identical name. This allows us to cast to BallSpinner in other files.
 {
     /// <inheritdoc/>
     public string Name { get; set; } = "Real Device";
@@ -61,8 +63,8 @@ public class BallSpinnerClass : IBallSpinner
     public static readonly double[][] RANGE_OPTIONS = {
         [2, 4, 8, 16,-1, -1, -1, -1],
         [125,250,500,1000,2000, -1, -1 ,-1],
-        [2, 4, 8, 16, 8, 16, 32, 64],
-        [1, 2, 3, 4, 5, 6, 7, 8],
+        [2500, 4, 8, 16, 8, 16, 32, 64],
+        [600, 1300, 8000, 16000, 32000, 64000, -1, -1],
     };
 
     /// <summary>
@@ -78,8 +80,8 @@ public class BallSpinnerClass : IBallSpinner
         //12 should be 12.5 
         [12.5, 25, 50, 100, 200, 400, 800, 1600],
         [25, 50, 100, 200, 400, 800, 1600, 3200, 6400],
-        [5, 10, 15, 20, 25, 100, -1, -1, -1], 
-        [25, 50, 100, 200, 400, 800, 1600, 3200, 6400]
+        [2, 6, 8, 10, 15, 20, 25, 30, -1], 
+        [0.5, 1, 2, 5, 10, 20, -1, -1, -1]
     };
 
     // Each index corresponds to an axis measurements
@@ -284,9 +286,9 @@ public class BallSpinnerClass : IBallSpinner
         //Testing
         //double[] r = new double[4];
         //double[] sr = new double[4];
-        //r = [4, 250 , 8, 3];
-        //sr = [1600,6400,10,100];
-        //SubmitSmartDotConfig(r, sr);
+        //r = [4, 250, 8, 3]; //chosen range values
+        //sr = [1600, 6400, 10, 100]; //chosen sample rates
+        //SubmitSmartDotConfig(r, sr, true, false, false, true);
     }
     private void SmartDotAddressReceivedEvent(PhysicalAddress address)
     {
@@ -379,7 +381,7 @@ public class BallSpinnerClass : IBallSpinner
         _connection.ToggleSDTakeData(shouldTakeData);
     }
     /// <inheritdoc/>
-    public void SubmitSmartDotConfig(double[] Ranges, double[] SampleRates)
+    public void SubmitSmartDotConfig(double[] Ranges, double[] SampleRates, bool XL_OFF, bool GY_OFF, bool MAG_OFF, bool LT_OFF)
     {
         if (!IsSmartDotPaired())
             throw new Exception("Smart Dot must be paired in order to send config settings");
@@ -402,12 +404,16 @@ public class BallSpinnerClass : IBallSpinner
 
             bytes[i] = Two4BitIntToByte(sampleRateIndex, rangeIndex);
         }
+
+        if (XL_OFF) bytes[0] = 255;
+        if (GY_OFF) bytes[1] = 255; 
+        if (MAG_OFF) bytes[2] = 255;
+        if (LT_OFF) bytes[3] = 255;
         for (int i = 0; i < bytes.Length; i++)
         {
-            Debug.WriteLine($"BYTE: [{i}]");
-        }
+            Debug.WriteLine($"BYTE: [{i}] == {bytes[i]}");
 
-  
+        }
         //TCP send message
         _connection.SendConfigData(bytes);
     }
