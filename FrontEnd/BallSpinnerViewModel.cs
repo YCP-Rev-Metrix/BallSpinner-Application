@@ -40,7 +40,7 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
     public LineSeries<double> magneYSeries = new LineSeries<double>();
     public LineSeries<double> magneZSeries = new LineSeries<double>();
     public LineSeries<double> lightSeries = new LineSeries<double>();
-    const int maxDataPoints = 50; //maximum values for the graphs
+    const int maxDataPoints = 75; //maximum values for the graphs
     private readonly DispatcherTimer _timer = new DispatcherTimer();
 
     public bool NotConnectedFadeVisible
@@ -100,6 +100,17 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
     private FrontEnd _frontEnd;
     public BallSpinnerViewModel(FrontEnd frontend, MainPage mainPage, IBallSpinner ballspinner)
     {
+        accelXSeries.GeometrySize = 0;
+        accelYSeries.GeometrySize = 0;
+        accelZSeries.GeometrySize = 0;
+        rotatXSeries.GeometrySize = 0;
+        rotatYSeries.GeometrySize = 0;
+        rotatZSeries.GeometrySize = 0;
+        magneXSeries.GeometrySize = 0;
+        magneYSeries.GeometrySize = 0;
+        magneZSeries.GeometrySize = 0;
+        lightSeries.GeometrySize = 0;
+
         _frontEnd = frontend;
         MainPage = mainPage;
         _ballSpinner = ballspinner;
@@ -159,17 +170,16 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
             LightSeries = [lightSeries];
             if (accelXValues.Count > maxDataPoints)
             {
-                accelXValues.RemoveAt(0);
-                accelYValues.RemoveAt(0);
-                accelZValues.RemoveAt(0);
-                rotatXValues.RemoveAt(0);
-                rotatYValues.RemoveAt(0);
-                rotatZValues.RemoveAt(0);
-                magneXValues.RemoveAt(0);
-                magneYValues.RemoveAt(0);
-                magneZValues.RemoveAt(0);
-                lightValues.RemoveAt(0);
-
+                if (accelXValues.Count >= 50) accelXValues.RemoveAt(0);
+                if (accelYValues.Count >= 50) accelYValues.RemoveAt(0);
+                if (accelZValues.Count >= 50) accelZValues.RemoveAt(0);
+                if (rotatXValues.Count >= 50) rotatXValues.RemoveAt(0);
+                if (rotatYValues.Count >= 50) rotatYValues.RemoveAt(0);
+                if (rotatZValues.Count >= 50) rotatZValues.RemoveAt(0);
+                if (magneXValues.Count >= 50) magneXValues.RemoveAt(0);
+                if (magneYValues.Count >= 50) magneYValues.RemoveAt(0);
+                if (magneZValues.Count >= 50) magneZValues.RemoveAt(0);
+                if (lightValues.Count >= 50) lightValues.RemoveAt(0);
             }
             /*Console.Out.WriteLine("TESTING");
             for(int i = 0; i < magneXSeries.Values.Count; i++)
