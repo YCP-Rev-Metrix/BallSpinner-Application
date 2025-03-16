@@ -315,15 +315,22 @@ public class TCP : IDisposable
             type, //Type
 
             0x00,
-            0x03, //Size
+            0x0C, //Size
 
             Rpm[0], // Set driver motor RPM value
             Rpm[1],
             Rpm[2],
             Rpm[3],
 
-            0x00, //Motor y - not yet used
-            0x00, //Motor z - not yet used
+            0x00, //Motor 2 values
+            0x00,
+            0x00,
+            0x00,
+
+            0x00, // Motor 3 values
+            0x00,
+            0x00,
+            0x00,
         };
 
         // Send the motor instruction to the PI

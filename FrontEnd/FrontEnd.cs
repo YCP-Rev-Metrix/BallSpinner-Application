@@ -174,7 +174,7 @@ public class FrontEnd : IFrontEnd
         if (_newInitialValuesWindow != null)
             return;
      
-        _newInitialValuesWindow = new Window(new InitialValues(_ballSpinner))
+        _newInitialValuesWindow = new Window(new InitialValues(_ballSpinner, this))
         {
             Title = "Input Values",
             Width = 400,

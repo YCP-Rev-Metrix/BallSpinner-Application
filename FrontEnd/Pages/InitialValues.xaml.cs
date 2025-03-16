@@ -2,17 +2,20 @@ using LiveChartsCore;
 using RevMetrix.BallSpinner.BackEnd;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 
+
 namespace RevMetrix.BallSpinner.FrontEnd;
 
 public partial class InitialValues : ContentPage
 {
     List<double> bezierPointsY;
     private BallSpinnerClass _ballSpinner;
-    public InitialValues(BallSpinnerClass ballSpinner)
+    private FrontEnd _frontend;
+    public InitialValues(BallSpinnerClass ballSpinner, FrontEnd frontend)
 	{
         InitializeComponent();
 
         _ballSpinner = ballSpinner;
+        _frontend = frontend;
         
         InitialValuesModel model = new InitialValuesModel();
         Coordinates dummyvalues = new Coordinates(0, 0);
@@ -30,6 +33,8 @@ public partial class InitialValues : ContentPage
 
     private async void SendMotorInstructions(object sender, EventArgs args)
     {
+        // close Initial values window
+        _frontend.CloseInitialValuesWindow();
         // Send rpms to the Ball Spinner
         _ballSpinner.SendMotorRPMs(bezierPointsY);
     }
