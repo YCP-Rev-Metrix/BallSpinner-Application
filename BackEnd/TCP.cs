@@ -301,6 +301,38 @@ public class TCP : IDisposable
     }
 
     /// <summary>
+    /// Sends RPMS to the motors
+    /// The Rpm parameter is expected to be a 32 bit float value conerted to a byte array
+    /// </summary>
+    public async Task<bool> SetMotorRPM(byte[] Rpm)
+    {
+        //if (!_client.Connected)
+        //    throw new Exception("Can't send instructions without being connected");
+
+        byte type = (byte)MessageType.A_B_MOTOR_INSTRUCTIONS;
+        byte[] instructions = new byte[]
+        {
+            type, //Type
+
+            0x00,
+            0x03, //Size
+
+            Rpm[0], // Set driver motor RPM value
+            Rpm[1],
+            Rpm[2],
+            Rpm[3],
+
+            0x00, //Motor y - not yet used
+            0x00, //Motor z - not yet used
+        };
+
+        // Send the motor instruction to the PI
+        //await _client.Client.SendAsync(instructions); - will be sent to BSC, but for now just output to console
+        Debug.WriteLine(BitConverter.ToString(instructions));
+        return true;
+    }
+
+    /// <summary>
     /// Stops sending instructions to the motor
     /// </summary>
     public async void StopMotorInstructions()

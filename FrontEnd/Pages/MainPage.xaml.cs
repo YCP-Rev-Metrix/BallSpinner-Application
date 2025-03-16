@@ -6,6 +6,9 @@ using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using RevMetrix.BallSpinner.BackEnd.Common.Utilities;
 using RevMetrix.BallSpinner.BackEnd.Database;
 using System.Collections.ObjectModel;
+using WinRT.FrontEndVtableClasses;
+using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 
@@ -76,9 +79,25 @@ public partial class MainPage : ContentPage
         _frontEnd.Login();
     }
 
-    private void OnNewShotButtonClicked(object sender, EventArgs args)
+    private async void OnNewShotButtonClicked(object sender, EventArgs args)
     {
-        _frontEnd.InitialValues();
+        // Extract BallSpinnerClass instance
+        BallSpinnerClass? ballSpinner = null;
+        foreach(var _ballSpinner in BallSpinners)
+        {
+            if (_ballSpinner.BallSpinner.GetType() == typeof(BallSpinnerClass)) 
+            {
+                ballSpinner = (BallSpinnerClass) _ballSpinner.BallSpinner;
+            }
+        }
+        // If the user is not properly connected to a ball spinner instance, return an error message
+        if (ballSpinner == null || (ballSpinner != null && !ballSpinner.IsConnected()))
+        {
+            await DisplayAlert("Not connected to a Ball Spinner", "Please connect to a Ball Spinner to enter initial values", "Ok");
+            return;
+        }
+        
+        _frontEnd.InitialValues(ballSpinner);
     }
 
     private void OnCloudManagementButtonClicked(object sender, EventArgs args)
@@ -208,12 +227,28 @@ public partial class MainPage : ContentPage
 
     private async void OnAddBallSpinnerButtonClicked(object sender, EventArgs args)
     {
-        var ballSpinner = await _frontEnd.AddBallSpinner();
+        IBallSpinner _ballSpinner = null;
+        // Dont allow the user to add a new ball spinner if there are already two ball spinner present
+        if (BallSpinners.Count >= 2)
+        {
+            await DisplayAlert("Cannot add a new Ball Spinner", "Limit already exceeded", "Fine!");
+            return;
+        }
+        else if (BallSpinners.Count == 1)
+        {
+            _ballSpinner = BallSpinners[0].BallSpinner;
+        }
+
+        var ballSpinner = await _frontEnd.AddBallSpinner(_ballSpinner);
 
         if(ballSpinner != null)
         {
             BallSpinners.Add(new BallSpinnerViewModel(_frontEnd, this, ballSpinner));
             OnPropertyChanged(nameof(BallSpinners));
+        }
+        else
+        {
+            await DisplayAlert("Error", "Cannot add more than one type of Ball Spinner", "Okay");
         }
     }
 

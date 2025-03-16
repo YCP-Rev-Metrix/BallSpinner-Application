@@ -20,7 +20,7 @@ namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 /// <summary>
 /// The real, physical ball spinner device
 /// </summary>
-public class BallSpinnerClass : IBallSpinner 
+public class BallSpinnerClass : IBallSpinner
 //Name was changed from BallSpinner to BallSpinnerClass to workaround the namespace having
 //the identical name. This allows us to cast to BallSpinner in other files.
 {
@@ -59,7 +59,7 @@ public class BallSpinnerClass : IBallSpinner
     /// <summary>
     /// The different config settings for the Range (+/-)
     /// </summary>
-   
+
     public static readonly double[][] RANGE_OPTIONS = {
         [2, 4, 8, 16,-1, -1, -1, -1],
         [125,250,500,1000,2000, -1, -1 ,-1],
@@ -75,12 +75,12 @@ public class BallSpinnerClass : IBallSpinner
     /// 2 - Mag
     /// 3 - Light
     /// </summary>
-    public static readonly double[][] SAMPLE_RATES = 
+    public static readonly double[][] SAMPLE_RATES =
     { 
         //12 should be 12.5 
         [12.5, 25, 50, 100, 200, 400, 800, 1600],
         [25, 50, 100, 200, 400, 800, 1600, 3200, 6400],
-        [2, 6, 8, 10, 15, 20, 25, 30, -1], 
+        [2, 6, 8, 10, 15, 20, 25, 30, -1],
         [0.5, 1, 2, 5, 10, 20, -1, -1, -1]
     };
 
@@ -131,9 +131,9 @@ public class BallSpinnerClass : IBallSpinner
         //gyro should be rate == 25, 6400
         //range should be 1
         byte[] data = { 3, 1, 1, 0b10_00_00_01, 2, 2, 4, 4};
-       // Debug.WriteLine($"Range byte: 0b{Convert.ToString(data[0], 2).PadLeft(8, '0')}");
+        // Debug.WriteLine($"Range byte: 0b{Convert.ToString(data[0], 2).PadLeft(8, '0')}");
 
-       // SmartDotConfigReceivedEvent(data);
+        // SmartDotConfigReceivedEvent(data);
 
     }
 
@@ -156,7 +156,7 @@ public class BallSpinnerClass : IBallSpinner
         _connection?.Dispose();
         _connection = new TCP(_address);
         await _connection.Connect();
-        
+
         if (_connection != null && _connection.Connected)
             OnConnected();
     }
@@ -207,7 +207,7 @@ public class BallSpinnerClass : IBallSpinner
     {
         Debug.WriteLine("Triggered the Smart Dot COnfig Received Event!");
         //Convert the data from the bytes and set the AvailableRange and Rate arrays
-        
+
         List<double> XL_rates = new List<double>();
         List<double> GY_rates = new List<double>();
         List<double> MG_rates = new List<double>();
@@ -281,7 +281,7 @@ public class BallSpinnerClass : IBallSpinner
         {
             Debug.WriteLine($"Index {i}: " + string.Join(", ", AvailableRanges[i]));
         }
-       
+
         //Debug.WriteLine("Beginning to send back an artificial message for config");
 
         //Testing
@@ -301,7 +301,7 @@ public class BallSpinnerClass : IBallSpinner
     {
         DataParser.SendSmartDotToSubscribers(sensorType, timeStamp, sampleCount, XData, YData, ZData);
     }
-    
+
 
     /// <inheritdoc/>
     public bool IsConnected()
@@ -312,7 +312,7 @@ public class BallSpinnerClass : IBallSpinner
     /// <inheritdoc/>
     public void ResendMessage()
     {
-        
+
     }
 
     /// <inheritdoc/>
@@ -361,7 +361,7 @@ public class BallSpinnerClass : IBallSpinner
 
         if (!string.IsNullOrEmpty(SmartDotMAC))
             return false;
-        
+
         return true;
     }
 
@@ -407,7 +407,7 @@ public class BallSpinnerClass : IBallSpinner
         }
 
         if (XL_OFF) bytes[0] = 255;
-        if (GY_OFF) bytes[1] = 255; 
+        if (GY_OFF) bytes[1] = 255;
         if (MAG_OFF) bytes[2] = 255;
         if (LT_OFF) bytes[3] = 255;
         for (int i = 0; i < bytes.Length; i++)
@@ -490,4 +490,16 @@ public class BallSpinnerClass : IBallSpinner
 
         _connection!.SetMotorVoltages(x, y, z);
     }
+    public async void SendMotorRPMs(List<double> Rpms)
+    {
+        foreach (var Rpm in Rpms)
+        {
+            // Send RPM value to the BSC
+            byte[] RPMByteVal = BitConverter.GetBytes((float)Rpm);
+            // Sleep for the designated predefined time step (0.001 for now)
+            Thread.Sleep(1);
+            await _connection!.SetMotorRPM(RPMByteVal);
+        }
+    }
 }
+

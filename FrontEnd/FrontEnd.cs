@@ -74,13 +74,13 @@ public class FrontEnd : IFrontEnd
         };
     }
 
-    public async Task<IBallSpinner?> AddBallSpinner()
+    public async Task<IBallSpinner?> AddBallSpinner(IBallSpinner _ballSpinner)
     {
         if (_newBallSpinnerWindow != null)
             return null;
 
         TaskCompletionSource<IBallSpinner?> task = new TaskCompletionSource<IBallSpinner?>();
-        var newBallSpinnerView = new NewBallSpinnerView(task);
+        var newBallSpinnerView = new NewBallSpinnerView(task, _ballSpinner);
         _newBallSpinnerWindow = new Window(newBallSpinnerView)
         {
             Title = "Add Ball Spinner",
@@ -169,12 +169,12 @@ public class FrontEnd : IFrontEnd
         return result;
     }
 
-    public void InitialValues()
+    public void InitialValues(BallSpinnerClass _ballSpinner)
     {
         if (_newInitialValuesWindow != null)
             return;
-
-        _newInitialValuesWindow = new Window(new InitialValues())
+     
+        _newInitialValuesWindow = new Window(new InitialValues(_ballSpinner))
         {
             Title = "Input Values",
             Width = 400,

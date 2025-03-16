@@ -1,18 +1,24 @@
 using LiveChartsCore;
 using RevMetrix.BallSpinner.BackEnd;
+using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 
 public partial class InitialValues : ContentPage
 {
-	public InitialValues()
+    List<double> bezierPointsY;
+    private BallSpinnerClass _ballSpinner;
+    public InitialValues(BallSpinnerClass ballSpinner)
 	{
-		InitializeComponent();
+        InitializeComponent();
 
+        _ballSpinner = ballSpinner;
         
         InitialValuesModel model = new InitialValuesModel();
         Coordinates dummyvalues = new Coordinates(0, 0);
         List<List<double>> axes = model.CalcuateBezierCruve(dummyvalues, dummyvalues, dummyvalues);
+        // Set beginning bezier y for motor instructions
+        bezierPointsY = axes[3];
         var chart = new InitialValuesChart(axes[0], axes[1], axes[2], axes[3]);
         BindingContext = chart;
         //BindingContext = this;
@@ -20,12 +26,11 @@ public partial class InitialValues : ContentPage
         {
             Console.Out.WriteLine("X = " + axes[2][i] + " , Y = " + axes[3][i]);
         }
-        
-
     }
 
-    private void PassValues(object sender, EventArgs args)
+    private async void SendMotorInstructions(object sender, EventArgs args)
     {
-        
+        // Send rpms to the Ball Spinner
+        _ballSpinner.SendMotorRPMs(bezierPointsY);
     }
 }

@@ -96,8 +96,14 @@
             </VerticalStackLayout>
         </HorizontalStackLayout>
     </VerticalStackLayout>-->
-    <lvc:CartesianChart 
-     HeightRequest="400"
-     Series="{Binding Series}">
-    </lvc:CartesianChart>
+    <VerticalStackLayout>
+        <lvc:CartesianChart 
+         HeightRequest="400"
+         Series="{Binding Series}">
+        </lvc:CartesianChart>
+        <Button 
+            Margin="10"
+            Clicked="SendMotorInstructions"
+            Text="Start Ball Spinner"/>
+    </VerticalStackLayout>
 </ContentPage>
