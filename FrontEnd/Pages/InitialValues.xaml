@@ -3,89 +3,14 @@
     x:Class="RevMetrix.BallSpinner.FrontEnd.InitialValues"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:RevMetrix.BallSpinner.FrontEnd;assembly=FrontEnd"
+    xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
     Title="InitialValues">
-    <VerticalStackLayout>
-        <Label
-            Margin="0,0,0,10"
-            FontAttributes="Bold"
-            FontSize="24"
-            HorizontalOptions="Center"
-            Text="Input Values" />
-        <HorizontalStackLayout>
-            <VerticalStackLayout Margin="20">
-                <Label
-                    Margin="0,15,0,10"
-                    FontSize="16"
-                    Text="Ball Weight: " />
-
-                <Label
-                    Margin="0,20,0,10"
-                    FontSize="16"
-                    Text="Speed: " />
-
-                <Label
-                    Margin="0,20,0,10"
-                    FontSize="16"
-                    Text="Circumfrence: " />
-
-                <Label
-                    Margin="0,20,0,10"
-                    FontSize="16"
-                    Text="Value 4" />
-
-                <Label
-                    Margin="0,20,0,10"
-                    FontSize="16"
-                    Text="Value 5" />
-            </VerticalStackLayout>
-
-            <VerticalStackLayout Margin="20">
-                <Entry
-                    x:Name="Weight"
-                    Margin="0,0,0,10"
-                    HorizontalOptions="Fill"
-                    Placeholder="lbs."
-                    SemanticProperties.HeadingLevel="Level2"
-                    Text="" />
-
-                <Entry
-                    x:Name="Speed"
-                    Margin="0,0,0,10"
-                    HorizontalOptions="Fill"
-                    Placeholder="mph"
-                    SemanticProperties.HeadingLevel="Level2"
-                    Text="" />
-
-                <Entry
-                    x:Name="Circumfrence"
-                    Margin="0,0,0,10"
-                    HorizontalOptions="Fill"
-                    Placeholder="inchees"
-                    SemanticProperties.HeadingLevel="Level2"
-                    Text="" />
-
-                <Entry
-                    x:Name="VAL4"
-                    Margin="0,0,0,10"
-                    HorizontalOptions="Fill"
-                    Placeholder="Val 4"
-                    SemanticProperties.HeadingLevel="Level2"
-                    Text="" />
-
-                <Entry
-                    x:Name="VAL5"
-                    Margin="0,0,0,10"
-                    HorizontalOptions="Fill"
-                    Placeholder="Val 5"
-                    SemanticProperties.HeadingLevel="Level2"
-                    Text="" />
-
-                <Button
-                    Margin="10"
-                    Clicked="PassValues"
-                    HorizontalOptions="Fill"
-                    Text="Submit" />
-            </VerticalStackLayout>
-        </HorizontalStackLayout>
-    </VerticalStackLayout>
+    <HorizontalStackLayout>
+        <lvc:CartesianChart HeightRequest="400"
+                            Series="{Binding Series}"/>
+        <Slider x:Name="MaxSlider" 
+                Minimum="0" 
+                Maximum="800" />
+    </HorizontalStackLayout>
 </ContentPage>

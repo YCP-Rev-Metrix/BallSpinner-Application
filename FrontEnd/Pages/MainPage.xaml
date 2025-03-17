@@ -3,8 +3,8 @@
     x:Class="RevMetrix.BallSpinner.FrontEnd.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:RevMetrix.BallSpinner.FrontEnd">
-
+    xmlns:local="clr-namespace:RevMetrix.BallSpinner.FrontEnd;assembly=FrontEnd"
+    xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui">
     <ContentPage.MenuBarItems>
         <MenuBarItem Text="File">
             <MenuFlyoutItem
@@ -74,48 +74,53 @@
             IsEnabled="false"
             Text="Reset" />
     </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <Grid>
 
-    <Grid>
-        <ScrollView VerticalScrollBarVisibility="Always">
-            <StackLayout>
-                <CollectionView
+            <ScrollView VerticalScrollBarVisibility="Always">
+                <StackLayout>
+                    <CollectionView
                     ItemsSource="{Binding BallSpinners}"
                     ItemsUpdatingScrollMode="KeepLastItemInView"
-                    VerticalScrollBarVisibility="Never">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <local:BallSpinnerView />
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                    VerticalScrollBarVisibility="Never"
+                    x:Name="BallSpinnerContainer">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <local:BallSpinnerView />
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
-                <Button
+                    <Button
                     Margin="10"
                     Clicked="OnAddBallSpinnerButtonClicked"
                     HorizontalOptions="Center"
                     Text="Add BallSpinner"
                     VerticalOptions="Center" />
 
-            </StackLayout>
-        </ScrollView>
+                </StackLayout>
+            </ScrollView>
 
-        <!-- <Grid IsVisible="{Binding NotLoggedIn}">
-            <BoxView
+            <Grid IsVisible="{Binding NotLoggedIn}">
+                <BoxView
                 HorizontalOptions="FillAndExpand"
                 InputTransparent="True"
                 Opacity="0.5"
                 VerticalOptions="FillAndExpand"
                 Color="Black" />
-            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                <Label
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label
                     Margin="10"
                     HorizontalOptions="CenterAndExpand"
                     HorizontalTextAlignment="Center"
                     Text="Not logged in"
                     VerticalOptions="CenterAndExpand"
                     VerticalTextAlignment="Center" />
-            </VerticalStackLayout>
-        </Grid> -->
-       
-    </Grid>
+                </VerticalStackLayout>
+            </Grid>
+            <!--<lvc:CartesianChart
+                Series="{Binding Series}">
+            </lvc:CartesianChart>-->
+        </Grid>
+    </ContentPage.Content>
 </ContentPage>

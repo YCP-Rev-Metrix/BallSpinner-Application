@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using LiveChartsCore.SkiaSharpView.Maui;
+using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 
@@ -16,6 +18,8 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
         builder
+            .UseSkiaSharp()
+            .UseLiveCharts()
             .UseMauiApp<App>()
             .ConfigureFonts(fonts =>
             {

@@ -61,10 +61,10 @@ public class BallSpinnerClass : IBallSpinner
     /// </summary>
    
     public static readonly double[][] RANGE_OPTIONS = {
-        [2, 4, 8, 16],
-        [125, 250, 1000, 2000],
-        [2500],
-        [600, 1300, 8000, 1600, 32000, 64000],
+        [2, 4, 8, 16,-1, -1, -1, -1],
+        [125,250,500,1000,2000, -1, -1 ,-1],
+        [2500, 4, 8, 16, 8, 16, 32, 64],
+        [600, 1300, 8000, 16000, 32000, 64000, -1, -1],
     };
 
     /// <summary>
@@ -80,8 +80,8 @@ public class BallSpinnerClass : IBallSpinner
         //12 should be 12.5 
         [12.5, 25, 50, 100, 200, 400, 800, 1600],
         [25, 50, 100, 200, 400, 800, 1600, 3200, 6400],
-        [5, 10, 15, 20, 25, 100], 
-        [0.0005, 0.001, 0.01, 0.02, 0.002]
+        [2, 6, 8, 10, 15, 20, 25, 30, -1], 
+        [0.5, 1, 2, 5, 10, 20, -1, -1, -1]
     };
 
     // Each index corresponds to an axis measurements
@@ -281,14 +281,15 @@ public class BallSpinnerClass : IBallSpinner
         {
             Debug.WriteLine($"Index {i}: " + string.Join(", ", AvailableRanges[i]));
         }
-        Debug.WriteLine("Beginning to send back an artificial message for config");
+       
+        //Debug.WriteLine("Beginning to send back an artificial message for config");
 
         //Testing
         //double[] r = new double[4];
         //double[] sr = new double[4];
-        //r = [4, 250, 8, 3];
-        //sr = [1600, 6400, 10, 100];
-        //SubmitSmartDotConfig(r, sr, true, false, false ,true);
+        //r = [4, 250, 8, 3]; //chosen range values
+        //sr = [1600, 6400, 10, 100]; //chosen sample rates
+        //SubmitSmartDotConfig(r, sr, true, false, false, true);
     }
     private void SmartDotAddressReceivedEvent(PhysicalAddress address)
     {

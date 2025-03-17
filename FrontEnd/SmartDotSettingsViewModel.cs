@@ -22,9 +22,11 @@ internal class SmartDotSettingsViewModel
 
         Ranges = new ObservableCollection<List<double>>();
         SampleRates = new ObservableCollection<List<double>>();
+        Enables = new List<bool>();
 
         BuildRanges();
         BuildSampleRates();
+        BuildEnables([false, false, false, false]);
     }
 
     public void BuildRanges()
@@ -75,7 +77,8 @@ internal class SmartDotSettingsViewModel
 
     public void BuildEnables(bool[] enables)
     {
-        Enables.Clear();
+        if (Enables != null)
+            Enables.Clear();
 
         foreach(bool val in enables)
         {
