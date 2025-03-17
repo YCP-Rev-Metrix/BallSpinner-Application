@@ -241,7 +241,7 @@ public class FrontEnd : IFrontEnd
         _newSmartDotSettingsWindow = new Window(new SmartDotSettingsPage(this, viewModel))
         {
             Title = "Simulation Settings",
-            Width = 500,
+            Width = 520,
             Height = 500,
             X = 100,
             Y = 100

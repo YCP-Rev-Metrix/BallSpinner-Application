@@ -49,7 +49,7 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
     public IDataViewModel BottomRightView { get; }
 
     public bool IsSimulation { get; }
-    public bool NotSimulation { get; }
+    public bool NotSimulation => !IsSimulation;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -63,7 +63,6 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         MainPage = mainPage;
         _ballSpinner = ballspinner;
         IsSimulation = _ballSpinner.GetType() == typeof(Simulation);
-        NotSimulation = !IsSimulation;
         NotConnectedFadeVisible = !IsSimulation;
 
         LeftView = new BallViewModel(_ballSpinner);
