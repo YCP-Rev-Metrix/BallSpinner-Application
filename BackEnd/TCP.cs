@@ -27,7 +27,7 @@ public class TCP : IDisposable
     /// <summary>
     /// Method signature for the SmartDotReceived event 
     /// </summary>
-    public delegate void SmartDotRecievedHandler(SensorType sensorType, float timeStamp, int sampleCount, float XData, float YData, float ZData);
+    public delegate void SmartDotRecievedHandler(SensorType sensorType, float deltaTime, int sampleCount, float XData, float YData, float ZData);
 
     /// <summary>
     /// Fired when a SmartDot packet is recieved
@@ -222,17 +222,17 @@ public class TCP : IDisposable
                         case MessageType.B_A_SD_SENSOR_DATA:
                             SensorType sensorType = (SensorType)Enum.ToObject(typeof(SensorType), packetFixed[3]);
                             int sampleCount = packetFixed[6] | (packetFixed[5] << 8) | (packetFixed[4] << 16); //3 bytes
-                            float timeStamp = BitConverter.ToSingle(packetFixed, 7); //BitConverter expects LITTLE ENDIAN
+                            float deltaTime = BitConverter.ToSingle(packetFixed, 7); //BitConverter expects LITTLE ENDIAN
                             float xData = BitConverter.ToSingle(packetFixed, 11);
                             float yData = BitConverter.ToSingle(packetFixed, 15);
                             float zData = BitConverter.ToSingle(packetFixed, 19);
                             // Debug statement to filter out light data (it comes in too slow right now)
                             if (sensorType == SensorType.Light) {
-                                Debug.WriteLine($"{sensorType}: {xData} {timeStamp} {sampleCount}");
+                                Debug.WriteLine($"{sensorType}: {xData} {deltaTime} {sampleCount}");
                             }
                             // Debug statement to print incoming smartdot packet data
                             //Debug.WriteLine($"{sensorType}: {xData} {yData} {zData}");
-                            SmartDotReceivedEvent?.Invoke(sensorType, timeStamp, sampleCount, xData, yData, zData);
+                            SmartDotReceivedEvent?.Invoke(sensorType, deltaTime, sampleCount, xData, yData, zData);
                             break;
                         case MessageType.B_A_RECEIVE_CONFIG_INFO:
                             var bytes = new ArraySegment<byte>(packetFixed, 3, messageSize).ToArray();

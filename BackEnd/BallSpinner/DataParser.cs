@@ -37,7 +37,7 @@ public class DataParser
     /// <summary>
     /// Takes a parsed packet, and sends it to the rev file Writer and the Simulation
     /// </summary>
-    public void SendSmartDotToSubscribers(SensorType sensorType, float timeStamp, int sampleCount, float XData, float YData, float ZData)
+    public void SendSmartDotToSubscribers(SensorType sensorType, float deltaTime, int sampleCount, float XData, float YData, float ZData)
     {
         //Debug.WriteLine();
         string sensorTypeString;
@@ -48,25 +48,25 @@ public class DataParser
             switch (sensorType)
             {
                 case SensorType.Accelerometer:
-                    OnDataReceived?.Invoke(Metric.AccelerationX, XData, timeStamp);
-                    OnDataReceived?.Invoke(Metric.AccelerationY, YData, timeStamp);
-                    OnDataReceived?.Invoke(Metric.AccelerationZ, ZData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.AccelerationX, XData, deltaTime);
+                    OnDataReceived?.Invoke(Metric.AccelerationY, YData, deltaTime);
+                    OnDataReceived?.Invoke(Metric.AccelerationZ, ZData, deltaTime);
                     sensorTypeString = "3";
                     break;
                 case SensorType.Gyroscope:
-                    OnDataReceived?.Invoke(Metric.RotationX, XData, timeStamp);
-                    OnDataReceived?.Invoke(Metric.RotationY, YData, timeStamp);
-                    OnDataReceived?.Invoke(Metric.RotationZ, ZData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.RotationX, XData, deltaTime);
+                    OnDataReceived?.Invoke(Metric.RotationY, YData, deltaTime);
+                    OnDataReceived?.Invoke(Metric.RotationZ, ZData, deltaTime);
                     sensorTypeString = "2";
                     break;
                 case SensorType.Light:
-                    OnDataReceived?.Invoke(Metric.Light, XData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.Light, XData, deltaTime);
                     sensorTypeString = "1";
                     break;
                 case SensorType.Magnetometer:
-                    OnDataReceived?.Invoke(Metric.MagnetometerX, XData, timeStamp);
-                    OnDataReceived?.Invoke(Metric.MagnetometerY, YData, timeStamp);
-                    OnDataReceived?.Invoke(Metric.MagnetometerZ, ZData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.MagnetometerX, XData, deltaTime);
+                    OnDataReceived?.Invoke(Metric.MagnetometerY, YData, deltaTime);
+                    OnDataReceived?.Invoke(Metric.MagnetometerZ, ZData, deltaTime);
                     sensorTypeString = "4";
                     break;
                 default:
@@ -75,7 +75,7 @@ public class DataParser
             }
             string[] smartDotData =
         {
-            sensorTypeString, timeStamp.ToString(), sampleCount.ToString(), XData.ToString(), YData.ToString(), ZData.ToString()
+            sensorTypeString, deltaTime.ToString(), sampleCount.ToString(), XData.ToString(), YData.ToString(), ZData.ToString()
         };
 
             _writer?.WriteData(smartDotData);

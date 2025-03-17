@@ -296,9 +296,9 @@ public class BallSpinnerClass : IBallSpinner
         OnSmartDotMACAddressReceived?.Invoke(address);
     }
 
-    private void SmartDotRecievedEvent(SensorType sensorType, float timeStamp, int sampleCount, float XData, float YData, float ZData)
+    private void SmartDotRecievedEvent(SensorType sensorType, float deltaTime, int sampleCount, float XData, float YData, float ZData)
     {
-        DataParser.SendSmartDotToSubscribers(sensorType, timeStamp, sampleCount, XData, YData, ZData);
+        DataParser.SendSmartDotToSubscribers(sensorType, deltaTime, sampleCount, XData, YData, ZData);
     }
     
 
