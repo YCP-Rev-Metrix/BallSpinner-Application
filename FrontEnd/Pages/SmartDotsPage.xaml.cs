@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
+using Microsoft.Maui.ApplicationModel;
 
 namespace RevMetrix.BallSpinner.FrontEnd.Pages;
 

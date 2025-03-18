@@ -2,6 +2,7 @@
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Drawing.Geometries;
+using Microsoft.UI.Xaml.Controls.AnimatedVisuals;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
@@ -10,7 +11,6 @@ public class ChartViewModel : GraphDataViewModel
 {
     public string Name { get; set; }
     private IBallSpinner _ballSpinner;
-
 
 
     //private List<double> _xpoints;

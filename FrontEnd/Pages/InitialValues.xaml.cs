@@ -12,7 +12,7 @@ public partial class InitialValues : ContentPage
         
         InitialValuesModel model = new InitialValuesModel();
         Coordinates dummyvalues = new Coordinates(0, 0);
-        List<List<double>> axes = model.CalcuateBezierCruve(dummyvalues, dummyvalues, dummyvalues);
+        List<List<double>> axes = model.CalculateBezierCurve(dummyvalues, dummyvalues, dummyvalues);
         var chart = new InitialValuesChart(axes[0], axes[1], axes[2], axes[3]);
         BindingContext = chart;
         //BindingContext = this;

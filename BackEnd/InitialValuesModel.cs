@@ -9,7 +9,7 @@ public class InitialValuesModel
         
     }
 
-    public List<List<double>> CalcuateBezierCruve(Coordinates pointInit, Coordinates inflectPoint, Coordinates pointFinal)
+    public List<List<double>> CalculateBezierCurve(Coordinates pointInit, Coordinates inflectPoint, Coordinates pointFinal)
     {
         //First List: Linear Treadline X
         //Second List: Linear Treadline Y

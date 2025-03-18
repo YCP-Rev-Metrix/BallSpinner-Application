@@ -90,7 +90,10 @@
                                     InputTransparent="True"
                                     Series="{Binding AccelerationSeries}"
                                     x:Name="TopMiddleView"
+                                    AnimationsSpeed="0"
                                     Grid.Row="1">
+                                    <lvc:CartesianChart.XAxes
+                                        Name="Time"/>
                                 </lvc:CartesianChart>
                             </Grid>
                         </Border>
@@ -113,6 +116,7 @@
                                     x:Name="BottomMiddleView"
                                     Grid.Row="1"
                                     InputTransparent="True"
+                                    AnimationsSpeed="0"
                                     Series="{Binding RotationSeries}">
                                 </lvc:CartesianChart>
                             </Grid>
@@ -136,6 +140,7 @@
                                     x:Name="TopRightView"
                                     Grid.Row="1"
                                     InputTransparent="True"
+                                    AnimationsSpeed="0"
                                     Series="{Binding MagnetometerSeries}">
                                 </lvc:CartesianChart>
                             </Grid>
@@ -159,6 +164,7 @@
                                     x:Name="BottomRightView"
                                     Grid.Row="1"
                                     InputTransparent="True"
+                                    AnimationsSpeed="0"
                                     Series="{Binding LightSeries}">
                                 </lvc:CartesianChart>
                             </Grid>

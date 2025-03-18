@@ -18,6 +18,7 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using Microsoft.Graphics.Canvas.Effects;
 using Microsoft.UI.Xaml;
+using Microsoft.Maui.ApplicationModel;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
@@ -100,16 +101,17 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
     private FrontEnd _frontEnd;
     public BallSpinnerViewModel(FrontEnd frontend, MainPage mainPage, IBallSpinner ballspinner)
     {
-        accelXSeries.GeometrySize = 0;
-        accelYSeries.GeometrySize = 0;
-        accelZSeries.GeometrySize = 0;
-        rotatXSeries.GeometrySize = 0;
-        rotatYSeries.GeometrySize = 0;
-        rotatZSeries.GeometrySize = 0;
-        magneXSeries.GeometrySize = 0;
-        magneYSeries.GeometrySize = 0;
-        magneZSeries.GeometrySize = 0;
-        lightSeries.GeometrySize = 0;
+        accelXSeries.GeometrySize = 0.5;
+        accelYSeries.GeometrySize = 0.5;
+        accelZSeries.GeometrySize = 0.5;
+        rotatXSeries.GeometrySize = 0.5;
+        rotatYSeries.GeometrySize = 0.5;
+        rotatZSeries.GeometrySize = 0.5;
+        magneXSeries.GeometrySize = 0.5;
+        magneYSeries.GeometrySize = 0.5;
+        magneZSeries.GeometrySize = 0.5;
+        lightSeries.GeometrySize = 0.5;
+
 
         _frontEnd = frontend;
         MainPage = mainPage;
@@ -138,10 +140,6 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            var accelSeriesList = new List<ISeries>();
-            var rotatSeriesList = new List<ISeries>();
-            var magneSeriesList = new List<ISeries>();
-
 
 
             accelXSeries.Values = accelXValues;
