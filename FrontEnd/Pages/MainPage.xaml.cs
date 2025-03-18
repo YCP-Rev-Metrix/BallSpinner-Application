@@ -120,6 +120,7 @@ public partial class MainPage : ContentPage
             FileTypes = customFileType,
         };
         FileResult result = await FilePicker.Default.PickAsync(options);
+        /*
         if (result != null)
         {
             // Create new ballSpinner instance, display on screen
@@ -129,6 +130,7 @@ public partial class MainPage : ContentPage
             BallSpinners.Add(viewModel);
             OnPropertyChanged(nameof(BallSpinners));
         }
+        */
     }
 
     private async void OnSaveShotButtonClicked(object sender, EventArgs args)
@@ -197,9 +199,9 @@ public partial class MainPage : ContentPage
     {
         foreach (var spinner in BallSpinners)
         {
-            if(spinner.NotConnectedFadeVisible)
+            if(spinner.NotConnectedFadeVisible || !spinner.InitialValuesSet)
             {
-                DisplayAlert("Can't start", "All ball spinners must be connected.", "Okay");
+                DisplayAlert("Can't start", "All ball spinners must be connected/have initial values.", "Okay");
                 return;
             }    
         }

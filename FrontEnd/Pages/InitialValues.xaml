@@ -103,7 +103,7 @@
         </lvc:CartesianChart>
         <Button 
             Margin="10"
-            Clicked="SendMotorInstructions"
-            Text="Start Ball Spinner"/>
+            Clicked="SetInitialValues"
+            Text="Set Initial Values"/>
     </VerticalStackLayout>
 </ContentPage>

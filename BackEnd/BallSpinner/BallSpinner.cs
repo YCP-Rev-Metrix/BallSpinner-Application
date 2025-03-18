@@ -50,6 +50,11 @@ public class BallSpinnerClass : IBallSpinner
     /// <inheritdoc/>
     public event Action<PhysicalAddress> OnSmartDotMACAddressReceived;
 
+    public bool InitialValuesSet => RPMs != null;
+    private List<double> RPMs { get; set; } = null;
+    private int currentRPMInd = 0;
+    private int RPMSize = 0;
+
     private TCP? _connection;
     private IPAddress _address;
 
@@ -134,6 +139,7 @@ public class BallSpinnerClass : IBallSpinner
         // Debug.WriteLine($"Range byte: 0b{Convert.ToString(data[0], 2).PadLeft(8, '0')}");
 
         // SmartDotConfigReceivedEvent(data);
+        RPMs = null;
 
     }
 
@@ -334,8 +340,11 @@ public class BallSpinnerClass : IBallSpinner
 
         DataParser.Start(Name);
 
-        _currentVoltage = 1;
-        _motorTimer = new Timer(TimeSpan.FromSeconds(0.25));
+
+        currentRPMInd = 0;
+        RPMSize = RPMs.Count;
+
+        _motorTimer = new Timer(TimeSpan.FromSeconds(0.003));
         _motorTimer.Elapsed += OnTimedEvent;
         _motorTimer.Start();
 
@@ -459,47 +468,30 @@ public class BallSpinnerClass : IBallSpinner
     {
         return AvailableSampleRates;
     }
-    private void OnTimedEvent(object? source, ElapsedEventArgs e)
+    private async void OnTimedEvent(object? source, ElapsedEventArgs e)
     {
-        if (!IsConnected())
-            return;
-
-        _currentVoltage++;
-
-        if (_currentVoltage >= 30) //Primary motor supports up to 30, secondary motors only 12
-            _currentVoltage = 0;
-
-        byte x, y, z;
-
-        if (_currentVoltage >= 0 && _currentVoltage <= 10)
-            y = 8;
-        else
-            y = 0;
-
-        if (_currentVoltage >= 10 && _currentVoltage <= 20)
-            z = 8;
-        else
-            z = 0;
-
-        if (_currentVoltage >= 15 && _currentVoltage <= 30)
-            x = _currentVoltage;
-        else
-            x = 0;
-
-        //x = 30;
-
-        _connection!.SetMotorVoltages(x, y, z);
-    }
-    public async void SendMotorRPMs(List<double> Rpms)
-    {
-        foreach (var Rpm in Rpms)
+        //if (!IsConnected())
+        //    return;
+        try
         {
-            // Send RPM value to the BSC
-            byte[] RPMByteVal = BitConverter.GetBytes((float)Rpm);
-            // Sleep for the designated predefined time step (0.001 for now)
-            Thread.Sleep(1);
-            await _connection!.SetMotorRPM(RPMByteVal);
+            if (currentRPMInd >= RPMSize)
+            {
+                _motorTimer.Stop();
+                return;
+            }
+
+            byte[] RPMVal = BitConverter.GetBytes((float)RPMs[currentRPMInd]);
+            currentRPMInd++;
+            _connection!.SetMotorRPM(RPMVal);
         }
+        catch (Exception ex) 
+        {
+            Debug.WriteLine(ex.Message);
+        }
+    }
+    public async void SetMotorRPMs(List<double> Rpms)
+    {
+        RPMs = Rpms;
     }
 }
 

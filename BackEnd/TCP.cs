@@ -297,14 +297,21 @@ public class TCP : IDisposable
         };
 
         // Send the motor instruction to the PI
-        await _client.Client.SendAsync(instructions);
+        try
+        {
+            await _client.Client.SendAsync(instructions);
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e.Message);
+        }
     }
 
     /// <summary>
     /// Sends RPMS to the motors
     /// The Rpm parameter is expected to be a 32 bit float value conerted to a byte array
     /// </summary>
-    public async Task<bool> SetMotorRPM(byte[] Rpm)
+    public async void SetMotorRPM(byte[] Rpm)
     {
         //if (!_client.Connected)
         //    throw new Exception("Can't send instructions without being connected");
@@ -312,7 +319,10 @@ public class TCP : IDisposable
         byte type = (byte)MessageType.A_B_MOTOR_INSTRUCTIONS;
         byte[] instructions = new byte[]
         {
-            type, //Type
+           // (byte)(inx & 0xFF), // Lower byte of inx
+           //(byte)((inx >> 8) & 0xFF), // Second byte of inx
+           //(byte)((inx >> 16) & 0xFF), // Third byte of inx
+           //(byte)((inx >> 24) & 0xFF), // Fourth byte of inx - Debug stuff
 
             0x00,
             0x0C, //Size
@@ -334,9 +344,8 @@ public class TCP : IDisposable
         };
 
         // Send the motor instruction to the PI
-        //await _client.Client.SendAsync(instructions); - will be sent to BSC, but for now just output to console
+        await _client.Client.SendAsync(instructions);
         Debug.WriteLine(BitConverter.ToString(instructions));
-        return true;
     }
 
     /// <summary>

@@ -23,6 +23,8 @@ public class Simulation : IBallSpinner
     ///<inheritdoc/>
     public string Name { get; set; } = "Simulation";
 
+    public bool InitialValuesSet { get; } = true;
+
     ///<inheritdoc/>
     public string SmartDotMAC { get; } = "11:11:11:11:11:11";
 

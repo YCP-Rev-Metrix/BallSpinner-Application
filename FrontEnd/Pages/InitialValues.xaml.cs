@@ -31,11 +31,13 @@ public partial class InitialValues : ContentPage
         }
     }
 
-    private async void SendMotorInstructions(object sender, EventArgs args)
+    private async void SetInitialValues(object sender, EventArgs args)
     {
         // close Initial values window
         _frontend.CloseInitialValuesWindow();
         // Send rpms to the Ball Spinner
-        _ballSpinner.SendMotorRPMs(bezierPointsY);
+        _ballSpinner.SetMotorRPMs(bezierPointsY);
+        // Let user know initial values are set for the ball spinner
+        OnPropertyChanged("InitalValuesSet");
     }
 }

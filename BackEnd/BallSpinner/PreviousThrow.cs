@@ -11,7 +11,7 @@ namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 /// <summary>
 /// Interface defining the structure for simulation components in the backend.
 /// </summary>
-public class PreviousThrow : IBallSpinner
+public class PreviousThrow // Previous throw is not implementing IBallSpinner. Needs to be fixed, and it will probably be different from IBallSpinner
 {
     ///<inheritdoc/>
     public string MAC { get; set; } = "Simulation";

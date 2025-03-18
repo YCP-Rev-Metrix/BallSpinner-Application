@@ -37,6 +37,8 @@ public interface IBallSpinner : INotifyPropertyChanged
     /// </summary>
     DataParser DataParser { get; }
 
+    public bool InitialValuesSet { get; }
+
     /// <summary>
     ///Event triggered when an error message is received from the Ball Spinner.
     /// </summary>

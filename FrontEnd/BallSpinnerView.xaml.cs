@@ -15,6 +15,8 @@ public partial class BallSpinnerView : ContentView
     
     private BallSpinnerViewModel _viewModel = null!;
 
+    private bool InitialValuesCheck => _viewModel.InitialValuesSet;
+
 	public BallSpinnerView()
 	{
 		InitializeComponent();

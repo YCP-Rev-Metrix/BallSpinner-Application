@@ -18,6 +18,7 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using Microsoft.Graphics.Canvas.Effects;
 using Microsoft.UI.Xaml;
+using WinRT.FrontEndVtableClasses;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
@@ -67,6 +68,8 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
     public IBallSpinner BallSpinner => _ballSpinner;
 
     private IBallSpinner _ballSpinner;
+
+    public bool InitialValuesSet  => _ballSpinner.InitialValuesSet;
 
     public ObservableCollection<double> accelXValues = new ObservableCollection<double>();
     public ObservableCollection<double> accelYValues = new ObservableCollection<double>();
