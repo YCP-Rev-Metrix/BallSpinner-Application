@@ -23,7 +23,7 @@ public class Simulation : IBallSpinner
     ///<inheritdoc/>
     public string Name { get; set; } = "Simulation";
 
-    public bool InitialValuesSet { get; } = true;
+    public bool InitialValuesSet { get; set; } = false;
 
     ///<inheritdoc/>
     public string SmartDotMAC { get; } = "11:11:11:11:11:11";
@@ -67,6 +67,7 @@ public class Simulation : IBallSpinner
     public Vector3 AngularVelocity = new Vector3(0.1f,0.0f,1f);
     public Quaternion Rotation = Quaternion.Identity;
 
+    private List<double> RPMs { get; set; } = null;
     /// <summary/>
     public Simulation()
     {
@@ -231,6 +232,11 @@ public class Simulation : IBallSpinner
         magneYValues.Add((double)Metric.MagnetometerY);
         magneZValues.Add((double)Metric.MagnetometerZ);
         lightValues.Add((double)Metric.Light);
+    }
+
+    public async void SetMotorRPMs(List<double> Rpms)
+    {
+        RPMs = Rpms;
     }
 
 }

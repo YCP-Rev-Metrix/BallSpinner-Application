@@ -37,7 +37,7 @@ public interface IBallSpinner : INotifyPropertyChanged
     /// </summary>
     DataParser DataParser { get; }
 
-    public bool InitialValuesSet { get; }
+    public bool InitialValuesSet { get; set; }
 
     /// <summary>
     ///Event triggered when an error message is received from the Ball Spinner.
@@ -107,6 +107,8 @@ public interface IBallSpinner : INotifyPropertyChanged
     /// It also requests the TCP connection to send the chosen values to the BSC
     /// </summary>
     void SubmitSmartDotConfig(double[] Ranges, double[] SampleRates, bool XL_OFF, bool GY_OFF, bool MAG_OFF, bool LT_OFF);
+
+    public void SetMotorRPMs(List<double> Rpms);
 
     ///<summary>
     /// This returns an array of booleans that will be used to compare against the received Range settings

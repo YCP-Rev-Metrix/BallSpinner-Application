@@ -8,13 +8,15 @@ namespace RevMetrix.BallSpinner.FrontEnd;
 public partial class InitialValues : ContentPage
 {
     List<double> bezierPointsY;
-    private BallSpinnerClass _ballSpinner;
+    private BallSpinnerViewModel _ballSpinner;
+    private BallSpinnerViewModel _simulation;
     private FrontEnd _frontend;
-    public InitialValues(BallSpinnerClass ballSpinner, FrontEnd frontend)
+    public InitialValues(BallSpinnerViewModel ballSpinner, BallSpinnerViewModel simulation, FrontEnd frontend)
 	{
         InitializeComponent();
 
         _ballSpinner = ballSpinner;
+        _simulation = simulation;
         _frontend = frontend;
         
         InitialValuesModel model = new InitialValuesModel();
@@ -35,9 +37,11 @@ public partial class InitialValues : ContentPage
     {
         // close Initial values window
         _frontend.CloseInitialValuesWindow();
-        // Send rpms to the Ball Spinner
-        _ballSpinner.SetMotorRPMs(bezierPointsY);
-        // Let user know initial values are set for the ball spinner
-        OnPropertyChanged("InitalValuesSet");
+        // Send rpms to the Ball Spinner/simulation
+        _ballSpinner.BallSpinner.SetMotorRPMs(bezierPointsY);
+        _simulation.BallSpinner.SetMotorRPMs(bezierPointsY);
+        //update initial values status
+        _ballSpinner.InitialValuesCheck = true;
+        _simulation.InitialValuesCheck = true;
     }
 }

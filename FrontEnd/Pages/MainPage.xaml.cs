@@ -82,22 +82,34 @@ public partial class MainPage : ContentPage
     private async void OnNewShotButtonClicked(object sender, EventArgs args)
     {
         // Extract BallSpinnerClass instance
-        BallSpinnerClass? ballSpinner = null;
+        BallSpinnerViewModel? ballSpinner = null;
+        BallSpinnerViewModel? simulation = null;
         foreach(var _ballSpinner in BallSpinners)
         {
             if (_ballSpinner.BallSpinner.GetType() == typeof(BallSpinnerClass)) 
             {
-                ballSpinner = (BallSpinnerClass) _ballSpinner.BallSpinner;
+                ballSpinner = _ballSpinner;
+            }
+            else if (_ballSpinner.BallSpinner.GetType() == typeof(Simulation))
+            {
+                simulation = _ballSpinner;
             }
         }
         // If the user is not properly connected to a ball spinner instance, return an error message
-        if (ballSpinner == null || (ballSpinner != null && !ballSpinner.IsConnected()))
+        if (ballSpinner.BallSpinner == null || (ballSpinner.BallSpinner != null && !ballSpinner.BallSpinner.IsConnected()))
         {
             await DisplayAlert("Not connected to a Ball Spinner", "Please connect to a Ball Spinner to enter initial values", "Ok");
             return;
         }
-        
-        _frontEnd.InitialValues(ballSpinner);
+
+        // If the user is not properly connected to a ball spinner instance, return an error message
+        if (simulation.BallSpinner == null)
+        {
+            await DisplayAlert("Not connected to a Simulation", "Please open a simulation to enter initial values", "Ok");
+            return;
+        }
+
+        _frontEnd.InitialValues(ballSpinner, simulation);
     }
 
     private void OnCloudManagementButtonClicked(object sender, EventArgs args)

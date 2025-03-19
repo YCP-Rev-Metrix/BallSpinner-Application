@@ -65,6 +65,15 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         }
     }
 
+    public bool InitialValuesCheck
+    {
+        get => _ballSpinner.InitialValuesSet;
+        set
+        {
+            _ballSpinner.InitialValuesSet = value;
+            OnPropertyChanged(nameof(InitialValuesCheck));
+        }
+    }
     public IBallSpinner BallSpinner => _ballSpinner;
 
     private IBallSpinner _ballSpinner;
@@ -101,6 +110,8 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
     public MainPage MainPage { get; }
     public int interval = 0;
     private FrontEnd _frontEnd;
+
+    public Action<bool> UpdateInitialValuesStatus;
     public BallSpinnerViewModel(FrontEnd frontend, MainPage mainPage, IBallSpinner ballspinner)
     {
         _frontEnd = frontend;
@@ -275,7 +286,7 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
     {
         _frontEnd.SmartDotSettings(this);
     }
-    
+
     //TODO: Function call to Backend to get ODR & sample rates
 
     //TODO: Function call to Backend to pass selected sample rates

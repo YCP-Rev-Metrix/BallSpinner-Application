@@ -169,12 +169,12 @@ public class FrontEnd : IFrontEnd
         return result;
     }
 
-    public void InitialValues(BallSpinnerClass _ballSpinner)
+    public void InitialValues(BallSpinnerViewModel _ballSpinner, BallSpinnerViewModel simulation)
     {
         if (_newInitialValuesWindow != null)
             return;
      
-        _newInitialValuesWindow = new Window(new InitialValues(_ballSpinner, this))
+        _newInitialValuesWindow = new Window(new InitialValues(_ballSpinner, simulation, this))
         {
             Title = "Input Values",
             Width = 400,

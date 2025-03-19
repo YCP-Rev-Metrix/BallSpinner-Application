@@ -50,7 +50,7 @@ public class BallSpinnerClass : IBallSpinner
     /// <inheritdoc/>
     public event Action<PhysicalAddress> OnSmartDotMACAddressReceived;
 
-    public bool InitialValuesSet => RPMs != null;
+    public bool InitialValuesSet { get; set; } = false;
     private List<double> RPMs { get; set; } = null;
     private int currentRPMInd = 0;
     private int RPMSize = 0;

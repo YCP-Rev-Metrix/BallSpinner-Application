@@ -15,9 +15,8 @@ public partial class BallSpinnerView : ContentView
     
     private BallSpinnerViewModel _viewModel = null!;
 
-    private bool InitialValuesCheck => _viewModel.InitialValuesSet;
 
-	public BallSpinnerView()
+    public BallSpinnerView()
 	{
 		InitializeComponent();
 	}
@@ -31,7 +30,8 @@ public partial class BallSpinnerView : ContentView
         _viewModel.TopRightView.DataReceived += (metric, value, timeFromStart) => { ChartDataReceived(_viewModel.TopRightView, TopRightView, metric, value, timeFromStart); };
         _viewModel.BottomMiddleView.DataReceived += (metric, value, timeFromStart) => { ChartDataReceived(_viewModel.BottomMiddleView, BottomMiddleView, metric, value, timeFromStart); };
         _viewModel.BottomRightView.DataReceived += (metric, value, timeFromStart) => { ChartDataReceived(_viewModel.BottomRightView, BottomRightView, metric, value, timeFromStart); };
-    
+
+
     }
 
     private void OnRemoveBallSpinnerButton(object sender, EventArgs args)
