@@ -3,7 +3,8 @@
     x:Class="RevMetrix.BallSpinner.FrontEnd.BallSpinnerView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:RevMetrix.BallSpinner.FrontEnd">
+    xmlns:local="clr-namespace:RevMetrix.BallSpinner.FrontEnd"
+    xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui">
     <Grid>
         <Border>
             <VerticalStackLayout>
@@ -80,11 +81,17 @@
                                     Grid.Row="0"
                                     Padding="3,0,0,0"
                                     Text="{Binding TopMiddleView.Name}" />
-                                <WebView
+                                <!--<WebView
                                     x:Name="TopMiddleView"
                                     Grid.Row="1"
                                     InputTransparent="True"
-                                    Source="{Binding TopMiddleView.Source}" />
+                                    Source="{Binding TopMiddleView.Source}" />-->
+                                <lvc:CartesianChart
+                                    InputTransparent="True"
+                                    Series="{Binding AccelerationSeries}"
+                                    x:Name="TopMiddleView"
+                                    Grid.Row="1">
+                                </lvc:CartesianChart>
                             </Grid>
                         </Border>
                         <Border Grid.Row="0" Grid.Column="1">
@@ -97,11 +104,17 @@
                                     Grid.Row="0"
                                     Padding="3,0,0,0"
                                     Text="{Binding BottomMiddleView.Name}" />
-                                <WebView
+                                <!--<WebView
                                     x:Name="BottomMiddleView"
                                     Grid.Row="1"
                                     InputTransparent="True"
-                                    Source="{Binding BottomMiddleView.Source}" />
+                                    Source="{Binding BottomMiddleView.Source}" />-->
+                                <lvc:CartesianChart
+                                    x:Name="BottomMiddleView"
+                                    Grid.Row="1"
+                                    InputTransparent="True"
+                                    Series="{Binding RotationSeries}">
+                                </lvc:CartesianChart>
                             </Grid>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="0">
@@ -114,11 +127,17 @@
                                     Grid.Row="0"
                                     Padding="3,0,0,0"
                                     Text="{Binding TopRightView.Name}" />
-                                <WebView
+                                <!--<WebView
                                     x:Name="TopRightView"
                                     Grid.Row="1"
                                     InputTransparent="True"
-                                    Source="{Binding TopRightView.Source}" />
+                                    Source="{Binding TopRightView.Source}" />-->
+                                <lvc:CartesianChart
+                                    x:Name="TopRightView"
+                                    Grid.Row="1"
+                                    InputTransparent="True"
+                                    Series="{Binding MagnetometerSeries}">
+                                </lvc:CartesianChart>
                             </Grid>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="1">
@@ -131,11 +150,17 @@
                                     Grid.Row="0"
                                     Padding="3,0,0,0"
                                     Text="{Binding BottomRightView.Name}" />
-                                <WebView
+                                <!--<WebView
                                     x:Name="BottomRightView"
                                     Grid.Row="1"
                                     InputTransparent="True"
-                                    Source="{Binding BottomRightView.Source}" />
+                                    Source="{Binding BottomRightView.Source}" />-->
+                                <lvc:CartesianChart
+                                    x:Name="BottomRightView"
+                                    Grid.Row="1"
+                                    InputTransparent="True"
+                                    Series="{Binding LightSeries}">
+                                </lvc:CartesianChart>
                             </Grid>
                         </Border>
                     </Grid>

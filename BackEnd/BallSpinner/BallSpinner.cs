@@ -62,7 +62,7 @@ public class BallSpinnerClass : IBallSpinner
    
     public static readonly double[][] RANGE_OPTIONS = {
         [2, 4, 8, 16,-1, -1, -1, -1],
-        [125,250,1000,2000,-1, -1, -1 ,6400],
+        [125,250,500,1000,2000, -1, -1 ,-1],
         [2500, 4, 8, 16, 8, 16, 32, 64],
         [600, 1300, 8000, 16000, 32000, 64000, -1, -1],
     };
@@ -281,7 +281,8 @@ public class BallSpinnerClass : IBallSpinner
         {
             Debug.WriteLine($"Index {i}: " + string.Join(", ", AvailableRanges[i]));
         }
-        Debug.WriteLine("Beginning to send back an artificial message for config");
+       
+        //Debug.WriteLine("Beginning to send back an artificial message for config");
 
         //Testing
         //double[] r = new double[4];
