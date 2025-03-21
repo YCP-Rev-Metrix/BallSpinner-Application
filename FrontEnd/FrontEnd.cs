@@ -174,11 +174,11 @@ public class FrontEnd : IFrontEnd
         if (_newInitialValuesWindow != null)
             return;
 
-        _newInitialValuesWindow = new Window(new InitialValues())
+        _newInitialValuesWindow = new Window(new InitialValues(Backend.Database))
         {
             Title = "Input Values",
-            Width = 400,
-            Height = 500,
+            Width = 450,
+            Height = 700,
             X = 100,
             Y = 100
         };
