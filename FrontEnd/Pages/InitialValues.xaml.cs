@@ -27,10 +27,6 @@ public partial class InitialValues : ContentPage
         var chart = new InitialValuesChart(axes[0], axes[1], axes[2], axes[3]);
         BindingContext = chart;
         //BindingContext = this;
-        for(int i = 0; i <= 100; i+=5) //delete this loop when done, currently it is for outputting bezier values to console.
-        {
-            Console.Out.WriteLine("X = " + axes[2][i] + " , Y = " + axes[3][i]);
-        }
     }
 
     private async void SetInitialValues(object sender, EventArgs args)
@@ -39,9 +35,9 @@ public partial class InitialValues : ContentPage
         _frontend.CloseInitialValuesWindow();
         // Send rpms to the Ball Spinner/simulation
         _ballSpinner.BallSpinner.SetMotorRPMs(bezierPointsY);
-        _simulation.BallSpinner.SetMotorRPMs(bezierPointsY);
+        //_simulation.BallSpinner.SetMotorRPMs(bezierPointsY);
         //update initial values status
         _ballSpinner.InitialValuesCheck = true;
-        _simulation.InitialValuesCheck = true;
+        //_simulation.InitialValuesCheck = true;
     }
 }

@@ -313,8 +313,8 @@ public class TCP : IDisposable
     /// </summary>
     public async void SetMotorRPM(byte[] Rpm)
     {
-        //if (!_client.Connected)
-        //    throw new Exception("Can't send instructions without being connected");
+        if (!_client.Connected)
+            throw new Exception("Can't send instructions without being connected");
 
         byte type = (byte)MessageType.A_B_MOTOR_INSTRUCTIONS;
         byte[] instructions = new byte[]
@@ -324,10 +324,10 @@ public class TCP : IDisposable
            //(byte)((inx >> 16) & 0xFF), // Third byte of inx
            //(byte)((inx >> 24) & 0xFF), // Fourth byte of inx - Debug stuff
 
-            0x0C, 
+            type, //type
 
             0x00,
-            0x03, // 
+            0x03, // size
 
             Rpm[0], // Set driver motor RPM value
             Rpm[1],
@@ -346,7 +346,7 @@ public class TCP : IDisposable
         };
 
         // Send the motor instruction to the PI
-        //await _client.Client.SendAsync(instructions);
+        await _client.Client.SendAsync(instructions);
         Debug.WriteLine(BitConverter.ToString(instructions));
     }
 

@@ -344,7 +344,7 @@ public class BallSpinnerClass : IBallSpinner
         currentRPMInd = 0;
         RPMSize = RPMs.Count;
         // For now I know the timestep, so this is hardcoded
-        _motorTimer = new Timer(TimeSpan.FromSeconds(0.1));
+        _motorTimer = new Timer(TimeSpan.FromSeconds(0.25));
         _motorTimer.Elapsed += OnTimedEvent;
         _motorTimer.Start();
     }
@@ -477,6 +477,7 @@ public class BallSpinnerClass : IBallSpinner
             if (!_semaphore.Wait(0))
             {
                 Debug.WriteLine("Thread attempted to enter when another was in use");
+                currentRPMInd += 25;
                 return; // If timed event tries to fire off when another thread is sending, ensure that thread does not have access
             }
             if (currentRPMInd >= RPMSize)
@@ -485,9 +486,9 @@ public class BallSpinnerClass : IBallSpinner
                 _semaphore.Release();
                 return;
             }
-
+            
             byte[] RPMVal = BitConverter.GetBytes((float)RPMs[currentRPMInd]);
-            currentRPMInd += 10; // I know this only lasts ten miliseconds and is sampled every 100 miliseconds, so in order to get the current RPM every 0.1 seconds skip 10 points
+            currentRPMInd += 25; // I know this only lasts ten miliseconds and is sampled every 100 miliseconds, so in order to get the current RPM every 0.1 seconds skip 10 points
             _connection!.SetMotorRPM(RPMVal);
         }
         catch (Exception ex)

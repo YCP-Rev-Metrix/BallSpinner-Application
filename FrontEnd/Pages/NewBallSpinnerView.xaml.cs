@@ -6,13 +6,13 @@ namespace RevMetrix.BallSpinner.FrontEnd.Pages;
 public partial class NewBallSpinnerView : ContentPage
 {
 	private TaskCompletionSource<IBallSpinner?> _task;
-	private IBallSpinner _ballSpinner;
+	private IBallSpinner _currentBallSpinner;
 
     public NewBallSpinnerView(TaskCompletionSource<IBallSpinner?> task, IBallSpinner ballSpinners)
 	{
 		_task = task;
 
-		_ballSpinner = ballSpinners;
+		_currentBallSpinner = ballSpinners;
 
 		InitializeComponent();
 	}
@@ -20,26 +20,23 @@ public partial class NewBallSpinnerView : ContentPage
 	public void AddSimulationButton(object sender, EventArgs args)
 	{
 		// Only add a Spinner if one is not already added
-        if (_ballSpinner.GetType() == typeof(Simulation)) {
-
-            _task.SetResult(null);
-		}
-		else
-		{
+        
+        if (_currentBallSpinner == null || _currentBallSpinner?.GetType() == typeof(BallSpinnerClass))
+        {
             _task.SetResult(new Simulation());
+        } 
+        else
+        {
+            _task.SetResult(null);
         }
+
     }
 
 	public async void AddBallSpinnerButton(object sender, EventArgs args)
 	{
-        // Only add a ball spinner if one is not already added
-        if (_ballSpinner.GetType() == typeof(BallSpinnerClass))
+        // Only add ball spinner if no ball spinners exist or if the only other ball spinner is a simulation
+        if (_currentBallSpinner == null || _currentBallSpinner?.GetType() == typeof(Simulation))
         {
-            DisplayAlert("NOPE", "Unable to add more than one Ball Spinner", "Okay");
-            _task.SetResult(null);
-        }
-		else
-		{
             var addr = IPAddr.Text;
             if (string.IsNullOrEmpty(addr))
             {
@@ -56,6 +53,10 @@ public partial class NewBallSpinnerView : ContentPage
                     await DisplayAlert("Alert", e.Message, "BOOOOOOOOOOOOOOOOOOOOOOOOO");
                 }
             }
+        }
+        else
+        {
+            _task.SetResult(null);
         }
     }
 }

@@ -103,12 +103,13 @@ public partial class MainPage : ContentPage
         }
 
         // If the user is not properly connected to a ball spinner instance, return an error message
+        /*
         if (simulation == null)
         {
             await DisplayAlert("Not connected to a Simulation", "Please open a simulation to enter initial values", "Ok");
             return;
         }
-
+        */
         _frontEnd.InitialValues(ballSpinner, simulation);
     }
 
