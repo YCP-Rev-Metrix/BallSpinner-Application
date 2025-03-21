@@ -343,11 +343,10 @@ public class BallSpinnerClass : IBallSpinner
 
         currentRPMInd = 0;
         RPMSize = RPMs.Count;
-
-        _motorTimer = new Timer(TimeSpan.FromSeconds(0.003));
+        // For now I know the timestep, so this is hardcoded
+        _motorTimer = new Timer(TimeSpan.FromSeconds(0.1));
         _motorTimer.Elapsed += OnTimedEvent;
         _motorTimer.Start();
-
     }
 
     /// <inheritdoc/>
@@ -468,25 +467,36 @@ public class BallSpinnerClass : IBallSpinner
     {
         return AvailableSampleRates;
     }
-    private async void OnTimedEvent(object? source, ElapsedEventArgs e)
+
+    private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+
+    private void OnTimedEvent(object? source, ElapsedEventArgs e)
     {
-        //if (!IsConnected())
-        //    return;
         try
         {
+            if (!_semaphore.Wait(0))
+            {
+                Debug.WriteLine("Thread attempted to enter when another was in use");
+                return; // If timed event tries to fire off when another thread is sending, ensure that thread does not have access
+            }
             if (currentRPMInd >= RPMSize)
             {
                 _motorTimer.Stop();
+                _semaphore.Release();
                 return;
             }
 
             byte[] RPMVal = BitConverter.GetBytes((float)RPMs[currentRPMInd]);
-            currentRPMInd++;
+            currentRPMInd += 10; // I know this only lasts ten miliseconds and is sampled every 100 miliseconds, so in order to get the current RPM every 0.1 seconds skip 10 points
             _connection!.SetMotorRPM(RPMVal);
         }
-        catch (Exception ex) 
+        catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
+        }
+        finally
+        {
+            _semaphore.Release();
         }
     }
     public async void SetMotorRPMs(List<double> Rpms)

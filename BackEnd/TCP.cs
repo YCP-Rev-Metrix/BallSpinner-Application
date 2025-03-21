@@ -324,8 +324,10 @@ public class TCP : IDisposable
            //(byte)((inx >> 16) & 0xFF), // Third byte of inx
            //(byte)((inx >> 24) & 0xFF), // Fourth byte of inx - Debug stuff
 
+            0x0C, 
+
             0x00,
-            0x0C, //Size
+            0x03, // 
 
             Rpm[0], // Set driver motor RPM value
             Rpm[1],
@@ -344,7 +346,7 @@ public class TCP : IDisposable
         };
 
         // Send the motor instruction to the PI
-        await _client.Client.SendAsync(instructions);
+        //await _client.Client.SendAsync(instructions);
         Debug.WriteLine(BitConverter.ToString(instructions));
     }
 

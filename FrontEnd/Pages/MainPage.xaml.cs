@@ -96,14 +96,14 @@ public partial class MainPage : ContentPage
             }
         }
         // If the user is not properly connected to a ball spinner instance, return an error message
-        if (ballSpinner.BallSpinner == null || (ballSpinner.BallSpinner != null && !ballSpinner.BallSpinner.IsConnected()))
+        if (ballSpinner == null || (ballSpinner != null && !ballSpinner.BallSpinner.IsConnected()))
         {
             await DisplayAlert("Not connected to a Ball Spinner", "Please connect to a Ball Spinner to enter initial values", "Ok");
             return;
         }
 
         // If the user is not properly connected to a ball spinner instance, return an error message
-        if (simulation.BallSpinner == null)
+        if (simulation == null)
         {
             await DisplayAlert("Not connected to a Simulation", "Please open a simulation to enter initial values", "Ok");
             return;

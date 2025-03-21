@@ -22,7 +22,7 @@ public class InitialValuesModel
         List<double> y = new List<double>();
 
         // generate t (which is also resolution of curve)
-        for (double i = 0; i <= 1; i += 0.003)
+        for (double i = 0; i <= 1; i += 0.01)
         {
             //Assume x = t = 100s
             x.Add(i*100);
