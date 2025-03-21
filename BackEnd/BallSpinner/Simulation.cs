@@ -88,7 +88,7 @@ public class Simulation : IBallSpinner
     {
         _FileIndex = FileIndex;
         InitializeConnection();
-        ball = new Ball("q", 8.0, 11, "Pancake");
+        ball = new Ball("Test", 8.0, 11, "Pancake");
     }
 
     /// <summary>

@@ -8,6 +8,7 @@ using Common.POCOs;
 using RevMetrix.BallSpinner.BackEnd.Common.Utilities;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using Common.POCOs.Shots;
+using System.Xml.Linq;
 
 namespace RevMetrix.BallSpinner.BackEnd.Database;
 
@@ -40,7 +41,14 @@ public partial class Database : IDatabase
         Coordinate inflection = new Coordinate(1.2, 1.1);
         Coordinate finalpoint = new Coordinate(1.2, 1.1);
 
-        ShotInfo parameters = new ShotInfo(name, initpoint, inflection, finalpoint, 0.003);
+        ShotInfo parameters = new ShotInfo
+        {
+            Name = name,
+            BezierInitPoint = initpoint,
+            BezierInflectionPoint = inflection,
+            BezierFinalPoint = finalpoint,
+            TimeStep = 0.003,
+        };
         Ball ball = ballSpinner.ball;
 
         byte[] macaddy = Convert.FromHexString("001A2B3C4D5E");
@@ -50,14 +58,14 @@ public partial class Database : IDatabase
             MACAddress = macaddy,
             Comments = "This was a very good module to use. SO GOOOOOOODDD!!!!",
         };
-        var requestObject = new
+        SimulatedShot shot = new SimulatedShot
         {
             shotinfo = parameters,
             data = sampleData,
             ball = ball,
-            sensorInfo = sensorInfo
+            sensorInfo = sensorInfo,
         };
-        var jsonBody = JsonConvert.SerializeObject(requestObject);
+        var jsonBody = JsonConvert.SerializeObject(shot);
         // Create the request content
         var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
         Client.DefaultRequestHeaders.Authorization = 

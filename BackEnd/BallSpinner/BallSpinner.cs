@@ -165,7 +165,7 @@ public class BallSpinnerClass : IBallSpinner
 
         // SmartDotConfigReceivedEvent(data);
 
-        ball = new Ball("q", 8.0, 11, "Pancake");
+        ball = new Ball("Test", 8.0, 11, "Pancake");
 
     }
 
