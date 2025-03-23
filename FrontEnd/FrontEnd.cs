@@ -169,12 +169,12 @@ public class FrontEnd : IFrontEnd
         return result;
     }
 
-    public void InitialValues()
+    public void InitialValues(IBallSpinner ballSpinner)
     {
         if (_newInitialValuesWindow != null)
             return;
 
-        _newInitialValuesWindow = new Window(new InitialValues())
+        _newInitialValuesWindow = new Window(new InitialValues(this, ballSpinner))
         {
             Title = "Input Values",
             Width = 400,
