@@ -169,7 +169,7 @@ public class FrontEnd : IFrontEnd
         return result;
     }
 
-    public void InitialValues(IBallSpinner ballSpinner)
+    public void InitialValues(BallSpinnerClass ballSpinner)
     {
         if (_newInitialValuesWindow != null)
             return;

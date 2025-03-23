@@ -22,7 +22,7 @@ public partial class MainPage : ContentPage
     public ISeries[] LightChartValues { get; set; }
     public ObservableCollection<BallSpinnerViewModel> BallSpinners { get; } = new();
 
-    public IBallSpinner _ballSpinner;
+    public BallSpinnerClass _ballSpinner;
 
     public bool NotLoggedIn => !LoggedIn;
     public bool LoggedIn { get; private set; } = false;
@@ -192,7 +192,7 @@ public partial class MainPage : ContentPage
             if (ballSpinner.GetType() == typeof(BallSpinnerClass))
             {
                 BallSpinnerCount++;
-                _ballSpinner = ballSpinner;
+                _ballSpinner = (BallSpinnerClass )ballSpinner;
             }
             else if (ballSpinner.GetType() == typeof(Simulation))
             {

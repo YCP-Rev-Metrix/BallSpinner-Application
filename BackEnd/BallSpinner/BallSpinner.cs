@@ -14,6 +14,7 @@ using Timer = System.Timers.Timer;
 using CsvHelper.Configuration.Attributes;
 using Microsoft.Maui;
 using Newtonsoft.Json.Linq;
+using System.Threading;
 
 namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 
@@ -33,7 +34,14 @@ public class BallSpinnerClass : IBallSpinner
     /// <inheritdoc/>
     public DataParser DataParser { get; private set; } = new DataParser();
 
+    public List<double> _rpms;
+
+    public int RPMCount;
+
+    public int currentRPMInd;
     public string SmartDotMAC { get; }
+
+    SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
     /// <inheritdoc/>
     public event Action? SendErrorToApp;
@@ -340,6 +348,8 @@ public class BallSpinnerClass : IBallSpinner
 
         DataParser.Start(Name + _FileIndex.ToString());
 
+        currentRPMInd = 0;
+
         _currentVoltage = 1;
         _motorTimer = new Timer(TimeSpan.FromSeconds(0.25));
         _motorTimer.Elapsed += OnTimedEvent;
@@ -465,35 +475,40 @@ public class BallSpinnerClass : IBallSpinner
     {
         return AvailableSampleRates;
     }
+
+    public void SetMotorRPMs(List<double> RPMs)
+    {
+        _rpms = RPMs;
+        RPMCount = RPMs.Count;
+    }
     private void OnTimedEvent(object? source, ElapsedEventArgs e)
     {
-        if (!IsConnected())
-            return;
+        try
+        {
+            if (!_semaphore.Wait(0))
+            {
+                Debug.WriteLine("Thread attempted to enter when another was in use");
+                return; // If timed event tries to fire off when another thread is sending, ensure that thread does not have access
+            }
+            if (currentRPMInd >= RPMCount)
+            {
+                _motorTimer.Stop();
+                _semaphore.Release();
+                return;
+            }
 
-        _currentVoltage++;
-
-        if (_currentVoltage >= 30) //Primary motor supports up to 30, secondary motors only 12
-            _currentVoltage = 0;
-
-        byte x, y, z;
-
-        if (_currentVoltage >= 0 && _currentVoltage <= 10)
-            y = 8;
-        else
-            y = 0;
-
-        if (_currentVoltage >= 10 && _currentVoltage <= 20)
-            z = 8;
-        else
-            z = 0;
-
-        if (_currentVoltage >= 15 && _currentVoltage <= 30)
-            x = _currentVoltage;
-        else
-            x = 0;
-
-        //x = 30;
-
-        _connection!.SetMotorVoltages(x, y, z);
+            Debug.WriteLine("Current index: " + currentRPMInd);
+            byte[] RPMVal = BitConverter.GetBytes((float)_rpms[currentRPMInd]);
+            currentRPMInd += 25; // I know this only lasts ten miliseconds and is sampled every 100 miliseconds, so in order to get the current RPM every 0.1 seconds skip 10 points
+            _connection!.SetMotorRPMs(RPMVal);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
     }
 }

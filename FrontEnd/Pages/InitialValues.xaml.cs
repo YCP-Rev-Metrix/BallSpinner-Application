@@ -9,9 +9,12 @@ public partial class InitialValues : ContentPage
 {
     public FrontEnd _frontend;
 
-    public IBallSpinner _ballSpinner;
-    
-    public InitialValues(FrontEnd frontend, IBallSpinner ballSpinner)
+    public BallSpinnerClass _ballSpinner;
+
+    public List<double> bezierPointsY;
+
+
+    public InitialValues(FrontEnd frontend, BallSpinnerClass ballSpinner)
 	{
 		InitializeComponent();
 
@@ -23,6 +26,7 @@ public partial class InitialValues : ContentPage
         Coordinates dummyvalues = new Coordinates(0, 0);
         List<List<double>> axes = model.CalcuateBezierCruve(dummyvalues, dummyvalues, dummyvalues);
         var chart = new InitialValuesChart(axes[0], axes[1], axes[2], axes[3]);
+        bezierPointsY = axes[3];
         BindingContext = chart;
         //BindingContext = this;
         

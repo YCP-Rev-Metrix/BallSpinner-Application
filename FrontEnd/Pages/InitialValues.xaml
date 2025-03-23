@@ -96,8 +96,15 @@
             </VerticalStackLayout>
         </HorizontalStackLayout>
     </VerticalStackLayout>-->
-    <lvc:CartesianChart 
-     HeightRequest="400"
-     Series="{Binding Series}">
-    </lvc:CartesianChart>
+    <StackLayout Orientation="Vertical">
+        <lvc:CartesianChart 
+        HeightRequest="400"
+        Series="{Binding Series}">
+        </lvc:CartesianChart>
+        <Button
+            Margin="10"
+            Clicked="SetInitialValues"
+            HorizontalOptions="Fill"
+            Text="Submit" />
+    </StackLayout>
 </ContentPage>
