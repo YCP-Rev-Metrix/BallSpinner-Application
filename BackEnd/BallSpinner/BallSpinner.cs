@@ -485,30 +485,22 @@ public class BallSpinnerClass : IBallSpinner
     {
         try
         {
-            if (!_semaphore.Wait(0))
-            {
-                Debug.WriteLine("Thread attempted to enter when another was in use");
-                return; // If timed event tries to fire off when another thread is sending, ensure that thread does not have access
-            }
             if (currentRPMInd >= RPMCount)
             {
                 _motorTimer.Stop();
-                _semaphore.Release();
                 return;
             }
 
             Debug.WriteLine("Current index: " + currentRPMInd);
-            byte[] RPMVal = BitConverter.GetBytes((float)_rpms[currentRPMInd]);
-            currentRPMInd += 25; // I know this only lasts ten miliseconds and is sampled every 100 miliseconds, so in order to get the current RPM every 0.1 seconds skip 10 points
+            //byte[] RPMVal = BitConverter.GetBytes((float)_rpms[currentRPMInd]);
+            //currentRPMInd += 25; // I know this only lasts ten miliseconds and is sampled every 100 miliseconds, so in order to get the current RPM every 0.1 seconds skip 10 points
+            byte[] RPMVal = BitConverter.GetBytes((float) 12.2);
+            currentRPMInd += 25;
             _connection!.SetMotorRPMs(RPMVal);
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
-        }
-        finally
-        {
-            _semaphore.Release();
         }
     }
 }

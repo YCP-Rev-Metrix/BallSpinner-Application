@@ -309,9 +309,11 @@ public class TCP : IDisposable
         if (!_client.Connected)
             throw new Exception("Can't send instructions without being connected");
 
-        byte type = (byte)MessageType.A_B_MOTOR_INSTRUCTIONS;
-        byte[] instructions = new byte[]
+        try
         {
+            byte type = (byte)MessageType.A_B_MOTOR_INSTRUCTIONS;
+            byte[] instructions = new byte[]
+            {
            // (byte)(inx & 0xFF), // Lower byte of inx
            //(byte)((inx >> 8) & 0xFF), // Second byte of inx
            //(byte)((inx >> 16) & 0xFF), // Third byte of inx
@@ -336,11 +338,15 @@ public class TCP : IDisposable
             0x00,
             0x00,
             0x00,
-        };
-
-        // Send the motor instruction to the PI
-        await _client.Client.SendAsync(instructions);
-        Debug.WriteLine(BitConverter.ToString(instructions));
+            };
+            // Send the motor instruction to the PI
+            await _client.Client.SendAsync(instructions);
+            Debug.WriteLine(BitConverter.ToString(instructions));
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e.Message);
+        }
     }
 
     /// <summary>
