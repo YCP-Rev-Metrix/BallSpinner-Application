@@ -22,8 +22,6 @@ public partial class MainPage : ContentPage
     public ISeries[] LightChartValues { get; set; }
     public ObservableCollection<BallSpinnerViewModel> BallSpinners { get; } = new();
 
-    public BallSpinnerClass _ballSpinner;
-
     public bool NotLoggedIn => !LoggedIn;
     public bool LoggedIn { get; private set; } = false;
 
@@ -94,7 +92,8 @@ public partial class MainPage : ContentPage
 
     private void OnNewShotButtonClicked(object sender, EventArgs args)
     {
-        _frontEnd.InitialValues(_ballSpinner);
+        // Load initial values page passing in an instance of all open BallSpinners
+        _frontEnd.InitialValues(BallSpinners);
     }
 
     private void OnCloudManagementButtonClicked(object sender, EventArgs args)
@@ -149,11 +148,12 @@ public partial class MainPage : ContentPage
 
     private void OnStartButtonClicked(object sender, EventArgs args)
     {
+        // check to see if all ballspinners are good to go
         foreach (var spinner in BallSpinners)
         {
-            if(spinner.NotConnectedFadeVisible)
+            if(spinner.NotConnectedFadeVisible || !spinner.InitialValuesSet)
             {
-                DisplayAlert("Can't start", "All ball spinners must be connected.", "Okay");
+                DisplayAlert("Can't start", "All ball spinners must be connected and have initial values set.", "Okay");
                 return;
             }    
         }
@@ -192,7 +192,6 @@ public partial class MainPage : ContentPage
             if (ballSpinner.GetType() == typeof(BallSpinnerClass))
             {
                 BallSpinnerCount++;
-                _ballSpinner = (BallSpinnerClass )ballSpinner;
             }
             else if (ballSpinner.GetType() == typeof(Simulation))
             {

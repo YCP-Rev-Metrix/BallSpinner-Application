@@ -16,6 +16,7 @@
                     </Grid.ColumnDefinitions>
                     <StackLayout Grid.Column="0">
                         <Label x:Name="Label" Text="{Binding Name}" />
+                        <Label Text="Initial Values Set!" IsVisible="{Binding InitialValuesSet}" />
                     </StackLayout>
                     <HorizontalStackLayout
                         Grid.Column="2"

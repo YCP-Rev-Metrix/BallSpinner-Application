@@ -34,11 +34,14 @@ public class BallSpinnerClass : IBallSpinner
     /// <inheritdoc/>
     public DataParser DataParser { get; private set; } = new DataParser();
 
-    public List<double> _rpms;
+    public List<double> RPMList { get; set; } = null;
 
-    public int RPMCount;
+    public int RPMCount { get; set; } = 0;
 
-    public int currentRPMInd;
+    public int currentRPMInd { get; set; } = 0;
+
+    ///<inheritdoc/>
+    public bool InitialValuesSet => RPMList != null;
     public string SmartDotMAC { get; }
 
     SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
@@ -351,7 +354,7 @@ public class BallSpinnerClass : IBallSpinner
         currentRPMInd = 0;
 
         _currentVoltage = 1;
-        _motorTimer = new Timer(TimeSpan.FromSeconds(0.25));
+        _motorTimer = new Timer(TimeSpan.FromSeconds(0.010));
         _motorTimer.Elapsed += OnTimedEvent;
         _motorTimer.Start();
 
@@ -475,27 +478,25 @@ public class BallSpinnerClass : IBallSpinner
     {
         return AvailableSampleRates;
     }
-
-    public void SetMotorRPMs(List<double> RPMs)
+    /// <inheritidoc/>
+    public void SetInitialValues(List<double> RPMs)
     {
-        _rpms = RPMs;
+        RPMList = RPMs;
         RPMCount = RPMs.Count;
     }
     private void OnTimedEvent(object? source, ElapsedEventArgs e)
     {
         try
         {
-            if (currentRPMInd >= RPMCount)
+            if (currentRPMInd - 1 >= RPMCount)
             {
                 _motorTimer.Stop();
                 return;
             }
 
             Debug.WriteLine("Current index: " + currentRPMInd);
-            //byte[] RPMVal = BitConverter.GetBytes((float)_rpms[currentRPMInd]);
-            //currentRPMInd += 25; // I know this only lasts ten miliseconds and is sampled every 100 miliseconds, so in order to get the current RPM every 0.1 seconds skip 10 points
-            byte[] RPMVal = BitConverter.GetBytes((float) 12.2);
-            currentRPMInd += 25;
+            byte[] RPMVal = BitConverter.GetBytes((float)RPMList[currentRPMInd]);
+            currentRPMInd += 1; // I know this only lasts ten miliseconds and is sampled every 100 miliseconds, so in order to get the current RPM every 0.1 seconds skip 10 points
             _connection!.SetMotorRPMs(RPMVal);
         }
         catch (Exception ex)

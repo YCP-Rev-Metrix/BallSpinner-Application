@@ -3,6 +3,7 @@ using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using RevMetrix.BallSpinner.FrontEnd.Pages;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
@@ -169,12 +170,12 @@ public class FrontEnd : IFrontEnd
         return result;
     }
 
-    public void InitialValues(BallSpinnerClass ballSpinner)
+    public void InitialValues(ObservableCollection<BallSpinnerViewModel> ballSpinners)
     {
         if (_newInitialValuesWindow != null)
             return;
 
-        _newInitialValuesWindow = new Window(new InitialValues(this, ballSpinner))
+        _newInitialValuesWindow = new Window(new InitialValues(this, ballSpinners))
         {
             Title = "Input Values",
             Width = 400,

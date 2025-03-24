@@ -70,6 +70,15 @@ public class Simulation : IBallSpinner
     public Vector3 AngularVelocity = new Vector3(0.1f,0.0f,1f);
     public Quaternion Rotation = Quaternion.Identity;
 
+    ///<inheritdoc/>
+    public List<double> RPMList { get; set; } = null;
+    ///<inheritdoc/>
+    public int RPMCount { get; set; } = 0;
+    ///<inheritdoc/>
+    public int currentRPMInd { get; set; } = 0;
+    ///<inheritdoc/>
+    public bool InitialValuesSet => RPMList != null;
+
     /// <summary/>
     public Simulation(int FileIndex)
     {
@@ -235,6 +244,13 @@ public class Simulation : IBallSpinner
         magneYValues.Add((double)Metric.MagnetometerY);
         magneZValues.Add((double)Metric.MagnetometerZ);
         lightValues.Add((double)Metric.Light);
+    }
+
+    /// <inheritidoc/>
+    public void SetInitialValues(List<double> RPMs)
+    {
+        RPMList = RPMs;
+        RPMCount = RPMs.Count;
     }
 
 }
