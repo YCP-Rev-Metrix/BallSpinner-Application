@@ -251,6 +251,7 @@ public class Simulation : IBallSpinner
     {
         RPMList = RPMs;
         RPMCount = RPMs.Count;
+        PropertyChanged.Invoke(null, new PropertyChangedEventArgs("InitialValuesSet"));
     }
 
 }

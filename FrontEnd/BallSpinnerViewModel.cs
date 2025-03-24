@@ -95,13 +95,7 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public bool InitialValuesSet {
-        get => _ballSpinner.InitialValuesSet;
-        set
-        {
-            OnPropertyChanged(nameof(Name));
-        }
-    }
+    public bool InitialValuesSet => _ballSpinner.InitialValuesSet;
 
     public MainPage MainPage { get; }
     public int interval = 0;
@@ -127,6 +121,7 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         //SetAllSeries();
         _ballSpinner.PropertyChanged += BallSpinner_PropertyChanged;
         _ballSpinner.OnConnectionChanged += BallSpinner_OnConnectionChanged;
+
 
         //BallSpinner_OnConnectionChanged(_ballSpinner.IsConnected()); Caused double smartdot connection screen
     }

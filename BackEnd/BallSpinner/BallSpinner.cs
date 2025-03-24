@@ -72,10 +72,11 @@ public class BallSpinnerClass : IBallSpinner
     private byte _currentVoltage = 0;
     private Timer? _motorTimer;
 
+
     /// <summary>
     /// The different config settings for the Range (+/-)
     /// </summary>
-   
+
     public static readonly double[][] RANGE_OPTIONS = {
         [2, 4, 8, 16,-1, -1, -1, -1],
         [125,250,500,1000,2000, -1, -1 ,-1],
@@ -483,11 +484,18 @@ public class BallSpinnerClass : IBallSpinner
     {
         RPMList = RPMs;
         RPMCount = RPMs.Count;
+        PropertyChanged.Invoke(null, new PropertyChangedEventArgs("InitialValuesSet"));
     }
     private void OnTimedEvent(object? source, ElapsedEventArgs e)
     {
         try
         {
+            if (!_semaphore.Wait(0))
+            {
+                Debug.WriteLine("Another thread attempted to execute while another is holding resources");
+                return;
+            }
+
             if (currentRPMInd - 1 >= RPMCount)
             {
                 _motorTimer.Stop();
@@ -502,6 +510,10 @@ public class BallSpinnerClass : IBallSpinner
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
+        }
+        finally
+        {
+            _semaphore.Release();
         }
     }
 }
