@@ -92,6 +92,12 @@ public partial class MainPage : ContentPage
 
     private void OnNewShotButtonClicked(object sender, EventArgs args)
     {
+        // Check to see if a user has any open IBallSpinner instances
+        if (BallSpinners.Count == 0)
+        {
+            DisplayAlert("Alert", "Please open a Ball Spinner to enter initial values.", "Ok");
+            return;
+        }
         // Load initial values page passing in an instance of all open BallSpinners
         _frontEnd.InitialValues(BallSpinners);
     }
