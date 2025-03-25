@@ -137,6 +137,15 @@ public class BallSpinnerClass : IBallSpinner
     /// </summary>
     private double[] CurrentSampleRates = new double[4];
 
+    /// <summary>
+    /// Integer that is used by multithreaded timer process within Interlocked operations. 
+    /// </summary>
+    private static int _eventRunning = 0; // Control variable: 0 (idle), 1 (event running), -1 (stopping)
+    /// <summary>
+    /// Represents the number of discarded events used by the timer process. That is, how many threads attempt to send motor instructions while another thread is currently sending
+    /// </summary>
+    private static int _discardedEvents = 0;
+
     /// <summary />
     public BallSpinnerClass(IPAddress address, int FileIndex)
     {
@@ -490,21 +499,22 @@ public class BallSpinnerClass : IBallSpinner
     {
         try
         {
-            if (!_semaphore.Wait(0))
+            // Prevent reentrancy: Try to set _eventRunning from 0 to 1 atomically
+            if (Interlocked.CompareExchange(ref _eventRunning, 1, 0) != 0)
             {
-                Debug.WriteLine("Another thread attempted to execute while another is holding resources");
+                Interlocked.Increment(ref _discardedEvents); // Event was skipped due to reentrancy
+                Debug.WriteLine("Number of discarded events: " + _discardedEvents);
                 return;
             }
 
-            if (currentRPMInd - 1 >= RPMCount)
+            if (currentRPMInd >= RPMCount)
             {
-                _motorTimer.Stop();
-                return;
+                return; // Don't stop the timer yet—ensure we reset _eventRunning first
             }
 
             Debug.WriteLine("Current index: " + currentRPMInd);
             byte[] RPMVal = BitConverter.GetBytes((float)RPMList[currentRPMInd]);
-            currentRPMInd += 1; // I know this only lasts ten miliseconds and is sampled every 100 miliseconds, so in order to get the current RPM every 0.1 seconds skip 10 points
+            currentRPMInd += 1;
             _connection!.SetMotorRPMs(RPMVal);
         }
         catch (Exception ex)
@@ -513,7 +523,15 @@ public class BallSpinnerClass : IBallSpinner
         }
         finally
         {
-            _semaphore.Release();
+            Interlocked.Exchange(ref _eventRunning, 0);
+            Interlocked.Exchange(ref _discardedEvents, 0);
+
+            // Ensure the timer is stopped only after _eventRunning is reset
+            if (currentRPMInd >= RPMCount)
+            {
+                _motorTimer.Stop();
+            }
         }
     }
+
 }

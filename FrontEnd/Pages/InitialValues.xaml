@@ -105,6 +105,6 @@
             Margin="10"
             Clicked="SetInitialValues"
             HorizontalOptions="Fill"
-            Text="Submit" />
+            Text="Submit Shot Parameters" />
     </StackLayout>
 </ContentPage>
