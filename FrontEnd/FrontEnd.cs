@@ -74,13 +74,13 @@ public class FrontEnd : IFrontEnd
         };
     }
 
-    public async Task<IBallSpinner?> AddBallSpinner()
+    public async Task<IBallSpinner?> AddBallSpinner(int BallSpinnerCount, int SimulationCount)
     {
         if (_newBallSpinnerWindow != null)
             return null;
 
         TaskCompletionSource<IBallSpinner?> task = new TaskCompletionSource<IBallSpinner?>();
-        var newBallSpinnerView = new NewBallSpinnerView(task);
+        var newBallSpinnerView = new NewBallSpinnerView(task, BallSpinnerCount, SimulationCount);
         _newBallSpinnerWindow = new Window(newBallSpinnerView)
         {
             Title = "Add Ball Spinner",

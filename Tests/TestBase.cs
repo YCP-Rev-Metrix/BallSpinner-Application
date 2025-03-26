@@ -40,6 +40,7 @@ public abstract class TestBase
 
     protected virtual void Cleanup()
     {
+        TempFileWriter.Dispose();
     }
 
     ~TestBase()

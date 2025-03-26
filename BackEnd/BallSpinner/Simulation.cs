@@ -23,7 +23,12 @@ public class Simulation : IBallSpinner
     ///<inheritdoc/>
     public string Name { get; set; } = "Simulation";
 
-    ///<inheritdoc/>
+    /// <summary>
+    /// Gives an index to the current IBallSpinner implementation. This allows for multiple simulations to be run at the same time
+    /// with a separate file name, so that an exception can be avoided.
+    /// </summary>
+    private int _FileIndex;
+
     public string SmartDotMAC { get; } = "11:11:11:11:11:11";
 
     ///<inheritdoc/>
@@ -66,8 +71,9 @@ public class Simulation : IBallSpinner
     public Quaternion Rotation = Quaternion.Identity;
 
     /// <summary/>
-    public Simulation()
+    public Simulation(int FileIndex)
     {
+        _FileIndex = FileIndex;
         InitializeConnection();
     }
 
@@ -112,7 +118,7 @@ public class Simulation : IBallSpinner
     {
         Stop();
 
-        DataParser.Start(Name);
+        DataParser.Start(Name + _FileIndex.ToString());
 
         TimeSpan frequency = TimeSpan.FromSeconds(1 / 10f);
         _timer = new Timer((o) =>

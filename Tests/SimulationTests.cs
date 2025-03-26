@@ -11,7 +11,7 @@ public class SimulationTests : TestBase
     [Fact]
     private void SimulationInitsTest()
     {
-        var simulation = new Simulation();
+        var simulation = new Simulation(1);
         simulation.Dispose();
     }
 }

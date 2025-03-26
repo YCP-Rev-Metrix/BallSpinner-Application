@@ -26,6 +26,11 @@ public partial class MainPage : ContentPage
 
     public bool NotLoggedIn => !LoggedIn;
     public bool LoggedIn { get; private set; } = false;
+
+    // Counts the number of currently open simulations/ballspinners.
+    public int SimulationCount { get; set; } = 0;
+
+    public int BallSpinnerCount { get; set; } = 0;
     /// <summary/>
     public MainPage()
     {
@@ -41,8 +46,8 @@ public partial class MainPage : ContentPage
         _database = database;
 
         _database.OnLoginChanged += Database_OnLoginChanged;
-
-        BallSpinners.Add(new BallSpinnerViewModel(_frontEnd, this, new Simulation()));
+        //Add simulation by default
+        BallSpinners.Add(new BallSpinnerViewModel(_frontEnd, this, new Simulation(++SimulationCount)));
     }
 
     private void Database_OnLoginChanged(bool obj)
@@ -55,6 +60,15 @@ public partial class MainPage : ContentPage
 
     public void RemoveBallSpinner(BallSpinnerViewModel ballSpinner)
     {
+        // Remove instance, and decrement count
+        if (ballSpinner.BallSpinner.GetType() == typeof(BallSpinnerClass))
+        {
+            BallSpinnerCount--;
+        }
+        else if (ballSpinner.BallSpinner.GetType() == typeof(Simulation))
+        {
+            SimulationCount--;
+        }
         BallSpinners.Remove(ballSpinner);
         ballSpinner.Dispose();
     }
@@ -90,28 +104,7 @@ public partial class MainPage : ContentPage
 
     private async void OnLoadShotButtonClicked(object sender, EventArgs args)
     {
-        var customFileType = new FilePickerFileType(
-            new Dictionary<DevicePlatform, IEnumerable<string>>
-            {
-                { DevicePlatform.WinUI, new[] { ".csv"} }, // file extension
-                { DevicePlatform.macOS, new[] { "csv"} } // UTType values
-            });
-        
-        PickOptions options = new()
-        {
-            PickerTitle = "Please select a csv file",
-            FileTypes = customFileType,
-        };
-        FileResult result = await FilePicker.Default.PickAsync(options);
-        if (result != null)
-        {
-            // Create new ballSpinner instance, display on screen
-            PreviousThrow ballSpinner = new PreviousThrow(result.FullPath);
-            BallSpinnerViewModel viewModel = new BallSpinnerViewModel(_frontEnd, this, ballSpinner);
-
-            BallSpinners.Add(viewModel);
-            OnPropertyChanged(nameof(BallSpinners));
-        }
+        throw new NotImplementedException("Need to change this so that it uses the cloud database/local database");
     }
 
     private async void OnSaveShotButtonClicked(object sender, EventArgs args)
@@ -122,33 +115,11 @@ public partial class MainPage : ContentPage
             {
                 if (await DisplayAlert("Notice", $"Would you like to save shot for device '{ballSpinner.Name}'?", "Yes", "No"))
                 {
-                    if (await DisplayAlert("Save Shot as ...", $"For device '{ballSpinner.Name}', save to database or local drive?", "Database", "Local"))
-                    {
-                        string name = await DisplayPromptAsync("Notice", "Please name the test");
+                    string name = await DisplayPromptAsync("Notice", "Please name the shot");
 
-                        if (name != null)
-                        {
-                            await _database.UploadShot(ballSpinner.BallSpinner, name, 0);
-                        } 
-                    }
-                    else
+                    if (name != null)
                     {
-                        // local option selected
-                        string name = await DisplayPromptAsync("Notice", "Please name your file");
-                    
-                        if (name != null)
-                        {
-                            try
-                            {
-                                Utilities.SaveLocalRevFile(name, ballSpinner.Name, Environment.GetEnvironmentVariable("CurrentUser"));
-                                // local save was successful, save this new local entry to database
-                                // await _database.SaveLocalEntry(name); - For now this will not work. Endpoint not implemented on cloud
-                            }
-                            catch (Exception e)
-                            {
-                                await DisplayAlert("Error When Attempting to Save", e.Message, "Ok");
-                            }
-                        }
+                        await _database.UploadShot(ballSpinner.BallSpinner, name, 0);
                     }
                 }
             }
@@ -207,13 +178,25 @@ public partial class MainPage : ContentPage
     {
         throw new NotImplementedException();
     }
-
+    /// <summary>
+    /// Gives user the option to open a new IBallSpinner instance. If a new IBallSpinner instance is selected, BallSpinnerCount and SimulationCount must be updated here to keep counts up to date.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="args"></param>
     private async void OnAddBallSpinnerButtonClicked(object sender, EventArgs args)
     {
-        var ballSpinner = await _frontEnd.AddBallSpinner();
+        var ballSpinner = await _frontEnd.AddBallSpinner(BallSpinnerCount, SimulationCount);
 
         if(ballSpinner != null)
         {
+            if (ballSpinner.GetType() == typeof(BallSpinnerClass))
+            {
+                BallSpinnerCount++;
+            }
+            else if (ballSpinner.GetType() == typeof(Simulation))
+            {
+                SimulationCount++;
+            }
             BallSpinners.Add(new BallSpinnerViewModel(_frontEnd, this, ballSpinner));
             OnPropertyChanged(nameof(BallSpinners));
         }

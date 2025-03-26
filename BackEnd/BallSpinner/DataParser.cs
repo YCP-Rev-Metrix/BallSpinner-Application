@@ -11,7 +11,7 @@ namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 /// <summary>
 /// Class for distributing data from ball spinner to view/database/etc
 /// </summary>
-public class DataParser
+public class DataParser: IDisposable
 {
     public string TempFilePath { get; private set; } = string.Empty;
 
@@ -107,5 +107,10 @@ public class DataParser
     public void Unsubscribe(Action<Metric, float, float> onDataReceived)
     {
         OnDataReceived -= onDataReceived;
+    }
+
+    public void Dispose()
+    {
+        _writer?.Dispose();
     }
 }

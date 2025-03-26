@@ -13,7 +13,7 @@
                 Text="New Shot" />
             <MenuFlyoutItem
                 Clicked="OnLoadShotButtonClicked"
-                IsEnabled="{Binding LoggedIn}"
+                IsEnabled="False"
                 Text="Load Shot" />
             <MenuFlyoutItem
                 Clicked="OnSaveShotButtonClicked"

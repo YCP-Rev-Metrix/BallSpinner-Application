@@ -43,6 +43,11 @@ public class BallSpinnerClass : IBallSpinner
 
     /// <inheritdoc/>
     public event Action<bool>? OnConnectionChanged;
+    /// <summary>
+    /// Gives an index to the current IBallSpinner implementation. This allows for multiple simulations to be run at the same time
+    /// with a separate file name, so that an exception can be avoided.
+    /// </summary>
+    private int _FileIndex;
 
     /// <inheritdoc/>
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -121,9 +126,10 @@ public class BallSpinnerClass : IBallSpinner
     private double[] CurrentSampleRates = new double[4];
 
     /// <summary />
-    public BallSpinnerClass(IPAddress address)
+    public BallSpinnerClass(IPAddress address, int FileIndex)
     {
         _address = address;
+        _FileIndex = FileIndex;
         InitializeConnection();
 
         //Me testing - brandon
@@ -332,7 +338,7 @@ public class BallSpinnerClass : IBallSpinner
     {
         //Stop();
 
-        DataParser.Start(Name);
+        DataParser.Start(Name + _FileIndex.ToString());
 
         _currentVoltage = 1;
         _motorTimer = new Timer(TimeSpan.FromSeconds(0.25));
