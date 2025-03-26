@@ -22,7 +22,7 @@
       <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.100" />
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-      <PackageReference Include="RevMetrix.BallSpinner.Common.Api" Version="1.1.4" />
+      <PackageReference Include="RevMetrix.BallSpinner.Common.Api" Version="1.1.7" />
       <PackageReference Include="RevMetrix.Client.Api" Version="1.0.15" />
       <PackageReference Include="xunit" Version="2.5.3" />
       <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">

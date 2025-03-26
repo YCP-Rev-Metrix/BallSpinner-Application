@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.NetworkInformation;
+using Common.POCOs;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,8 @@ public interface IBallSpinner : INotifyPropertyChanged
     /// Event triggered when data is received from the Ball Spinner.
     /// </summary>
     DataParser DataParser { get; }
+
+    public Ball ball { get; set; }
 
     /// <summary>
     ///Event triggered when an error message is received from the Ball Spinner.

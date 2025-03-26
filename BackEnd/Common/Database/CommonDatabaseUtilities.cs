@@ -20,7 +20,8 @@ public partial class Database : IDatabase
         }
         else if (this.dbType == DatabaseTypes.REALDATABASE)
         {
-            BaseAPIURL = "https://api.revmetrix.io/api";
+            //BaseAPIURL = "https://api.revmetrix.io/api";
+            BaseAPIURL = "https://localhost:7238/api";
         }
     }
     /// <summary>

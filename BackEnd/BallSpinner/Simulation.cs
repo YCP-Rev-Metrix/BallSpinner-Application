@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.POCOs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -19,6 +20,9 @@ public class Simulation : IBallSpinner
 
     ///<inheritdoc/>
     public DataParser DataParser { get; private set; } = new DataParser();
+
+    // Simulation should not have a ball.
+    public Ball ball { get; set; }
 
     ///<inheritdoc/>
     public string Name { get; set; } = "Simulation";
@@ -84,6 +88,7 @@ public class Simulation : IBallSpinner
     {
         _FileIndex = FileIndex;
         InitializeConnection();
+        ball = new Ball("q", 8.0, 11, "Pancake");
     }
 
     /// <summary>

@@ -52,6 +52,9 @@ public class BallSpinnerClass : IBallSpinner
     /// <inheritdoc/>
     public event Action? SendRejection;
 
+    // Hardcoded ball FOR NOW
+    public Ball ball { get; set; }
+
     /// <inheritdoc/>
     public event Action<bool>? OnConnectionChanged;
     /// <summary>
@@ -158,9 +161,11 @@ public class BallSpinnerClass : IBallSpinner
         //gyro should be rate == 25, 6400
         //range should be 1
         byte[] data = { 3, 1, 1, 0b10_00_00_01, 2, 2, 4, 4};
-       // Debug.WriteLine($"Range byte: 0b{Convert.ToString(data[0], 2).PadLeft(8, '0')}");
+        // Debug.WriteLine($"Range byte: 0b{Convert.ToString(data[0], 2).PadLeft(8, '0')}");
 
-       // SmartDotConfigReceivedEvent(data);
+        // SmartDotConfigReceivedEvent(data);
+
+        ball = new Ball("q", 8.0, 11, "Pancake");
 
     }
 

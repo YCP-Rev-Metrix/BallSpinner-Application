@@ -7,6 +7,7 @@ using CsvHelper.Configuration;
 using Common.POCOs;
 using RevMetrix.BallSpinner.BackEnd.Common.Utilities;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
+using Common.POCOs.Shots;
 
 namespace RevMetrix.BallSpinner.BackEnd.Database;
 
@@ -34,12 +35,27 @@ public partial class Database : IDatabase
         {
             throw new Exception("No data to upload. Temporary csv is empty.");
         }
+        //FOR NOW THIS IS ALL DUMMY DATA TO TEST THESE ENDPOINTS. NEED TO INTEGRATE WITH FRONTEND TO ENABLE THESE PARAMETERS TO BE SET BY THE USERA
+        Coordinate initpoint = new Coordinate(1.2, 1.1);
+        Coordinate inflection = new Coordinate(1.2, 1.1);
+        Coordinate finalpoint = new Coordinate(1.2, 1.1);
 
-        ShotInfo parameters = new ShotInfo(name, InitialSpeed, 20, 20, 20);
+        ShotInfo parameters = new ShotInfo(name, initpoint, inflection, finalpoint, 0.003);
+        Ball ball = ballSpinner.ball;
+
+        byte[] macaddy = Convert.FromHexString("001A2B3C4D5E");
+
+        SmartDotInfo sensorInfo = new SmartDotInfo
+        {
+            MACAddress = macaddy,
+            Comments = "This was a very good module to use. SO GOOOOOOODDD!!!!",
+        };
         var requestObject = new
         {
             shotinfo = parameters,
-            data = sampleData
+            data = sampleData,
+            ball = ball,
+            sensorInfo = sensorInfo
         };
         var jsonBody = JsonConvert.SerializeObject(requestObject);
         // Create the request content
