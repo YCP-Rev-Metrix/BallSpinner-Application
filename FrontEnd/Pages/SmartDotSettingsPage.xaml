@@ -23,8 +23,11 @@
                            WidthRequest="110"
                            Text="Range:"/>
                     <Picker x:Name="AccelrationRange"
-                            ItemsSource="{Binding Ranges[0]}">
-                    </Picker>
+                            ItemsSource="{Binding Ranges[0]}"/>
+                    <Label FontSize="16"
+                           WidthRequest="40"
+                           HorizontalTextAlignment="End"
+                           Text="g"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
                     <Label FontSize="16"
@@ -32,6 +35,10 @@
                             Text="Sample Rate:"/>
                     <Picker x:Name="AccelrationSampleRate"
                             ItemsSource="{Binding SampleRates[0]}"/>
+                    <Label FontSize="16"
+                           WidthRequest="40"
+                           HorizontalTextAlignment="End"
+                           Text="Hz"/>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
             <VerticalStackLayout>
@@ -53,6 +60,10 @@
                            Text="Range:"/>
                     <Picker x:Name="RotationRange"
                             ItemsSource="{Binding Ranges[1]}"/>
+                    <Label FontSize="16"
+                           WidthRequest="40"
+                           HorizontalTextAlignment="End"
+                           Text="dps"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
                     <Label FontSize="16"
@@ -60,6 +71,10 @@
                            Text="Sample Rate:"/>
                     <Picker x:Name="RotationSampleRate"
                             ItemsSource="{Binding SampleRates[1]}"/>
+                    <Label FontSize="16"
+                           WidthRequest="40"
+                           HorizontalTextAlignment="End"
+                           Text="Hz"/>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </HorizontalStackLayout>
@@ -68,12 +83,12 @@
                 <Label HorizontalOptions="Center"
                        Margin="10" 
                        TextDecorations="Underline"
-                       Text="Magnatometer"/>
+                       Text="Magnetometer"/>
                 <HorizontalStackLayout>
                     <Label FontSize="16"
                            WidthRequest="110"
                            Text="Enabled: " />
-                    <CheckBox x:Name="MagnatometerEnabled"
+                    <CheckBox x:Name="MagnetometerEnabled"
                               IsChecked="True"
                               CheckedChanged="OnEnabledToggleChanged" />
                 </HorizontalStackLayout>
@@ -81,15 +96,23 @@
                     <Label FontSize="16"
                            WidthRequest="110"
                            Text="Range:"/>
-                    <Picker x:Name="MagnatometerRange"
+                    <Picker x:Name="MagnetometerRange"
                             ItemsSource="{Binding Ranges[2]}"/>
+                    <Label FontSize="16"
+                           WidthRequest="40"
+                           HorizontalTextAlignment="End"
+                           Text="Lux"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
                     <Label FontSize="16"
                            WidthRequest="110"
                            Text="Sample Rate:"/>
-                    <Picker x:Name="MagnatometerSampleRate"
+                    <Picker x:Name="MagnetometerSampleRate"
                             ItemsSource="{Binding SampleRates[2]}"/>
+                    <Label FontSize="16"
+                           WidthRequest="40"
+                           HorizontalTextAlignment="End"
+                           Text="Hz"/>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
             <VerticalStackLayout>
@@ -111,6 +134,10 @@
                            Text="Range:"/>
                     <Picker x:Name="LightRange"
                             ItemsSource="{Binding Ranges[3]}"/>
+                    <Label FontSize="16"
+                           WidthRequest="40"
+                           HorizontalTextAlignment="End"
+                           Text="Lux"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
                     <Label FontSize="16"
@@ -118,6 +145,10 @@
                            Text="Sample Rate:"/>
                     <Picker x:Name="LightSampleRate"
                             ItemsSource="{Binding SampleRates[3]}"/>
+                    <Label FontSize="16"
+                           WidthRequest="40"
+                           HorizontalTextAlignment="End"
+                           Text="Hz"/>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </HorizontalStackLayout>

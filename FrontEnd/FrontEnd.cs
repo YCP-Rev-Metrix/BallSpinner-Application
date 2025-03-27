@@ -174,11 +174,11 @@ public class FrontEnd : IFrontEnd
         if (_newInitialValuesWindow != null)
             return;
 
-        _newInitialValuesWindow = new Window(new InitialValues())
+        _newInitialValuesWindow = new Window(new InitialValues(Backend.Database))
         {
             Title = "Input Values",
-            Width = 400,
-            Height = 500,
+            Width = 450,
+            Height = 650,
             X = 100,
             Y = 100
         };
@@ -241,7 +241,7 @@ public class FrontEnd : IFrontEnd
         _newSmartDotSettingsWindow = new Window(new SmartDotSettingsPage(this, viewModel))
         {
             Title = "Simulation Settings",
-            Width = 500,
+            Width = 520,
             Height = 500,
             X = 100,
             Y = 100

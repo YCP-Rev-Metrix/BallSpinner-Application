@@ -31,6 +31,7 @@ public partial class BallSpinnerView : ContentView
     ];
 
 
+
     
     private BallSpinnerViewModel _viewModel = null!;
 

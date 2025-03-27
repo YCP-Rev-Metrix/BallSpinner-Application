@@ -7,6 +7,7 @@
     xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls">
 
+    
     <Grid>
         <Border>
             <VerticalStackLayout>
@@ -39,7 +40,7 @@
                             MaximumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
                             MinimumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
                             IsVisible="{Binding NotSimulation}"
-                            Text="Simulation Settings" />
+                            Text="Configuration Settings" />
                         <Button
                             Padding="-14,-10"
                             Clicked="OnRemoveBallSpinnerButton"

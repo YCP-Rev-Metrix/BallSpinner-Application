@@ -13,6 +13,7 @@ public class ChartViewModel : GraphDataViewModel
     private IBallSpinner _ballSpinner;
 
 
+
     //private List<double> _xpoints;
     //private List<double> _ypoints;
     //private List<double> _zpoints;
