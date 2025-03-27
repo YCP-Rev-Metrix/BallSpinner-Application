@@ -16,9 +16,17 @@ public partial class InitialValues : ContentPage
     public List<double> bezierPointsY;
 
 
-    public InitialValues(FrontEnd frontend, ObservableCollection<BallSpinnerViewModel> ballSpinners)
+    private InitialValuesViewModel ContextStore;
+
+    public InitialValues(FrontEnd frontend, ObservableCollection<BallSpinnerViewModel> ballSpinners, IDatabase database)
 	{
-		InitializeComponent();
+        ContextStore = new InitialValuesViewModel(database);
+        BindingContext = ContextStore;
+
+        InitializeComponent();
+
+        MaxVal.Value = 800;
+    }
 
         _frontend = frontend;
 

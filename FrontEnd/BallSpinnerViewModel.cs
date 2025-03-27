@@ -91,7 +91,7 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
     public IDataViewModel BottomRightView { get; }
 
     public bool IsSimulation { get; }
-    public bool NotSimulation { get; }
+    public bool NotSimulation => !IsSimulation;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -106,7 +106,6 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         MainPage = mainPage;
         _ballSpinner = ballspinner;
         IsSimulation = _ballSpinner.GetType() == typeof(Simulation);
-        NotSimulation = !IsSimulation;
         NotConnectedFadeVisible = !IsSimulation;
 
         LeftView = new BallViewModel(_ballSpinner);
@@ -160,7 +159,6 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
                 magneXSeries, magneYSeries, magneZSeries
             ];
             LightSeries = [lightSeries];
-
             if (accelXValues.Count > maxDataPoints)
             {
                 accelXValues.RemoveAt(0);
@@ -195,9 +193,9 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
             //if (interval > 5)
             //{
             OnPropertyChanged(nameof(MagnetometerSeries));
-                OnPropertyChanged(nameof(AccelerationSeries));
-                OnPropertyChanged(nameof(RotationSeries));
-                OnPropertyChanged(nameof(LightSeries));
+            OnPropertyChanged(nameof(AccelerationSeries));
+            OnPropertyChanged(nameof(RotationSeries));
+            OnPropertyChanged(nameof(LightSeries));
             //    interval = 0;
             //}
             //else interval++;

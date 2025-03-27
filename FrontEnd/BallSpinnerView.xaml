@@ -46,7 +46,7 @@
                             MaximumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
                             MinimumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
                             IsVisible="{Binding NotSimulation}"
-                            Text="Simulation Settings" />
+                            Text="Configuration Settings" />
                         <Button
                             Padding="-14,-10"
                             Clicked="OnRemoveBallSpinnerButton"

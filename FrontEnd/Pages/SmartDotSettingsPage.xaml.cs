@@ -33,6 +33,7 @@ public partial class SmartDotSettingsPage : ContentPage
         BindingContext = test;
         */
         
+        
         BindingContext = _viewModel;
         InitializeComponent();
 
@@ -43,8 +44,8 @@ public partial class SmartDotSettingsPage : ContentPage
         RotationRange.SelectedIndex = 0;
         RotationSampleRate.SelectedIndex = 0;
 
-        MagnatometerRange.SelectedIndex = 0;
-        MagnatometerSampleRate.SelectedIndex = 0;
+        MagnetometerRange.SelectedIndex = 0;
+        MagnetometerSampleRate.SelectedIndex = 0;
 
         LightRange.SelectedIndex = 0;
         LightSampleRate.SelectedIndex = 0;
@@ -54,12 +55,12 @@ public partial class SmartDotSettingsPage : ContentPage
 	{
         double[] r = [_viewModel.Ranges[0][AccelrationRange.SelectedIndex], 
                       _viewModel.Ranges[1][RotationRange.SelectedIndex],
-                      _viewModel.Ranges[2][MagnatometerRange.SelectedIndex],
+                      _viewModel.Ranges[2][MagnetometerRange.SelectedIndex],
                       _viewModel.Ranges[3][LightRange.SelectedIndex]];
 
         double[] sr = [_viewModel.SampleRates[0][AccelrationSampleRate.SelectedIndex],
                        _viewModel.SampleRates[1][RotationSampleRate.SelectedIndex],
-                       _viewModel.SampleRates[2][MagnatometerSampleRate.SelectedIndex],
+                       _viewModel.SampleRates[2][MagnetometerSampleRate.SelectedIndex],
                        _viewModel.SampleRates[3][LightSampleRate.SelectedIndex]];
 
         _ballSpinner.BallSpinner.SubmitSmartDotConfig(r,sr,
@@ -75,7 +76,7 @@ public partial class SmartDotSettingsPage : ContentPage
     {
         bool[] arr = [AccelerationEnabled.IsChecked, 
                       RotationEnabled.IsChecked,
-                      MagnatometerEnabled.IsChecked, 
+                      MagnetometerEnabled.IsChecked, 
                       LightEnabled.IsChecked];
 
         _viewModel.BuildEnables(arr);
