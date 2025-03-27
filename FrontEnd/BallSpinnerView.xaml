@@ -4,7 +4,9 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:RevMetrix.BallSpinner.FrontEnd"
-    xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui">
+    xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls">
+
     <Grid>
         <Border>
             <VerticalStackLayout>
@@ -55,10 +57,11 @@
                     </Grid.ColumnDefinitions>
 
                     <Border>
-                        <WebView
+                        <!--<WebView
                             x:Name="LeftView"
                             Grid.Column="0"
-                            Source="{Binding LeftView.Source}" />
+                            Source="{Binding LeftView.Source}" />-->
+                        
                     </Border>
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
@@ -91,9 +94,8 @@
                                     Series="{Binding AccelerationSeries}"
                                     x:Name="TopMiddleView"
                                     AnimationsSpeed="0"
-                                    Grid.Row="1">
-                                    <lvc:CartesianChart.XAxes
-                                        Name="Time"/>
+                                    Grid.Row="1"
+                                    XAxes="{Binding XAxes}">
                                 </lvc:CartesianChart>
                             </Grid>
                         </Border>
