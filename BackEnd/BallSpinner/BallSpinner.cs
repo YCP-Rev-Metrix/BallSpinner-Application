@@ -41,19 +41,14 @@ public class BallSpinnerClass : IBallSpinner
     public int currentRPMInd { get; set; } = 0;
 
     ///<inheritdoc/>
-    public bool InitialValuesSet => RPMList != null;
+    public bool InitialValuesSet => RPMList != null && BezierInitPoint != null && BezierInflectionPoint != null && BezierFinalPoint != null && ball != null && Comments != null;
     public string SmartDotMAC { get; }
-
-    SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
     /// <inheritdoc/>
     public event Action? SendErrorToApp;
 
     /// <inheritdoc/>
     public event Action? SendRejection;
-
-    // Hardcoded ball FOR NOW
-    public Ball ball { get; set; }
 
     /// <inheritdoc/>
     public event Action<bool>? OnConnectionChanged;
@@ -148,6 +143,16 @@ public class BallSpinnerClass : IBallSpinner
     /// Represents the number of discarded events used by the timer process. That is, how many threads attempt to send motor instructions while another thread is currently sending
     /// </summary>
     private static int _discardedEvents = 0;
+
+    public Coordinate BezierInitPoint { get; set; }
+
+    public Coordinate BezierInflectionPoint { get; set; }
+
+    public Coordinate BezierFinalPoint { get; set; }
+
+    public Ball ball { get; set; }
+
+    public string Comments { get; set;  }
 
     /// <summary />
     public BallSpinnerClass(IPAddress address, int FileIndex)
@@ -494,10 +499,16 @@ public class BallSpinnerClass : IBallSpinner
         return AvailableSampleRates;
     }
     /// <inheritidoc/>
-    public void SetInitialValues(List<double> RPMs)
+    public void SetInitialValues(List<double> RPMs, Coordinate BezierInit, Coordinate BezierInflection, Coordinate BezierFinal, string Comments, Ball ball)
     {
-        RPMList = RPMs;
-        RPMCount = RPMs.Count;
+        // Set RPMs for motor instructions
+        this.RPMList = RPMs;
+        this.RPMCount = RPMs.Count;
+        this.BezierInitPoint = BezierInit;
+        this.BezierInflectionPoint = BezierInflection;
+        this.BezierFinalPoint = BezierFinal;
+        this.Comments = Comments;
+        this.ball = ball;
         PropertyChanged.Invoke(null, new PropertyChangedEventArgs("InitialValuesSet"));
     }
     private void OnTimedEvent(object? source, ElapsedEventArgs e)

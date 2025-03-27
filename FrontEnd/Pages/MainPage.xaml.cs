@@ -124,7 +124,14 @@ public partial class MainPage : ContentPage
 
                     if (name != null)
                     {
-                        await _database.UploadShot(ballSpinner.BallSpinner, name, 0);
+                        try
+                        {
+                            await _database.UploadShot(ballSpinner.BallSpinner, name, 0);
+                        }
+                        catch (Exception e)
+                        {
+                            await DisplayAlert("Error", e.Message, "Okay");
+                        }
                     }
                 }
             }

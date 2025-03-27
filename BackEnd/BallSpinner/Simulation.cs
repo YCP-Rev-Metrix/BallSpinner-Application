@@ -21,9 +21,6 @@ public class Simulation : IBallSpinner
     ///<inheritdoc/>
     public DataParser DataParser { get; private set; } = new DataParser();
 
-    // Simulation should not have a ball.
-    public Ball ball { get; set; }
-
     ///<inheritdoc/>
     public string Name { get; set; } = "Simulation";
 
@@ -81,14 +78,23 @@ public class Simulation : IBallSpinner
     ///<inheritdoc/>
     public int currentRPMInd { get; set; } = 0;
     ///<inheritdoc/>
-    public bool InitialValuesSet => RPMList != null;
+    public bool InitialValuesSet => RPMList != null && BezierInitPoint != null && BezierInflectionPoint != null && BezierFinalPoint != null && ball != null && Comments != null;
+
+    public Coordinate BezierInitPoint { get; set; }
+
+    public Coordinate BezierInflectionPoint { get; set; }
+
+    public Coordinate BezierFinalPoint { get; set; }
+
+    public Ball ball { get; set; }
+
+    public string Comments { get; set; }
 
     /// <summary/>
     public Simulation(int FileIndex)
     {
         _FileIndex = FileIndex;
         InitializeConnection();
-        ball = new Ball("Test", 8.0, 11, "Pancake");
     }
 
     /// <summary>
@@ -252,10 +258,16 @@ public class Simulation : IBallSpinner
     }
 
     /// <inheritidoc/>
-    public void SetInitialValues(List<double> RPMs)
+    public void SetInitialValues(List<double> RPMs, Coordinate BezierInit, Coordinate BezierInflection, Coordinate BezierFinal, string Comments, Ball ball)
     {
-        RPMList = RPMs;
-        RPMCount = RPMs.Count;
+        // Set RPMs for motor instructions
+        this.RPMList = RPMs;
+        this.RPMCount = RPMs.Count;
+        this.BezierInitPoint = BezierInit;
+        this.BezierInflectionPoint = BezierInflection;
+        this.BezierFinalPoint = BezierFinal;
+        this.Comments = Comments;
+        this.ball = ball;
         PropertyChanged.Invoke(null, new PropertyChangedEventArgs("InitialValuesSet"));
     }
 

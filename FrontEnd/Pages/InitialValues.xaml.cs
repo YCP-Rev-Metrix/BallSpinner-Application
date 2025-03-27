@@ -42,7 +42,11 @@ public partial class InitialValues : ContentPage
         // Send rpms to the all open ballspinners
         foreach (var BallSpinner in _ballSpinners)
         {
-            BallSpinner.BallSpinner.SetInitialValues(bezierPointsY);
+            Coordinate BezierInitPoint = new Coordinate(0, 0);
+            Coordinate BezierInflectionPoint = new Coordinate(1.2, 225.3);
+            Coordinate BezierFinalPoint = new Coordinate(3.2, 775);
+            Ball testBall = new Ball("Test", 8.0, 11, "Pancake");
+            BallSpinner.BallSpinner.SetInitialValues(bezierPointsY, BezierInitPoint, BezierInflectionPoint, BezierFinalPoint, "Really nice shot my dude!", testBall);
         }
     }
 }

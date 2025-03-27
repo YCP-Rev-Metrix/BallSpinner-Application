@@ -38,7 +38,6 @@ public interface IBallSpinner : INotifyPropertyChanged
     /// </summary>
     DataParser DataParser { get; }
 
-    public Ball ball { get; set; }
 
     /// <summary>
     ///Event triggered when an error message is received from the Ball Spinner.
@@ -137,12 +136,22 @@ public interface IBallSpinner : INotifyPropertyChanged
     /// Sets the inital values for the BallSpinner instance. This will be expanded to include things like ball and comments in the future.
     /// </summary>
     /// <param name="RPMs"></param>
-    public void SetInitialValues(List<double> RPMs);
+    public void SetInitialValues(List<double> RPMs, Coordinate BezierInit, Coordinate BezierInflection, Coordinate BezierFinal, string Comments, Ball ball);
 
     /// <summary>
     /// Indicates wheter or not the initial values are set for the 
     /// </summary>
     public bool InitialValuesSet => RPMList != null;
+
+    public Coordinate BezierInitPoint { get; set; }
+
+    public Coordinate BezierInflectionPoint { get; set; }
+
+    public Coordinate BezierFinalPoint { get; set; }
+
+    public Ball ball { get; set; }
+
+    public string Comments { get; set; }
 }
 
 /// <summary>
