@@ -178,7 +178,7 @@ public class FrontEnd : IFrontEnd
         {
             Title = "Input Values",
             Width = 450,
-            Height = 700,
+            Height = 650,
             X = 100,
             Y = 100
         };

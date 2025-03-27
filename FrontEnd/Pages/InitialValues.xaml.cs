@@ -14,10 +14,12 @@ public partial class InitialValues : ContentPage
         BindingContext = ContextStore;
 
         InitializeComponent();
+
+        MaxVal.Value = 800;
     }
 
     private void PassValues(object sender, EventArgs args)
     {
-        
+        //TODO   
     }
 }
