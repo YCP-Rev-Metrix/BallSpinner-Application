@@ -72,7 +72,7 @@ public class Simulation : IBallSpinner
     public Quaternion Rotation = Quaternion.Identity;
 
     ///<inheritdoc/>
-    public List<double> RPMList { get; set; } = null;
+    public List<double?> RPMList { get; set; } = null;
     ///<inheritdoc/>
     public int RPMCount { get; set; } = 0;
     ///<inheritdoc/>
@@ -258,7 +258,7 @@ public class Simulation : IBallSpinner
     }
 
     /// <inheritidoc/>
-    public void SetInitialValues(List<double> RPMs, Coordinate BezierInit, Coordinate BezierInflection, Coordinate BezierFinal, string Comments, Ball ball)
+    public void SetInitialValues(List<double?> RPMs, Coordinate BezierInit, Coordinate BezierInflection, Coordinate BezierFinal, string Comments, Ball ball)
     {
         // Set RPMs for motor instructions
         this.RPMList = RPMs;

@@ -13,7 +13,7 @@ public partial class InitialValues : ContentPage
 
     public ObservableCollection<BallSpinnerViewModel> _ballSpinners;
 
-    public List<double> bezierPointsY;
+    public List<double?> bezierPointsY;
 
 
     private InitialValuesViewModel ContextStore;
@@ -26,35 +26,36 @@ public partial class InitialValues : ContentPage
         InitializeComponent();
 
         MaxVal.Value = 800;
-    }
+    
 
-        _frontend = frontend;
+       _frontend = frontend;
 
-        _ballSpinners = ballSpinners;
+       _ballSpinners = ballSpinners;
 
-        InitialValuesModel model = new InitialValuesModel();
-        Coordinates dummyvalues = new Coordinates(0, 0);
-        List<List<double>> axes = model.CalcuateBezierCruve(dummyvalues, dummyvalues, dummyvalues);
-        var chart = new InitialValuesChart(axes[0], axes[1], axes[2], axes[3]);
-        bezierPointsY = axes[3];
-        BindingContext = chart;
-        //BindingContext = this;
-        
+        bezierPointsY = new List<double?>();
 
     }
 
-    private async void SetInitialValues(object sender, EventArgs args)
+    private async void PassValues(object sender, EventArgs args)
     {
         // close Initial values window
         _frontend.CloseInitialValuesWindow();
+        // Get RPM values
+        foreach (var _point in ContextStore.chart.bezierValues)
+        {
+            bezierPointsY.Add(_point.Y);
+        }
+
         // Send rpms to the all open ballspinners
         foreach (var BallSpinner in _ballSpinners)
         {
+            // Hardcoded coordinates for now
             Coordinate BezierInitPoint = new Coordinate(0, 0);
-            Coordinate BezierInflectionPoint = new Coordinate(1.2, 225.3);
-            Coordinate BezierFinalPoint = new Coordinate(3.2, 775);
-            Ball testBall = new Ball("Test", 8.0, 11, "Pancake");
-            BallSpinner.BallSpinner.SetInitialValues(bezierPointsY, BezierInitPoint, BezierInflectionPoint, BezierFinalPoint, "Really nice shot my dude!", testBall);
+            Coordinate BezierInflectionPoint = new Coordinate(1.2, 233);
+            Coordinate BezierFinalPoint = new Coordinate(2.9, 775);
+            Ball Ball = (Ball) BallSelection.SelectedItem;
+            string Comments = Comment.Text;
+            BallSpinner.BallSpinner.SetInitialValues(bezierPointsY, BezierInitPoint, BezierInflectionPoint, BezierFinalPoint, Comments, Ball);
         }
     }
 }

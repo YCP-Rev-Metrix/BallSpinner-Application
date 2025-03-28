@@ -13,7 +13,7 @@ namespace RevMetrix.BallSpinner.FrontEnd;
 class InitialValuesViewModel
 {
     BallsViewModel _ballsViewModel;
-    InitialValuesChart chart = null;
+    public InitialValuesChart chart = null;
     public ISeries[] Series { get; private set; }
     public ObservableCollection<Ball> Arsenal { get; private set; }
 

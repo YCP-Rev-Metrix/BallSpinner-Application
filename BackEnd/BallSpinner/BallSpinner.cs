@@ -34,7 +34,7 @@ public class BallSpinnerClass : IBallSpinner
     /// <inheritdoc/>
     public DataParser DataParser { get; private set; } = new DataParser();
 
-    public List<double> RPMList { get; set; } = null;
+    public List<double?> RPMList { get; set; } = null;
 
     public int RPMCount { get; set; } = 0;
 
@@ -499,7 +499,7 @@ public class BallSpinnerClass : IBallSpinner
         return AvailableSampleRates;
     }
     /// <inheritidoc/>
-    public void SetInitialValues(List<double> RPMs, Coordinate BezierInit, Coordinate BezierInflection, Coordinate BezierFinal, string Comments, Ball ball)
+    public void SetInitialValues(List<double?> RPMs, Coordinate BezierInit, Coordinate BezierInflection, Coordinate BezierFinal, string Comments, Ball ball)
     {
         // Set RPMs for motor instructions
         this.RPMList = RPMs;
