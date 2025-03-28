@@ -21,14 +21,15 @@ public class InitialValuesModel
         List<double> t = new List<double>();
         List<double> x = new List<double>();
         List<double> y = new List<double>();
-
+        double tempY = pointInit.y;
+        double diff = pointFinal.y - pointInit.y;
         // generate t (which is also resolution of curve)
         for (double i = 0; i <= 1; i += 0.003)
         {
             //Assume x = t = 100s
             x.Add(i*100);
             //Y from 0 to maxvalue
-            y.Add(i *pointFinal.y);
+            y.Add(pointInit.y+i*diff);
             t.Add(i);
         }
 

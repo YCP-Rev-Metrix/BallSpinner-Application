@@ -40,9 +40,8 @@
         </Grid>
 
         <lvc:CartesianChart Grid.Row="0"
-                            Grid.Column="0"
+                            Grid.Column="2"
                             AnimationsSpeed="0"
-                            XAxes=""
                             Series="{Binding Series}"/>
 
         <Grid Grid.Row="0"

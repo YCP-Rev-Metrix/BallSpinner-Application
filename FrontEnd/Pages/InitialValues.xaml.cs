@@ -21,7 +21,7 @@ public partial class InitialValues : ContentPage
     private void OnMaxSliderValueChanged(object sender, EventArgs args)
     {
         if (MaxVal.Value <= MinVal.Value) MaxVal.Value = MinVal.Value + 1;
-        Coordinates lower = new Coordinates(0, MinValue.Value);
+        Coordinates lower = new Coordinates(0, MinVal.Value);
         Coordinates inflection = new Coordinates(70, 50);
         Coordinates upper = new Coordinates(100, MaxVal.Value);
         ContextStore.OnGraphChanged(lower, inflection, upper);
@@ -31,6 +31,11 @@ public partial class InitialValues : ContentPage
     private void OnMinSliderValueChanged(object sender, EventArgs args)
     {
         if (MinVal.Value >= MaxVal.Value) MinVal.Value = MaxVal.Value + 1;
+        Coordinates lower = new Coordinates(0, MinVal.Value);
+        Coordinates inflection = new Coordinates(70, 50);
+        Coordinates upper = new Coordinates(100, MaxVal.Value);
+        ContextStore.OnGraphChanged(lower, inflection, upper);
+        BindingContext = ContextStore;
     }
 
     private async void PassValues(object sender, EventArgs args)
