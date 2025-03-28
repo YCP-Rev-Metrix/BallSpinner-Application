@@ -18,7 +18,17 @@ public partial class InitialValues : ContentPage
         MaxVal.Value = 800;
     }
 
-    private void PassValues(object sender, EventArgs args)
+    private void OnMaxSliderValueChanged(object sender, EventArgs args)
+    {
+        if (MaxVal.Value <= MinVal.Value) MaxVal.Value = MinVal.Value + 1;
+    }
+
+    private void OnMinSliderValueChanged(object sender, EventArgs args)
+    {
+        if (MinVal.Value >= MaxVal.Value) MinVal.Value = MaxVal.Value + 1;
+    }
+
+    private async void PassValues(object sender, EventArgs args)
     {
         //TODO
     }

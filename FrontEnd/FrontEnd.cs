@@ -177,7 +177,7 @@ public class FrontEnd : IFrontEnd
         _newInitialValuesWindow = new Window(new InitialValues(Backend.Database))
         {
             Title = "Input Values",
-            Width = 450,
+            Width = 460,
             Height = 650,
             X = 100,
             Y = 100
