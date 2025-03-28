@@ -20,6 +20,6 @@ public partial class InitialValues : ContentPage
 
     private void PassValues(object sender, EventArgs args)
     {
-        //TODO   
+        //TODO
     }
 }
