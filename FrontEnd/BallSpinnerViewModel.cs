@@ -31,16 +31,46 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
 
     public ObservableCollection<ISeries> LightSeries { get; set; }
 
-    public LineSeries<double> accelXSeries = new LineSeries<double>();
-    public LineSeries<double> accelYSeries = new LineSeries<double>();
-    public LineSeries<double> accelZSeries = new LineSeries<double>();
-    public LineSeries<double> rotatXSeries = new LineSeries<double>();
-    public LineSeries<double> rotatYSeries = new LineSeries<double>();
-    public LineSeries<double> rotatZSeries = new LineSeries<double>();
-    public LineSeries<double> magneXSeries = new LineSeries<double>();
-    public LineSeries<double> magneYSeries = new LineSeries<double>();
-    public LineSeries<double> magneZSeries = new LineSeries<double>();
-    public LineSeries<double> lightSeries = new LineSeries<double>();
+    public LineSeries<double> accelXSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> accelYSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Red) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> accelZSeries = new LineSeries<double>() 
+    {
+        Stroke = new SolidColorPaint(SKColors.Green) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> rotatXSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> rotatYSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Red) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> rotatZSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Green) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> magneXSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> magneYSeries = new LineSeries<double>() 
+    {
+        Stroke = new SolidColorPaint(SKColors.Red) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> magneZSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Green) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> lightSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 4 }
+    };
     const int maxDataPoints = 50; //maximum values for the graphs
     private readonly DispatcherTimer _timer = new DispatcherTimer();
 

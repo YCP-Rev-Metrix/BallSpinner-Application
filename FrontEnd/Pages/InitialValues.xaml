@@ -19,7 +19,9 @@
 
         <lvc:CartesianChart Grid.Row="0"
                             Grid.Column="0"
-                            Series="{Binding Series}"/>
+                            AnimationsSpeed="0"
+                            Series="{Binding Series}"
+                            XAxes=""/>
 
         <Grid Grid.Row="0"
               Grid.Column="1">
@@ -37,7 +39,8 @@
                     Minimum="0"
                     Rotation="-90"
                     VerticalOptions="Center"
-                    WidthRequest="286"/>
+                    WidthRequest="286"
+                    DragCompleted="PassValues"/>
             <!--Label Grid.Row="1"
                    Grid.Column="0"
                    VerticalOptions="Center"

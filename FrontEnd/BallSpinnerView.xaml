@@ -58,11 +58,11 @@
                     </Grid.ColumnDefinitions>
 
                     <Border>
-                        <!--<WebView
+                        <WebView
                             x:Name="LeftView"
                             Grid.Column="0"
-                            Source="{Binding LeftView.Source}" />-->
-                        
+                            Source="{Binding LeftView.Source}" />
+
                     </Border>
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>

@@ -12,7 +12,7 @@ public partial class InitialValues : ContentPage
 	{
         ContextStore = new InitialValuesViewModel(database);
         BindingContext = ContextStore;
-
+        
         InitializeComponent();
 
         MaxVal.Value = 800;
@@ -20,6 +20,11 @@ public partial class InitialValues : ContentPage
 
     private void PassValues(object sender, EventArgs args)
     {
-        //TODO   
+        Console.Out.WriteLine("PassValues Running");
+        Coordinates lower = new Coordinates(0, 0);
+        Coordinates inflection = new Coordinates(70, 50);
+        Coordinates upper = new Coordinates(100, MaxVal.Value);
+        ContextStore.OnGraphChanged(lower, inflection, upper);
+        BindingContext = ContextStore;
     }
 }

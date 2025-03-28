@@ -27,8 +27,8 @@ public class InitialValuesModel
         {
             //Assume x = t = 100s
             x.Add(i*100);
-            //Y from 0 to 800
-            y.Add(i *800);
+            //Y from 0 to maxvalue
+            y.Add(i *pointFinal.y);
             t.Add(i);
         }
 
@@ -38,11 +38,11 @@ public class InitialValuesModel
         //Adds Points of line to 
 
         //Hardcoded to generate data for testing
-        double P1x = 0  /*pointInit.x*/, P1y = 0 /*pointInit.y*/;
-        double P3x = 70 /*inflectPoint.x*/, P3y = 50 /*inflectPoint.y*/;
+        double P1x = pointInit.x, P1y = pointInit.y;
+        double P3x = inflectPoint.x, P3y = inflectPoint.y;
         
         //Hardcoded to generate data for testing
-        double P5x = 100, P5y = 800;
+        double P5x = pointFinal.x, P5y = pointFinal.y;
 
         double P2x = (P3x - P1x) / 2;
         double P2y = ((P3y - P1y) / (P3x - P1x)) * P2x + P1y;
