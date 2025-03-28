@@ -18,13 +18,23 @@ public partial class InitialValues : ContentPage
         MaxVal.Value = 800;
     }
 
-    private void PassValues(object sender, EventArgs args)
+    private void OnMaxSliderValueChanged(object sender, EventArgs args)
     {
-        Console.Out.WriteLine("PassValues Running");
-        Coordinates lower = new Coordinates(0, 0);
+        if (MaxVal.Value <= MinVal.Value) MaxVal.Value = MinVal.Value + 1;
+        Coordinates lower = new Coordinates(0, MinValue.Value);
         Coordinates inflection = new Coordinates(70, 50);
         Coordinates upper = new Coordinates(100, MaxVal.Value);
         ContextStore.OnGraphChanged(lower, inflection, upper);
         BindingContext = ContextStore;
+    }
+
+    private void OnMinSliderValueChanged(object sender, EventArgs args)
+    {
+        if (MinVal.Value >= MaxVal.Value) MinVal.Value = MaxVal.Value + 1;
+    }
+
+    private async void PassValues(object sender, EventArgs args)
+    {
+        //TODO
     }
 }
