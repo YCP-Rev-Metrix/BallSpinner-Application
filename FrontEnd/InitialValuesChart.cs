@@ -11,8 +11,9 @@ namespace RevMetrix.BallSpinner.FrontEnd;
 
 public class InitialValuesChart
 {
-    public ISeries[] Series { get; set; } 
-    
+    public ISeries[] Series { get; set; }
+    public List<ObservablePoint> lineValues;
+    public List<ObservablePoint> bezierValues;
     public InitialValuesChart() { 
         Series = [
             new LineSeries<double>
@@ -34,12 +35,12 @@ public class InitialValuesChart
     public InitialValuesChart(List<double> x, List<double> y, List<double> bezierX, List<double> bezierY)
     {
         var seriesList = new List<ISeries>();
-
-        List<ObservablePoint> lineValues = new List<ObservablePoint>();
-        List<ObservablePoint> bezierValues = new List<ObservablePoint>();
+        
         List<ObservablePoint> placeholder = new List<ObservablePoint>();
         List<ObservablePoint> placeholder2 = new List<ObservablePoint>();
 
+        lineValues = new List<ObservablePoint>();
+        bezierValues = new List<ObservablePoint>();
 
         for (int i = 0; i < x.Count; i++)
         {

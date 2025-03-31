@@ -24,6 +24,15 @@
                         Grid.Column="2"
                         HeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
                         HorizontalOptions="End">
+                        <Label
+                            Margin="5,0"
+                            HeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
+                            MaximumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
+                            MinimumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
+                            Text="Initial Values Set!"
+                            BackgroundColor="Yellow"
+                            TextColor="Black"
+                            IsVisible="{Binding InitialValuesSet}"/>
                         <Button
                             Margin="5,0"
                             Padding="10,-10"

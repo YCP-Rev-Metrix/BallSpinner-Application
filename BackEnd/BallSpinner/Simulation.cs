@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.POCOs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -23,7 +24,12 @@ public class Simulation : IBallSpinner
     ///<inheritdoc/>
     public string Name { get; set; } = "Simulation";
 
-    ///<inheritdoc/>
+    /// <summary>
+    /// Gives an index to the current IBallSpinner implementation. This allows for multiple simulations to be run at the same time
+    /// with a separate file name, so that an exception can be avoided.
+    /// </summary>
+    private int _FileIndex;
+
     public string SmartDotMAC { get; } = "11:11:11:11:11:11";
 
     ///<inheritdoc/>
@@ -65,9 +71,29 @@ public class Simulation : IBallSpinner
     public Vector3 AngularVelocity = new Vector3(0.1f,0.0f,1f);
     public Quaternion Rotation = Quaternion.Identity;
 
+    ///<inheritdoc/>
+    public List<double?> RPMList { get; set; } = null;
+    ///<inheritdoc/>
+    public int RPMCount { get; set; } = 0;
+    ///<inheritdoc/>
+    public int currentRPMInd { get; set; } = 0;
+    ///<inheritdoc/>
+    public bool InitialValuesSet => RPMList != null && BezierInitPoint != null && BezierInflectionPoint != null && BezierFinalPoint != null && ball != null && Comments != null;
+
+    public Coordinate BezierInitPoint { get; set; }
+
+    public Coordinate BezierInflectionPoint { get; set; }
+
+    public Coordinate BezierFinalPoint { get; set; }
+
+    public Ball ball { get; set; }
+
+    public string Comments { get; set; }
+
     /// <summary/>
-    public Simulation()
+    public Simulation(int FileIndex)
     {
+        _FileIndex = FileIndex;
         InitializeConnection();
     }
 
@@ -112,7 +138,7 @@ public class Simulation : IBallSpinner
     {
         Stop();
 
-        DataParser.Start(Name);
+        DataParser.Start(Name + _FileIndex.ToString());
 
         TimeSpan frequency = TimeSpan.FromSeconds(1 / 10f);
         _timer = new Timer((o) =>
@@ -229,6 +255,20 @@ public class Simulation : IBallSpinner
         magneYValues.Add((double)Metric.MagnetometerY);
         magneZValues.Add((double)Metric.MagnetometerZ);
         lightValues.Add((double)Metric.Light);
+    }
+
+    /// <inheritidoc/>
+    public void SetInitialValues(List<double?> RPMs, Coordinate BezierInit, Coordinate BezierInflection, Coordinate BezierFinal, string Comments, Ball ball)
+    {
+        // Set RPMs for motor instructions
+        this.RPMList = RPMs;
+        this.RPMCount = RPMs.Count;
+        this.BezierInitPoint = BezierInit;
+        this.BezierInflectionPoint = BezierInflection;
+        this.BezierFinalPoint = BezierFinal;
+        this.Comments = Comments;
+        this.ball = ball;
+        PropertyChanged.Invoke(null, new PropertyChangedEventArgs("InitialValuesSet"));
     }
 
 }

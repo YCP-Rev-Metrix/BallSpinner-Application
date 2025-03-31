@@ -24,7 +24,7 @@ public class InitialValuesModel
         double tempY = pointInit.y;
         double diff = pointFinal.y - pointInit.y;
         // generate t (which is also resolution of curve)
-        for (double i = 0; i <= 1; i += 0.003)
+        for (double i = 0; i <= 1; i += 0.01)
         {
             //Assume x = t = 100s
             x.Add(i*100);

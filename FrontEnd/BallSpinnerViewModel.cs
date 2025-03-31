@@ -126,6 +126,8 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    public bool InitialValuesSet => _ballSpinner.InitialValuesSet;
+
     public MainPage MainPage { get; }
     public int interval = 0;
     private FrontEnd _frontEnd;
@@ -161,6 +163,7 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         //SetAllSeries();
         _ballSpinner.PropertyChanged += BallSpinner_PropertyChanged;
         _ballSpinner.OnConnectionChanged += BallSpinner_OnConnectionChanged;
+
 
         //BallSpinner_OnConnectionChanged(_ballSpinner.IsConnected()); Caused double smartdot connection screen
     }
@@ -201,17 +204,30 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
             LightSeries = [lightSeries];
             if (accelXValues.Count > maxDataPoints)
             {
-                if (accelXValues.Count >= 50) accelXValues.RemoveAt(0);
-                if (accelYValues.Count >= 50) accelYValues.RemoveAt(0);
-                if (accelZValues.Count >= 50) accelZValues.RemoveAt(0);
-                if (rotatXValues.Count >= 50) rotatXValues.RemoveAt(0);
-                if (rotatYValues.Count >= 50) rotatYValues.RemoveAt(0);
-                if (rotatZValues.Count >= 50) rotatZValues.RemoveAt(0);
-                if (magneXValues.Count >= 50) magneXValues.RemoveAt(0);
-                if (magneYValues.Count >= 50) magneYValues.RemoveAt(0);
-                if (magneZValues.Count >= 50) magneZValues.RemoveAt(0);
-                if (lightValues.Count >= 50) lightValues.RemoveAt(0);
+                accelXValues.RemoveAt(0);
+                accelYValues.RemoveAt(0);
+                accelZValues.RemoveAt(0);
             }
+            if (rotatXValues.Count > maxDataPoints)
+            {
+                rotatXValues.RemoveAt(0);
+                rotatYValues.RemoveAt(0);
+                rotatZValues.RemoveAt(0);
+            }
+
+            if (magneXValues.Count > maxDataPoints)
+            {
+                magneXValues.RemoveAt(0);
+                magneYValues.RemoveAt(0);
+                magneZValues.RemoveAt(0);
+            }
+
+            if (lightValues.Count > maxDataPoints)
+            {
+                lightValues.RemoveAt(0);
+            }
+
+
             /*Console.Out.WriteLine("TESTING");
             for(int i = 0; i < magneXSeries.Values.Count; i++)
             {
@@ -219,10 +235,10 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
             }*/
             //if (interval > 5)
             //{
-                OnPropertyChanged(nameof(MagnetometerSeries));
-                OnPropertyChanged(nameof(AccelerationSeries));
-                OnPropertyChanged(nameof(RotationSeries));
-                OnPropertyChanged(nameof(LightSeries));
+            OnPropertyChanged(nameof(MagnetometerSeries));
+            OnPropertyChanged(nameof(AccelerationSeries));
+            OnPropertyChanged(nameof(RotationSeries));
+            OnPropertyChanged(nameof(LightSeries));
             //    interval = 0;
             //}
             //else interval++;

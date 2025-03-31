@@ -7,16 +7,30 @@ public partial class NewBallSpinnerView : ContentPage
 {
 	private TaskCompletionSource<IBallSpinner?> _task;
 
-    public NewBallSpinnerView(TaskCompletionSource<IBallSpinner?> task)
+	private int _BallSpinnerCount;
+
+	private int _SimulationCount;
+
+    /// <summary>
+    /// Initiates a new IBallSpinner of type Simulation or BallSpinnerClass based on user input
+    /// </summary>
+    /// <param name="task"> Returns a new instance of the user selected IBallSpinner</param>
+    /// <param name="BallSpinnerCount">Represents the current number of BallSpinners open on the application. Used to assign file index.</param>
+    /// <param name="SimulationCount">Represents the current number of BallSpinners open on the application. Used to assign file index.</param>
+    public NewBallSpinnerView(TaskCompletionSource<IBallSpinner?> task, int BallSpinnerCount, int SimulationCount)
 	{
 		_task = task;
+
+		_BallSpinnerCount = BallSpinnerCount;
+
+		_SimulationCount = SimulationCount;
 
 		InitializeComponent();
 	}
 
 	public void AddSimulationButton(object sender, EventArgs args)
 	{
-		_task.SetResult(new Simulation());
+		_task.SetResult(new Simulation(++_SimulationCount));
     }
 
 	public async void AddBallSpinnerButton(object sender, EventArgs args)
@@ -30,7 +44,7 @@ public partial class NewBallSpinnerView : ContentPage
 		{
 			try
 			{
-				_task.SetResult(new BackEnd.BallSpinner.BallSpinnerClass(IPAddress.Parse(addr)));
+				_task.SetResult(new BackEnd.BallSpinner.BallSpinnerClass(IPAddress.Parse(addr), ++_BallSpinnerCount));
 			}
             catch (Exception e)
             {
