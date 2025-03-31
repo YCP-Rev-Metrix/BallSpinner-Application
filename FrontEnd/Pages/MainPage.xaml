@@ -115,15 +115,10 @@
                     VerticalOptions="CenterAndExpand"
                     VerticalTextAlignment="Center" />
             </VerticalStackLayout>
-        </Grid>
+        </Grid> -->
 
-        <!-- Added OpenGLView for rendering -->
-        <local:OpenGLView x:Name="OpenGLView"
-                          WidthRequest="300"
-                          HeightRequest="300"
-                          HorizontalOptions="Center"
-                          VerticalOptions="Center"
-                          BackgroundColor="White" />
+       
+        
 
     </Grid>
 </ContentPage>

@@ -24,6 +24,11 @@ public partial class MainPage : ContentPage
     {
         InitializeComponent();
         BindingContext = this;
+        //i add this here to make a pop up 
+        using (Game game = new Game(800, 600, "OpenTK"))
+        {
+            game.Run();
+        }
     }
 
     public void Init(FrontEnd frontEnd, IDatabase database)
