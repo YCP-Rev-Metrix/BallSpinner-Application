@@ -35,9 +35,7 @@
                         <ColumnDefinition Width="200" />
                         <ColumnDefinition Width="100" />
                         <ColumnDefinition Width="100" />
-                        <ColumnDefinition Width="100" />
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Column="0"
@@ -45,10 +43,13 @@
                            Text="Name" />
                     <Label Grid.Column="1"
                            FontSize="18"
-                           Text="Count" />
+                           Text="Ball" />
                     <Label Grid.Column="2"
-                        FontSize="18"
-                        Text="Comments" />
+                           FontSize="18"
+                           Text="Count" />
+                    <Label Grid.Column="3"
+                           FontSize="18"
+                           Text="Comments" />
                 </Grid>
 
                 <ListView Grid.Row="1"
@@ -70,16 +71,16 @@
                                         <ColumnDefinition Width="200" />
                                         <ColumnDefinition Width="100" />
                                         <ColumnDefinition Width="100" />
-                                        <ColumnDefinition Width="100" />
-                                        <ColumnDefinition Width="120" />
-                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <Label Grid.Column="0" 
                                            Text="{Binding shotinfo.Name}" />
                                     <Label Grid.Column="1"
-                                           Text="{Binding shotinfo.DataCount}" />
+                                           Text="{Binding ball.Name}"/>
                                     <Label Grid.Column="2"
-                                        Text="{Binding shotinfo.Comments}" />
+                                           Text="{Binding shotinfo.DataCount}" />
+                                    <Label Grid.Column="3"
+                                           Text="{Binding shotinfo.Comments}" />
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>
