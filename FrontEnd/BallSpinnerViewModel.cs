@@ -18,6 +18,7 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using Microsoft.Graphics.Canvas.Effects;
 using Microsoft.UI.Xaml;
+using Microsoft.Maui.ApplicationModel;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
@@ -30,16 +31,46 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
 
     public ObservableCollection<ISeries> LightSeries { get; set; }
 
-    public LineSeries<double> accelXSeries = new LineSeries<double>();
-    public LineSeries<double> accelYSeries = new LineSeries<double>();
-    public LineSeries<double> accelZSeries = new LineSeries<double>();
-    public LineSeries<double> rotatXSeries = new LineSeries<double>();
-    public LineSeries<double> rotatYSeries = new LineSeries<double>();
-    public LineSeries<double> rotatZSeries = new LineSeries<double>();
-    public LineSeries<double> magneXSeries = new LineSeries<double>();
-    public LineSeries<double> magneYSeries = new LineSeries<double>();
-    public LineSeries<double> magneZSeries = new LineSeries<double>();
-    public LineSeries<double> lightSeries = new LineSeries<double>();
+    public LineSeries<double> accelXSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> accelYSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Red) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> accelZSeries = new LineSeries<double>() 
+    {
+        Stroke = new SolidColorPaint(SKColors.Green) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> rotatXSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> rotatYSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Red) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> rotatZSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Green) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> magneXSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> magneYSeries = new LineSeries<double>() 
+    {
+        Stroke = new SolidColorPaint(SKColors.Red) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> magneZSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Green) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> lightSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 4 }
+    };
     const int maxDataPoints = 50; //maximum values for the graphs
     private readonly DispatcherTimer _timer = new DispatcherTimer();
 
@@ -102,6 +133,18 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
     private FrontEnd _frontEnd;
     public BallSpinnerViewModel(FrontEnd frontend, MainPage mainPage, IBallSpinner ballspinner)
     {
+        accelXSeries.GeometrySize = 0.5;
+        accelYSeries.GeometrySize = 0.5;
+        accelZSeries.GeometrySize = 0.5;
+        rotatXSeries.GeometrySize = 0.5;
+        rotatYSeries.GeometrySize = 0.5;
+        rotatZSeries.GeometrySize = 0.5;
+        magneXSeries.GeometrySize = 0.5;
+        magneYSeries.GeometrySize = 0.5;
+        magneZSeries.GeometrySize = 0.5;
+        lightSeries.GeometrySize = 0.5;
+
+
         _frontEnd = frontend;
         MainPage = mainPage;
         _ballSpinner = ballspinner;

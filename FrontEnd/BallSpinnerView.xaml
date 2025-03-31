@@ -4,7 +4,10 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:RevMetrix.BallSpinner.FrontEnd"
-    xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui">
+    xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls">
+
+    
     <Grid>
         <Border>
             <VerticalStackLayout>
@@ -68,6 +71,7 @@
                             x:Name="LeftView"
                             Grid.Column="0"
                             Source="{Binding LeftView.Source}" />
+
                     </Border>
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
@@ -99,7 +103,9 @@
                                     InputTransparent="True"
                                     Series="{Binding AccelerationSeries}"
                                     x:Name="TopMiddleView"
-                                    Grid.Row="1">
+                                    AnimationsSpeed="0"
+                                    Grid.Row="1"
+                                    XAxes="{Binding XAxes}">
                                 </lvc:CartesianChart>
                             </Grid>
                         </Border>
@@ -122,6 +128,7 @@
                                     x:Name="BottomMiddleView"
                                     Grid.Row="1"
                                     InputTransparent="True"
+                                    AnimationsSpeed="0"
                                     Series="{Binding RotationSeries}">
                                 </lvc:CartesianChart>
                             </Grid>
@@ -145,6 +152,7 @@
                                     x:Name="TopRightView"
                                     Grid.Row="1"
                                     InputTransparent="True"
+                                    AnimationsSpeed="0"
                                     Series="{Binding MagnetometerSeries}">
                                 </lvc:CartesianChart>
                             </Grid>
@@ -168,6 +176,7 @@
                                     x:Name="BottomRightView"
                                     Grid.Row="1"
                                     InputTransparent="True"
+                                    AnimationsSpeed="0"
                                     Series="{Binding LightSeries}">
                                 </lvc:CartesianChart>
                             </Grid>
