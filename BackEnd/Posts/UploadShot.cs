@@ -7,6 +7,7 @@ using CsvHelper.Configuration;
 using Common.POCOs;
 using RevMetrix.BallSpinner.BackEnd.Common.Utilities;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
+using System.Xml.Linq;
 
 namespace RevMetrix.BallSpinner.BackEnd.Database;
 
@@ -35,13 +36,24 @@ public partial class Database : IDatabase
             throw new Exception("No data to upload. Temporary csv is empty.");
         }
 
-        ShotInfo parameters = new ShotInfo(name, InitialSpeed, 20, 20, 20);
-        var requestObject = new
+        ShotInfo parameters = new ShotInfo
+        {
+            Name = name,
+            BezierInitPoint = ballSpinner.BezierInitPoint,
+            BezierInflectionPoint = ballSpinner.BezierInflectionPoint,
+            BezierFinalPoint = ballSpinner.BezierFinalPoint,
+            TimeStep = 0.010,
+            Comments = ballSpinner.Comments
+        };
+        Ball ball = ballSpinner.ball;
+
+        SimulatedShot shot = new SimulatedShot
         {
             shotinfo = parameters,
-            data = sampleData
+            data = sampleData,
+            ball = ball,
         };
-        var jsonBody = JsonConvert.SerializeObject(requestObject);
+        var jsonBody = JsonConvert.SerializeObject(shot);
         // Create the request content
         var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
         Client.DefaultRequestHeaders.Authorization = 

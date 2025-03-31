@@ -96,7 +96,7 @@ public class DatabaseTests : TestBase
         };
         Database.SetUserTokens(token);
 
-        var ballSpinner = new Simulation();
+        var ballSpinner = new Simulation(1);
         ballSpinner.Start();
         Thread.Sleep(1000);
         ballSpinner.Stop();

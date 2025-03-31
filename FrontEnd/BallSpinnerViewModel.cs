@@ -95,6 +95,8 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    public bool InitialValuesSet => _ballSpinner.InitialValuesSet;
+
     public MainPage MainPage { get; }
     public int interval = 0;
     private FrontEnd _frontEnd;
@@ -118,6 +120,7 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         //SetAllSeries();
         _ballSpinner.PropertyChanged += BallSpinner_PropertyChanged;
         _ballSpinner.OnConnectionChanged += BallSpinner_OnConnectionChanged;
+
 
         //BallSpinner_OnConnectionChanged(_ballSpinner.IsConnected()); Caused double smartdot connection screen
     }
@@ -161,15 +164,27 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
                 accelXValues.RemoveAt(0);
                 accelYValues.RemoveAt(0);
                 accelZValues.RemoveAt(0);
+            }
+            if (rotatXValues.Count > maxDataPoints)
+            {
                 rotatXValues.RemoveAt(0);
                 rotatYValues.RemoveAt(0);
                 rotatZValues.RemoveAt(0);
+            }
+
+            if (magneXValues.Count > maxDataPoints)
+            {
                 magneXValues.RemoveAt(0);
                 magneYValues.RemoveAt(0);
                 magneZValues.RemoveAt(0);
-                lightValues.RemoveAt(0);
-
             }
+
+            if (lightValues.Count > maxDataPoints)
+            {
+                lightValues.RemoveAt(0);
+            }
+
+
             /*Console.Out.WriteLine("TESTING");
             for(int i = 0; i < magneXSeries.Values.Count; i++)
             {
@@ -177,10 +192,10 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
             }*/
             //if (interval > 5)
             //{
-                OnPropertyChanged(nameof(MagnetometerSeries));
-                OnPropertyChanged(nameof(AccelerationSeries));
-                OnPropertyChanged(nameof(RotationSeries));
-                OnPropertyChanged(nameof(LightSeries));
+            OnPropertyChanged(nameof(MagnetometerSeries));
+            OnPropertyChanged(nameof(AccelerationSeries));
+            OnPropertyChanged(nameof(RotationSeries));
+            OnPropertyChanged(nameof(LightSeries));
             //    interval = 0;
             //}
             //else interval++;
