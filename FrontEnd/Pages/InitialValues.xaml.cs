@@ -26,6 +26,12 @@ public partial class InitialValues : ContentPage
         InitializeComponent();
 
         MaxVal.Value = 800;
+
+        _frontend = frontend;
+
+        _ballSpinners = ballSpinners;
+
+        bezierPointsY = new List<double?>();
     }
 
     private void OnMaxSliderValueChanged(object sender, EventArgs args)
@@ -49,20 +55,7 @@ public partial class InitialValues : ContentPage
     }
 
     private async void PassValues(object sender, EventArgs args)
-    {
-        //TODO
-    
-
-       _frontend = frontend;
-
-       _ballSpinners = ballSpinners;
-
-        bezierPointsY = new List<double?>();
-
-    }
-
-    private async void PassValues(object sender, EventArgs args)
-    {
+    {    
         // close Initial values window
         _frontend.CloseInitialValuesWindow();
         // Get RPM values
@@ -75,9 +68,9 @@ public partial class InitialValues : ContentPage
         foreach (var BallSpinner in _ballSpinners)
         {
             // Hardcoded coordinates for now
-            Coordinate BezierInitPoint = new Coordinate(0, 0);
-            Coordinate BezierInflectionPoint = new Coordinate(1.2, 233);
-            Coordinate BezierFinalPoint = new Coordinate(2.9, 775);
+            Coordinate BezierInitPoint = new Coordinate(0, MinVal.Value);
+            Coordinate BezierInflectionPoint = new Coordinate(70, 50);
+            Coordinate BezierFinalPoint = new Coordinate(100, MaxVal.Value);
             Ball Ball = (Ball) BallSelection.SelectedItem;
             string Comments = Comment.Text;
             BallSpinner.BallSpinner.SetInitialValues(bezierPointsY, BezierInitPoint, BezierInflectionPoint, BezierFinalPoint, Comments, Ball);
