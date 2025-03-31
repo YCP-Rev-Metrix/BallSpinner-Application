@@ -38,7 +38,8 @@ public class InitialValuesChart
         List<ObservablePoint> lineValues = new List<ObservablePoint>();
         List<ObservablePoint> bezierValues = new List<ObservablePoint>();
         List<ObservablePoint> placeholder = new List<ObservablePoint>();
-        
+        List<ObservablePoint> placeholder2 = new List<ObservablePoint>();
+
 
         for (int i = 0; i < x.Count; i++)
         {
@@ -46,6 +47,7 @@ public class InitialValuesChart
             bezierValues.Add(new ObservablePoint(bezierX[i], bezierY[i]));
         }
         placeholder.Add(new ObservablePoint(100, 800));
+        placeholder2.Add(new ObservablePoint(0, 0));
 
         seriesList.Add(new LineSeries<ObservablePoint>()
         {
@@ -65,8 +67,14 @@ public class InitialValuesChart
             Values = placeholder,
             GeometrySize = 0,
         });
+        seriesList.Add(new LineSeries<ObservablePoint>()
+        {
+            Values = placeholder2,
+            GeometrySize = 0,
+        });
 
-        
+
+
 
         Series = seriesList.ToArray();
     }

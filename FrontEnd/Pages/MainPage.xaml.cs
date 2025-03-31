@@ -33,10 +33,10 @@ public partial class MainPage : ContentPage
 
         //BindingContext = new RevMetrix.BallSpinner.FrontEnd.TestChart2();
         BindingContext = this;
-        using (OpenTKGame game = new OpenTKGame(800, 600, "LearnOpenTK"))
-        {
-            game.Run();
-        }
+        //using (OpenTKGame game = new OpenTKGame(800, 600, "LearnOpenTK"))
+        //{
+        //    game.Run();
+        //}
     }
 
     public void Init(FrontEnd frontEnd, IDatabase database)
