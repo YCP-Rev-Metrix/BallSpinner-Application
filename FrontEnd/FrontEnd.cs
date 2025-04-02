@@ -207,7 +207,9 @@ public class FrontEnd : IFrontEnd
 
         _newCloudManagementWindow = new Window(new CloudManagementPage(Backend.Database))
         {
-            Title = "Cloud Management"
+            Title = "Cloud Management",
+            Width = 800,
+            Height = 600
         };
 
         Application.Current!.OpenWindow(_newCloudManagementWindow);
