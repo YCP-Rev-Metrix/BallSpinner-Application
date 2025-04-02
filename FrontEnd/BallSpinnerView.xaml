@@ -129,7 +129,8 @@
                                     Grid.Row="1"
                                     InputTransparent="True"
                                     AnimationsSpeed="0"
-                                    Series="{Binding RotationSeries}">
+                                    Series="{Binding RotationSeries}"
+                                    XAxes="{Binding XAxes}">
                                 </lvc:CartesianChart>
                             </Grid>
                         </Border>
@@ -153,7 +154,8 @@
                                     Grid.Row="1"
                                     InputTransparent="True"
                                     AnimationsSpeed="0"
-                                    Series="{Binding MagnetometerSeries}">
+                                    Series="{Binding MagnetometerSeries}"
+                                    XAxes="{Binding XAxes}">
                                 </lvc:CartesianChart>
                             </Grid>
                         </Border>
@@ -177,7 +179,8 @@
                                     Grid.Row="1"
                                     InputTransparent="True"
                                     AnimationsSpeed="0"
-                                    Series="{Binding LightSeries}">
+                                    Series="{Binding LightSeries}"
+                                    XAxes="{Binding XAxes}">
                                 </lvc:CartesianChart>
                             </Grid>
                         </Border>

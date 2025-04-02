@@ -19,10 +19,19 @@ using SkiaSharp;
 using Microsoft.Graphics.Canvas.Effects;
 using Microsoft.UI.Xaml;
 using Microsoft.Maui.ApplicationModel;
+using LiveChartsCore.Kernel.Sketches;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
 {
+    /*public ICartesianAxis[] XAxes { get; set; } = [
+        new Axis
+        {
+            Name = "Time",
+            NamePaint = new SolidColorPaint(SKColors.White),
+            
+        }
+    ];*/
     public ObservableCollection<ISeries> AccelerationSeries { get; set; } 
 
     public ObservableCollection<ISeries> RotationSeries { get; set; }

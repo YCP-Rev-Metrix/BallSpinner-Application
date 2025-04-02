@@ -23,16 +23,6 @@ namespace RevMetrix.BallSpinner.FrontEnd;
 
 public partial class BallSpinnerView : ContentView
 {
-    public ICartesianAxis[] XAxes { get; set; } = [
-        new Axis
-        {
-            Name = "Time",
-        }
-    ];
-
-
-
-    
     private BallSpinnerViewModel _viewModel = null!;
 
 	public BallSpinnerView()

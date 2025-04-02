@@ -54,12 +54,14 @@ public class InitialValuesChart
         {
             Values = lineValues,
             GeometrySize = 0,
+            Fill = null,
             Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 4 },
 
         });
         seriesList.Add(new LineSeries<ObservablePoint>()
         {
             Values = bezierValues,
+            Fill = null,
             GeometrySize = 0,
             Stroke = new SolidColorPaint(SKColors.Red) { StrokeThickness = 4 },
         });

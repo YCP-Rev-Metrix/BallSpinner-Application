@@ -35,14 +35,15 @@
                     Minimum="0"
                     Rotation="-90"
                     VerticalOptions="Center"
-                    WidthRequest="286"
+                    WidthRequest="350"
                     ValueChanged="OnMinSliderValueChanged"/>
         </Grid>
 
         <lvc:CartesianChart Grid.Row="0"
                             Grid.Column="2"
                             AnimationsSpeed="0"
-                            Series="{Binding Series}"/>
+                            Series="{Binding Series}"
+                            YAxes="{Binding YAxes}"/>
 
         <Grid Grid.Row="0"
               Grid.Column="3">
@@ -60,7 +61,7 @@
                     Minimum="0"
                     Rotation="-90"
                     VerticalOptions="Center"
-                    WidthRequest="286"
+                    WidthRequest="350"
                     ValueChanged="OnMaxSliderValueChanged"/>
             <!--Label Grid.Row="1"
                    Grid.Column="0"
