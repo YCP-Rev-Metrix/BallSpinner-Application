@@ -1,31 +1,93 @@
+using Common.POCOs;
 using LiveChartsCore;
 using RevMetrix.BallSpinner.BackEnd;
+using RevMetrix.BallSpinner.BackEnd.BallSpinner;
+using System.Collections.ObjectModel;
+using WinRT.FrontEndVtableClasses;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 
 public partial class InitialValues : ContentPage
 {
-	public InitialValues()
-	{
-		InitializeComponent();
+    public FrontEnd _frontend;
 
-        
-        InitialValuesModel model = new InitialValuesModel();
-        Coordinates dummyvalues = new Coordinates(0, 0);
-        List<List<double>> axes = model.CalcuateBezierCruve(dummyvalues, dummyvalues, dummyvalues);
-        var chart = new InitialValuesChart(axes[0], axes[1], axes[2], axes[3]);
-        BindingContext = chart;
-        //BindingContext = this;
-        for(int i = 0; i <= 100; i+=5) //delete this loop when done, currently it is for outputting bezier values to console.
-        {
-            Console.Out.WriteLine("X = " + axes[2][i] + " , Y = " + axes[3][i]);
-        }
-        
+    public ObservableCollection<BallSpinnerViewModel> _ballSpinners;
 
-    }
+    public List<double?> bezierPointsY;
 
-    private void PassValues(object sender, EventArgs args)
+
+    private InitialValuesViewModel ContextStore;
+
+    public InitialValues(FrontEnd frontend, ObservableCollection<BallSpinnerViewModel> ballSpinners, IDatabase database)
     {
-        
+        ContextStore = new InitialValuesViewModel(database);
+        BindingContext = ContextStore;
+
+        InitializeComponent();
+
+        MaxVal.Value = 800;
+
+        _frontend = frontend;
+
+        _ballSpinners = ballSpinners;
+
+        bezierPointsY = new List<double?>();
     }
-}
+
+    private void OnMaxSliderValueChanged(object sender, EventArgs args)
+    {
+        if (MaxVal.Value <= MinVal.Value) MaxVal.Value = MinVal.Value + 1;
+        Coordinates lower = new Coordinates(0, MinVal.Value);
+        Coordinates inflection = new Coordinates(70, 50);
+        Coordinates upper = new Coordinates(100, MaxVal.Value);
+        ContextStore.OnGraphChanged(lower, inflection, upper);
+        BindingContext = ContextStore;
+    }
+
+    private void OnMinSliderValueChanged(object sender, EventArgs args)
+    {
+        if (MinVal.Value >= MaxVal.Value) MinVal.Value = MaxVal.Value + 1;
+        Coordinates lower = new Coordinates(0, MinVal.Value);
+        Coordinates inflection = new Coordinates(70, 50);
+        Coordinates upper = new Coordinates(100, MaxVal.Value);
+        ContextStore.OnGraphChanged(lower, inflection, upper);
+        BindingContext = ContextStore;
+    }
+
+    private async void PassValues(object sender, EventArgs args)
+    {
+        // Get RPM values
+            if (BallSelection.SelectedIndex == -1 || string.IsNullOrEmpty(Comment.Text))
+            {
+                await DisplayAlert("Alert", "No bowling ball selected or no Comment Made", "Ok");
+            }
+            else
+            {
+                // close Initial values window
+                _frontend.CloseInitialValuesWindow();
+
+                bezierPointsY.Clear();
+
+                foreach (var _point in ContextStore.chart.bezierValues)
+                {
+                    bezierPointsY.Add(_point.Y);
+                }
+
+
+
+                // Send rpms to the all open ballspinners
+                foreach (var BallSpinner in _ballSpinners)
+                {
+
+                    // Inflection is hardcoded for now
+                    Coordinate BezierInitPoint = new Coordinate(0, MinVal.Value);
+                    Coordinate BezierInflectionPoint = new Coordinate(70, 50);
+                    Coordinate BezierFinalPoint = new Coordinate(100, MaxVal.Value);
+                    Ball Ball = (Ball)BallSelection.SelectedItem;
+                    string Comments = Comment.Text;
+                    BallSpinner.BallSpinner.SetInitialValues(bezierPointsY, BezierInitPoint, BezierInflectionPoint, BezierFinalPoint, Comments, Ball);
+                }
+            }
+        }
+    }
+

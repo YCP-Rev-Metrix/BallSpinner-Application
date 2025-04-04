@@ -9,7 +9,7 @@
         <MenuBarItem Text="File">
             <MenuFlyoutItem
                 Clicked="OnNewShotButtonClicked"
-                IsEnabled="true"
+                IsEnabled="{Binding LoggedIn}"
                 Text="New Shot" />
             <MenuFlyoutItem
                 Clicked="OnLoadShotButtonClicked"
@@ -101,7 +101,7 @@
                 </StackLayout>
             </ScrollView>
 
-            <Grid IsVisible="{Binding NotLoggedIn}">
+            <!--Grid IsVisible="{Binding NotLoggedIn}">
                 <BoxView
                 HorizontalOptions="FillAndExpand"
                 InputTransparent="True"
@@ -118,7 +118,7 @@
                     VerticalTextAlignment="Center" />
                 </VerticalStackLayout>
             </Grid>
-            <!--<lvc:CartesianChart
+            <lvc:CartesianChart
                 Series="{Binding Series}">
             </lvc:CartesianChart>-->
         </Grid>

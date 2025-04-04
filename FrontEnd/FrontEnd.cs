@@ -3,6 +3,7 @@ using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using RevMetrix.BallSpinner.FrontEnd.Pages;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
@@ -169,16 +170,16 @@ public class FrontEnd : IFrontEnd
         return result;
     }
 
-    public void InitialValues()
+    public void InitialValues(ObservableCollection<BallSpinnerViewModel> ballSpinners)
     {
         if (_newInitialValuesWindow != null)
             return;
 
-        _newInitialValuesWindow = new Window(new InitialValues())
+        _newInitialValuesWindow = new Window(new InitialValues(this, ballSpinners, Backend.Database))
         {
             Title = "Input Values",
-            Width = 400,
-            Height = 500,
+            Width = 460,
+            Height = 650,
             X = 100,
             Y = 100
         };
@@ -206,7 +207,9 @@ public class FrontEnd : IFrontEnd
 
         _newCloudManagementWindow = new Window(new CloudManagementPage(Backend.Database))
         {
-            Title = "Cloud Management"
+            Title = "Cloud Management",
+            Width = 800,
+            Height = 600
         };
 
         Application.Current!.OpenWindow(_newCloudManagementWindow);
@@ -241,7 +244,7 @@ public class FrontEnd : IFrontEnd
         _newSmartDotSettingsWindow = new Window(new SmartDotSettingsPage(this, viewModel))
         {
             Title = "Simulation Settings",
-            Width = 500,
+            Width = 520,
             Height = 500,
             X = 100,
             Y = 100

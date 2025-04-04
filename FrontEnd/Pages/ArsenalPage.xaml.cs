@@ -51,8 +51,15 @@ public partial class ArsenalPage : ContentPage
         }
         else
         {
-            await _database.AddBowlingBall(new Ball(Name.Text, double.Parse(Diameter.Text), double.Parse(Weight.Text), (string?)CoreType.ItemsSource[CoreType.SelectedIndex]));
-            Refresh(sender, args);
+            try
+            {
+                await _database.AddBowlingBall(new Ball(Name.Text, double.Parse(Diameter.Text), double.Parse(Weight.Text), (string?)CoreType.ItemsSource[CoreType.SelectedIndex]));
+                Refresh(sender, args);
+            }
+            catch (Exception e)
+            {
+                await DisplayAlert("Error", e.Message, "Ok");
+            }
         }
     }
 }

@@ -27,3 +27,5 @@ packages
 .idea/**/libraries
 .vs
 /.idea/.idea.BallSpinner-Application/.idea/deploymentTargetSelector.xml
+#ignore sdk resolver files
+*csproj.SdkResolver*

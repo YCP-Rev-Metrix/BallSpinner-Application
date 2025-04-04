@@ -4,7 +4,10 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:RevMetrix.BallSpinner.FrontEnd"
-    xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui">
+    xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls">
+
+    
     <Grid>
         <Border>
             <VerticalStackLayout>
@@ -21,6 +24,15 @@
                         Grid.Column="2"
                         HeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
                         HorizontalOptions="End">
+                        <Label
+                            Margin="5,0"
+                            HeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
+                            MaximumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
+                            MinimumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
+                            Text="Initial Values Set!"
+                            BackgroundColor="Yellow"
+                            TextColor="Black"
+                            IsVisible="{Binding InitialValuesSet}"/>
                         <Button
                             Margin="5,0"
                             Padding="10,-10"
@@ -37,7 +49,7 @@
                             MaximumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
                             MinimumHeightRequest="{Binding Source={x:Reference Label}, Path=Height}"
                             IsVisible="{Binding NotSimulation}"
-                            Text="Simulation Settings" />
+                            Text="Configuration Settings" />
                         <Button
                             Padding="-14,-10"
                             Clicked="OnRemoveBallSpinnerButton"
@@ -59,6 +71,7 @@
                             x:Name="LeftView"
                             Grid.Column="0"
                             Source="{Binding LeftView.Source}" />
+
                     </Border>
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
@@ -90,7 +103,9 @@
                                     InputTransparent="True"
                                     Series="{Binding AccelerationSeries}"
                                     x:Name="TopMiddleView"
-                                    Grid.Row="1">
+                                    AnimationsSpeed="0"
+                                    Grid.Row="1"
+                                    XAxes="{Binding XAxes}">
                                 </lvc:CartesianChart>
                             </Grid>
                         </Border>
@@ -113,7 +128,9 @@
                                     x:Name="BottomMiddleView"
                                     Grid.Row="1"
                                     InputTransparent="True"
-                                    Series="{Binding RotationSeries}">
+                                    AnimationsSpeed="0"
+                                    Series="{Binding RotationSeries}"
+                                    XAxes="{Binding XAxes}">
                                 </lvc:CartesianChart>
                             </Grid>
                         </Border>
@@ -136,7 +153,9 @@
                                     x:Name="TopRightView"
                                     Grid.Row="1"
                                     InputTransparent="True"
-                                    Series="{Binding MagnetometerSeries}">
+                                    AnimationsSpeed="0"
+                                    Series="{Binding MagnetometerSeries}"
+                                    XAxes="{Binding XAxes}">
                                 </lvc:CartesianChart>
                             </Grid>
                         </Border>
@@ -159,7 +178,9 @@
                                     x:Name="BottomRightView"
                                     Grid.Row="1"
                                     InputTransparent="True"
-                                    Series="{Binding LightSeries}">
+                                    AnimationsSpeed="0"
+                                    Series="{Binding LightSeries}"
+                                    XAxes="{Binding XAxes}">
                                 </lvc:CartesianChart>
                             </Grid>
                         </Border>

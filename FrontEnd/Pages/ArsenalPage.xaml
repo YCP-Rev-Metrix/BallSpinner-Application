@@ -149,11 +149,11 @@
 
         <HorizontalStackLayout Grid.Row="2">
             <Button Margin="10"
-            Clicked="Refresh"
-            Text="Refresh" />
+                    Clicked="Refresh"
+                    Text="Refresh" />
             <Button Margin="10"
-            Clicked="DeleteBall"
-            Text="Delete Selection" />
+                    Clicked="DeleteBall"
+                    Text="Delete Selection" />
         </HorizontalStackLayout>
     </Grid>
     

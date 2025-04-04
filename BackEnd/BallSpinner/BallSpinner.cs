@@ -14,6 +14,7 @@ using Timer = System.Timers.Timer;
 using CsvHelper.Configuration.Attributes;
 using Microsoft.Maui;
 using Newtonsoft.Json.Linq;
+using System.Threading;
 
 namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 
@@ -33,6 +34,14 @@ public class BallSpinnerClass : IBallSpinner
     /// <inheritdoc/>
     public DataParser DataParser { get; private set; } = new DataParser();
 
+    public List<double?> RPMList { get; set; } = null;
+
+    public int RPMCount { get; set; } = 0;
+
+    public int currentRPMInd { get; set; } = 0;
+
+    ///<inheritdoc/>
+    public bool InitialValuesSet => RPMList != null && BezierInitPoint != null && BezierInflectionPoint != null && BezierFinalPoint != null && ball != null && Comments != null;
     public string SmartDotMAC { get; }
 
     /// <inheritdoc/>
@@ -61,10 +70,11 @@ public class BallSpinnerClass : IBallSpinner
     private byte _currentVoltage = 0;
     private Timer? _motorTimer;
 
+
     /// <summary>
     /// The different config settings for the Range (+/-)
     /// </summary>
-   
+
     public static readonly double[][] RANGE_OPTIONS = {
         [2, 4, 8, 16,-1, -1, -1, -1],
         [125,250,500,1000,2000, -1, -1 ,-1],
@@ -125,6 +135,25 @@ public class BallSpinnerClass : IBallSpinner
     /// </summary>
     private double[] CurrentSampleRates = new double[4];
 
+    /// <summary>
+    /// Integer that is used by multithreaded timer process within Interlocked operations. 
+    /// </summary>
+    private static int _eventRunning = 0; // Control variable: 0 (idle), 1 (event running), -1 (stopping)
+    /// <summary>
+    /// Represents the number of discarded events used by the timer process. That is, how many threads attempt to send motor instructions while another thread is currently sending
+    /// </summary>
+    private static int _discardedEvents = 0;
+
+    public Coordinate BezierInitPoint { get; set; }
+
+    public Coordinate BezierInflectionPoint { get; set; }
+
+    public Coordinate BezierFinalPoint { get; set; }
+
+    public Ball ball { get; set; }
+
+    public string Comments { get; set;  }
+
     /// <summary />
     public BallSpinnerClass(IPAddress address, int FileIndex)
     {
@@ -137,9 +166,11 @@ public class BallSpinnerClass : IBallSpinner
         //gyro should be rate == 25, 6400
         //range should be 1
         byte[] data = { 3, 1, 1, 0b10_00_00_01, 2, 2, 4, 4};
-       // Debug.WriteLine($"Range byte: 0b{Convert.ToString(data[0], 2).PadLeft(8, '0')}");
+        // Debug.WriteLine($"Range byte: 0b{Convert.ToString(data[0], 2).PadLeft(8, '0')}");
 
-       // SmartDotConfigReceivedEvent(data);
+        // SmartDotConfigReceivedEvent(data);
+
+        ball = new Ball("Test", 8.0, 11, "Pancake");
 
     }
 
@@ -340,8 +371,10 @@ public class BallSpinnerClass : IBallSpinner
 
         DataParser.Start(Name + _FileIndex.ToString());
 
+        currentRPMInd = 0;
+
         _currentVoltage = 1;
-        _motorTimer = new Timer(TimeSpan.FromSeconds(0.25));
+        _motorTimer = new Timer(TimeSpan.FromSeconds(0.010));
         _motorTimer.Elapsed += OnTimedEvent;
         _motorTimer.Start();
 
@@ -465,35 +498,56 @@ public class BallSpinnerClass : IBallSpinner
     {
         return AvailableSampleRates;
     }
+    /// <inheritidoc/>
+    public void SetInitialValues(List<double?> RPMs, Coordinate BezierInit, Coordinate BezierInflection, Coordinate BezierFinal, string Comments, Ball ball)
+    {
+        // Set RPMs for motor instructions
+        this.RPMList = RPMs;
+        this.RPMCount = RPMs.Count;
+        this.BezierInitPoint = BezierInit;
+        this.BezierInflectionPoint = BezierInflection;
+        this.BezierFinalPoint = BezierFinal;
+        this.Comments = Comments;
+        this.ball = ball;
+        PropertyChanged.Invoke(null, new PropertyChangedEventArgs("InitialValuesSet"));
+    }
     private void OnTimedEvent(object? source, ElapsedEventArgs e)
     {
-        if (!IsConnected())
-            return;
+        try
+        {
+            // Prevent reentrancy: Try to set _eventRunning from 0 to 1 atomically
+            if (Interlocked.CompareExchange(ref _eventRunning, 1, 0) != 0)
+            {
+                Interlocked.Increment(ref _discardedEvents); // Event was skipped due to reentrancy
+                Debug.WriteLine("Number of discarded events: " + _discardedEvents);
+                return;
+            }
 
-        _currentVoltage++;
+            if (currentRPMInd >= RPMCount)
+            {
+                return; // Don't stop the timer yet—ensure we reset _eventRunning first
+            }
 
-        if (_currentVoltage >= 30) //Primary motor supports up to 30, secondary motors only 12
-            _currentVoltage = 0;
+            Debug.WriteLine("Current index: " + currentRPMInd);
+            byte[] RPMVal = BitConverter.GetBytes((float)RPMList[currentRPMInd]);
+            currentRPMInd += 1;
+            _connection!.SetMotorRPMs(RPMVal);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }
+        finally
+        {
+            Interlocked.Exchange(ref _eventRunning, 0);
+            Interlocked.Exchange(ref _discardedEvents, 0);
 
-        byte x, y, z;
-
-        if (_currentVoltage >= 0 && _currentVoltage <= 10)
-            y = 8;
-        else
-            y = 0;
-
-        if (_currentVoltage >= 10 && _currentVoltage <= 20)
-            z = 8;
-        else
-            z = 0;
-
-        if (_currentVoltage >= 15 && _currentVoltage <= 30)
-            x = _currentVoltage;
-        else
-            x = 0;
-
-        //x = 30;
-
-        _connection!.SetMotorVoltages(x, y, z);
+            // Ensure the timer is stopped only after _eventRunning is reset
+            if (currentRPMInd >= RPMCount)
+            {
+                _motorTimer.Stop();
+            }
+        }
     }
+
 }

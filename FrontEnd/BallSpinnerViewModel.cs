@@ -18,10 +18,20 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using Microsoft.Graphics.Canvas.Effects;
 using Microsoft.UI.Xaml;
+using Microsoft.Maui.ApplicationModel;
+using LiveChartsCore.Kernel.Sketches;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
 {
+    /*public ICartesianAxis[] XAxes { get; set; } = [
+        new Axis
+        {
+            Name = "Time",
+            NamePaint = new SolidColorPaint(SKColors.White),
+            
+        }
+    ];*/
     public ObservableCollection<ISeries> AccelerationSeries { get; set; } 
 
     public ObservableCollection<ISeries> RotationSeries { get; set; }
@@ -30,16 +40,46 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
 
     public ObservableCollection<ISeries> LightSeries { get; set; }
 
-    public LineSeries<double> accelXSeries = new LineSeries<double>();
-    public LineSeries<double> accelYSeries = new LineSeries<double>();
-    public LineSeries<double> accelZSeries = new LineSeries<double>();
-    public LineSeries<double> rotatXSeries = new LineSeries<double>();
-    public LineSeries<double> rotatYSeries = new LineSeries<double>();
-    public LineSeries<double> rotatZSeries = new LineSeries<double>();
-    public LineSeries<double> magneXSeries = new LineSeries<double>();
-    public LineSeries<double> magneYSeries = new LineSeries<double>();
-    public LineSeries<double> magneZSeries = new LineSeries<double>();
-    public LineSeries<double> lightSeries = new LineSeries<double>();
+    public LineSeries<double> accelXSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> accelYSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Red) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> accelZSeries = new LineSeries<double>() 
+    {
+        Stroke = new SolidColorPaint(SKColors.Green) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> rotatXSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> rotatYSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Red) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> rotatZSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Green) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> magneXSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> magneYSeries = new LineSeries<double>() 
+    {
+        Stroke = new SolidColorPaint(SKColors.Red) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> magneZSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Green) { StrokeThickness = 4 }
+    };
+    public LineSeries<double> lightSeries = new LineSeries<double>()
+    {
+        Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 4 }
+    };
     const int maxDataPoints = 50; //maximum values for the graphs
     private readonly DispatcherTimer _timer = new DispatcherTimer();
 
@@ -91,20 +131,33 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
     public IDataViewModel BottomRightView { get; }
 
     public bool IsSimulation { get; }
-    public bool NotSimulation { get; }
+    public bool NotSimulation => !IsSimulation;
 
     public event PropertyChangedEventHandler? PropertyChanged;
+
+    public bool InitialValuesSet => _ballSpinner.InitialValuesSet;
 
     public MainPage MainPage { get; }
     public int interval = 0;
     private FrontEnd _frontEnd;
     public BallSpinnerViewModel(FrontEnd frontend, MainPage mainPage, IBallSpinner ballspinner)
     {
+        accelXSeries.GeometrySize = 0.5;
+        accelYSeries.GeometrySize = 0.5;
+        accelZSeries.GeometrySize = 0.5;
+        rotatXSeries.GeometrySize = 0.5;
+        rotatYSeries.GeometrySize = 0.5;
+        rotatZSeries.GeometrySize = 0.5;
+        magneXSeries.GeometrySize = 0.5;
+        magneYSeries.GeometrySize = 0.5;
+        magneZSeries.GeometrySize = 0.5;
+        lightSeries.GeometrySize = 0.5;
+
+
         _frontEnd = frontend;
         MainPage = mainPage;
         _ballSpinner = ballspinner;
         IsSimulation = _ballSpinner.GetType() == typeof(Simulation);
-        NotSimulation = !IsSimulation;
         NotConnectedFadeVisible = !IsSimulation;
 
         LeftView = new BallViewModel(_ballSpinner);
@@ -119,6 +172,7 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         //SetAllSeries();
         _ballSpinner.PropertyChanged += BallSpinner_PropertyChanged;
         _ballSpinner.OnConnectionChanged += BallSpinner_OnConnectionChanged;
+
 
         //BallSpinner_OnConnectionChanged(_ballSpinner.IsConnected()); Caused double smartdot connection screen
     }
@@ -162,15 +216,27 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
                 accelXValues.RemoveAt(0);
                 accelYValues.RemoveAt(0);
                 accelZValues.RemoveAt(0);
+            }
+            if (rotatXValues.Count > maxDataPoints)
+            {
                 rotatXValues.RemoveAt(0);
                 rotatYValues.RemoveAt(0);
                 rotatZValues.RemoveAt(0);
+            }
+
+            if (magneXValues.Count > maxDataPoints)
+            {
                 magneXValues.RemoveAt(0);
                 magneYValues.RemoveAt(0);
                 magneZValues.RemoveAt(0);
-                lightValues.RemoveAt(0);
-
             }
+
+            if (lightValues.Count > maxDataPoints)
+            {
+                lightValues.RemoveAt(0);
+            }
+
+
             /*Console.Out.WriteLine("TESTING");
             for(int i = 0; i < magneXSeries.Values.Count; i++)
             {
@@ -178,10 +244,10 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
             }*/
             //if (interval > 5)
             //{
-                OnPropertyChanged(nameof(MagnetometerSeries));
-                OnPropertyChanged(nameof(AccelerationSeries));
-                OnPropertyChanged(nameof(RotationSeries));
-                OnPropertyChanged(nameof(LightSeries));
+            OnPropertyChanged(nameof(MagnetometerSeries));
+            OnPropertyChanged(nameof(AccelerationSeries));
+            OnPropertyChanged(nameof(RotationSeries));
+            OnPropertyChanged(nameof(LightSeries));
             //    interval = 0;
             //}
             //else interval++;

@@ -38,6 +38,10 @@ public partial class MainPage : ContentPage
 
         //BindingContext = new RevMetrix.BallSpinner.FrontEnd.TestChart2();
         BindingContext = this;
+        //using (OpenTKGame game = new OpenTKGame(800, 600, "LearnOpenTK"))
+        //{
+        //    game.Run();
+        //}
     }
 
     public void Init(FrontEnd frontEnd, IDatabase database)
@@ -94,7 +98,14 @@ public partial class MainPage : ContentPage
 
     private void OnNewShotButtonClicked(object sender, EventArgs args)
     {
-        _frontEnd.InitialValues();
+        // Check to see if a user has any open IBallSpinner instances
+        if (BallSpinners.Count == 0)
+        {
+            DisplayAlert("Alert", "Please open a Ball Spinner to enter initial values.", "Ok");
+            return;
+        }
+        // Load initial values page passing in an instance of all open BallSpinners
+        _frontEnd.InitialValues(BallSpinners);
     }
 
     private void OnCloudManagementButtonClicked(object sender, EventArgs args)
@@ -119,7 +130,14 @@ public partial class MainPage : ContentPage
 
                     if (name != null)
                     {
-                        await _database.UploadShot(ballSpinner.BallSpinner, name, 0);
+                        try
+                        {
+                            await _database.UploadShot(ballSpinner.BallSpinner, name, 0);
+                        }
+                        catch (Exception e)
+                        {
+                            await DisplayAlert("Error", e.Message, "Okay");
+                        }
                     }
                 }
             }
@@ -149,11 +167,12 @@ public partial class MainPage : ContentPage
 
     private void OnStartButtonClicked(object sender, EventArgs args)
     {
+        // check to see if all ballspinners are good to go
         foreach (var spinner in BallSpinners)
         {
-            if(spinner.NotConnectedFadeVisible)
+            if(spinner.NotConnectedFadeVisible || !spinner.InitialValuesSet)
             {
-                DisplayAlert("Can't start", "All ball spinners must be connected.", "Okay");
+                DisplayAlert("Can't start", "All ball spinners must be connected and have initial values set.", "Okay");
                 return;
             }    
         }

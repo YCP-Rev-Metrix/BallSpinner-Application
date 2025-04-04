@@ -35,29 +35,21 @@
                         <ColumnDefinition Width="200" />
                         <ColumnDefinition Width="100" />
                         <ColumnDefinition Width="100" />
-                        <ColumnDefinition Width="100" />
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    
+
                     <Label Grid.Column="0"
                            FontSize="18"
                            Text="Name" />
                     <Label Grid.Column="1"
                            FontSize="18"
-                           Text="Speed" />
+                           Text="Ball" />
                     <Label Grid.Column="2"
                            FontSize="18"
-                           Text="Angle" />
+                           Text="Count" />
                     <Label Grid.Column="3"
                            FontSize="18"
-                           Text="Position" />
-                    <Label Grid.Column="4"
-                           FontSize="18"
-                           Text="Frequency" />
-                    <Label Grid.Column="5"
-                           FontSize="18"
-                           Text="Count" />
+                           Text="Comments" />
                 </Grid>
 
                 <ListView Grid.Row="1"
@@ -79,22 +71,16 @@
                                         <ColumnDefinition Width="200" />
                                         <ColumnDefinition Width="100" />
                                         <ColumnDefinition Width="100" />
-                                        <ColumnDefinition Width="100" />
-                                        <ColumnDefinition Width="120" />
-                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <Label Grid.Column="0" 
                                            Text="{Binding shotinfo.Name}" />
-                                    <Label Grid.Column="1" 
-                                           Text="{Binding shotinfo.Speed}" />
-                                    <Label Grid.Column="2" 
-                                           Text="{Binding shotinfo.Angle}" />
-                                    <Label Grid.Column="3" 
-                                           Text="{Binding shotinfo.Position}" />
-                                    <Label Grid.Column="4" 
-                                           Text="{Binding shotinfo.Frequency}" />
-                                    <Label Grid.Column="5"
+                                    <Label Grid.Column="1"
+                                           Text="{Binding ball.Name}"/>
+                                    <Label Grid.Column="2"
                                            Text="{Binding shotinfo.DataCount}" />
+                                    <Label Grid.Column="3"
+                                           Text="{Binding shotinfo.Comments}" />
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>

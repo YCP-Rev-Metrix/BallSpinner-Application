@@ -6,13 +6,23 @@ using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using System.Diagnostics;
 using LiveChartsCore.SkiaSharpView.Maui;
+using LiveChartsCore.Kernel.Sketches;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
+using OpenTK.Graphics;
+using OpenTK.Graphics.ES30;
+using OpenTK.Platform;
+using OpenTK.Platform.Windows;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.Maui.Controls.PlatformConfiguration;
+
 
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 
 public partial class BallSpinnerView : ContentView
 {
-    
     private BallSpinnerViewModel _viewModel = null!;
 
 	public BallSpinnerView()
