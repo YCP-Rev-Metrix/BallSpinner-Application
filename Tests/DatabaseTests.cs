@@ -130,10 +130,11 @@ public class DatabaseTests : TestBase
         };
         
         TempFileWriter.WriteData(dataArray3);
-        TempFileWriter.Stop();
 
         List<SampleData> sample = new List<SampleData>();
-        await Database.GetSampleData(sample, revFilePath);
+        await Database.GetSampleData(sample, revFilePath, 3);
+        // Dispose of memory mapped file
+        TempFileWriter.Stop();
         // Test the contents of sample to make sure it is parsed into JSON correctly
         //Assert.Empty(sample);
         // Test to make sure dataArray1 is parsed correctly into sample and is 1st element

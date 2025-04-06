@@ -6,7 +6,7 @@ public class TestWriteToTempFile() : TestBase
 {
 
     [Fact]
-    private void SimpleTest() 
+    private async void SimpleTest() 
     {
         TempFileWriter.Start();
         string[] dataArray = new string[6] 
@@ -22,10 +22,11 @@ public class TestWriteToTempFile() : TestBase
         };
                 
         TempFileWriter.WriteData(dataArray2);
-        TempFileWriter.Stop();
         // Use GetSampleData to view content of file
         List<SampleData> list = new List<SampleData>();
-        Database.GetSampleData(list, revFilePath);
+        await Database.GetSampleData(list, revFilePath, 2);
+        // Dispose of memory mapped file
+        TempFileWriter.Stop();
         // Test to make sure dataArray1 is parsed correctly into sample and is 1st element
         Assert.Equal("3", list[0].Type);
         Assert.Equal(43, list[0].Count);

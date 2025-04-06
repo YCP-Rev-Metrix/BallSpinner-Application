@@ -32,8 +32,9 @@ public abstract class TestBase
             TokenB = "test"
         };
         Database.SetUserTokens(token);
-        revFilePath = Utilities.GetTempRevFileDir("Tests");
+        revFilePath = "Testing";
         TempFileWriter = new WriteToTempRevFile(revFilePath);
+        TempFileWriter.OnRecordAdded += HandleRecordAdded;
         FrontEnd.Init(BackEnd);
         BackEnd.Init(FrontEnd, Database);
     }
@@ -41,6 +42,11 @@ public abstract class TestBase
     protected virtual void Cleanup()
     {
         TempFileWriter.Dispose();
+    }
+
+    private void HandleRecordAdded()
+    {
+
     }
 
     ~TestBase()
