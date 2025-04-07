@@ -5,6 +5,7 @@ using Common.POCOs;
 using RevMetrix.BallSpinner.BackEnd.BallSpinner;
 using System.IO.MemoryMappedFiles;
 using System.Collections;
+using System.Globalization;
 
 namespace RevMetrix.BallSpinner.BackEnd.Database;
 
@@ -26,7 +27,7 @@ public partial class Database : IDatabase
 
         List<SampleData> sampleData = new List<SampleData>();
         // Get sample data from temp rev file
-        await GetSampleData(sampleData, ballSpinner.DataParser.TempFilePath, ballSpinner.DataParser.NumRecords);
+        await GetSampleData(sampleData, ballSpinner.DataParser.TempFilePath, ballSpinner.DataParser.NumRecords, DataParser.NUM_DATA_POINTS);
         //If the csv is empty...
         if (sampleData.Count == 0)
         {
@@ -63,42 +64,42 @@ public partial class Database : IDatabase
     ///<Summary>
     /// Database utility method that parses temp rev file and puts data into a SampleData list
     ///</Summary>
-    public async Task<List<SampleData>> GetSampleData(List<SampleData> sampleData, string path, int numRecords)
+    public async Task<List<SampleData>> GetSampleData(List<SampleData> sampleData, string path, int numRecords, int numDataPoints)
     {
         using (MemoryMappedFile mmf = MemoryMappedFile.OpenExisting(path))
         {
             int position = 0;
-            int pointsRead = 0;
             List<byte[]> records = new List<byte[]>();
-            //Dictionary<byte[], int> recordMapping = new Dictionary<byte[], int>();
             for (int i = 0; i < numRecords; i++)
             {
                 using (MemoryMappedViewAccessor accessor = mmf.CreateViewAccessor())
                 {
-                    int length = accessor.ReadInt32(position); // Read length first
-                    position += 4; // Read length which is 4 bytes, now move forward 4 bytes
-                    byte[] dataPoints = new byte[length];
-                    accessor.ReadArray(position, dataPoints, 0, length); // Offset by 4 bytes
-                    records.Add(dataPoints);
-
-                    position += length;
-                    pointsRead += 1;
-                    // If an entire sample point has been read
-                    if (pointsRead % 6 == 0)
+                    for (int j = 1; j <= numDataPoints; j++)
                     {
-                        // Records are in order
-                        float.Parse(Encoding.UTF8.GetString(records[0]));
-                        SampleData data = new SampleData()
+                        int length = accessor.ReadInt32(position); // Read length first
+                        position += 4; // Read length which is 4 bytes, now move forward 4 bytes
+                        byte[] dataPoints = new byte[length];
+                        accessor.ReadArray(position, dataPoints, 0, length); // Offset by 4 bytes
+                        records.Add(dataPoints);
+
+                        position += length;
+                        // If an entire sample point has been read
+                        if (j == numDataPoints)
                         {
-                            Type = Encoding.UTF8.GetString(records[0]),
-                            Logtime = float.Parse(Encoding.UTF8.GetString(records[1])),
-                            Count = int.Parse(Encoding.UTF8.GetString(records[2])),
-                            X = float.Parse(Encoding.UTF8.GetString(records[3])),
-                            Y = float.Parse(Encoding.UTF8.GetString(records[4])),
-                            Z = float.Parse(Encoding.UTF8.GetString(records[5])),
-                        };
-                        sampleData.Add(data);
-                        records.Clear();
+                            // Records are in order
+                            float.Parse(Encoding.UTF8.GetString(records[0]));
+                            SampleData data = new SampleData()
+                            {
+                                Type = Encoding.UTF8.GetString(records[0]),
+                                Logtime = double.Parse(Encoding.UTF8.GetString(records[1]), CultureInfo.InvariantCulture),
+                                Count = int.Parse(Encoding.UTF8.GetString(records[2]), CultureInfo.InvariantCulture),
+                                X = double.Parse(Encoding.UTF8.GetString(records[3]), CultureInfo.InvariantCulture),
+                                Y = double.Parse(Encoding.UTF8.GetString(records[4]), CultureInfo.InvariantCulture),
+                                Z = double.Parse(Encoding.UTF8.GetString(records[5]), CultureInfo.InvariantCulture),
+                            };
+                            sampleData.Add(data);
+                            records.Clear();
+                        }
                     }
                 }
             }

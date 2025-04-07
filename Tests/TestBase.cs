@@ -13,7 +13,8 @@ public abstract class TestBase
     public Backend BackEnd = null!;
     public IDatabase Database = null!;
     public WriteToTempRevFile TempFileWriter = null!;
-    public string revFilePath = null!; 
+    public string revFilePath = null!;
+    public double epsilon = 0.01;
 
     protected TestBase()
     {

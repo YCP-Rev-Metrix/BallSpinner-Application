@@ -19,6 +19,11 @@ public class DataParser : IDisposable
     private WriteToTempRevFile? _writer;
 
     public int NumRecords { get; set; } = 0;
+    /// <summary>
+    /// Represents the number of data points within the sensor packets. Whenever the sensor packets are altered, this constant should 
+    /// change along with it.
+    /// </summary>
+    public static int NUM_DATA_POINTS { get; } = 6;
     public void Start(string name)
     {
         Stop();
