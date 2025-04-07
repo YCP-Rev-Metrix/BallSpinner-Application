@@ -27,7 +27,7 @@ public class WriteToTempRevFile : IDisposable
     }
 
     /// <summary>
-    /// Indicates that writing has stopped
+    /// Indicates that writing has stopped and file data is no longer needed.
     /// </summary>
     public void Stop()
     {

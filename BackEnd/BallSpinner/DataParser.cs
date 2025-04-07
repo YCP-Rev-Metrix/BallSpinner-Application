@@ -29,8 +29,11 @@ public class DataParser : IDisposable
         Stop();
 
         TempFilePath = name;
-
-        _writer = new WriteToTempRevFile(name);
+        // ONly create new writer object if it does not already exist
+        if (_writer == null)
+        {
+            _writer = new WriteToTempRevFile(name);
+        }
         _writer.OnRecordAdded += HandleRecordAdded;
         _writer.Start();
     }
@@ -39,7 +42,7 @@ public class DataParser : IDisposable
     /// </summary>
     public void Stop()
     {
-        // For now, these are commented out because dispose of _writer deletes memory mapped file
+        // For now, these are commented out because the dispose() of _writer deletes memory mapped file
         //_writer?.Dispose();
         //_writer = null;
     }
@@ -123,7 +126,9 @@ public class DataParser : IDisposable
     {
         _writer?.Dispose();
     }
-
+    /// <summary>
+    /// Handler function that increments NumRecords when WriteToTempRevFile successfully writes a smartdot sample point.
+    /// </summary>
     private void HandleRecordAdded()
     {
         NumRecords++;
