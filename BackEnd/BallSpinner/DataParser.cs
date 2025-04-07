@@ -69,6 +69,18 @@ public class DataParser: IDisposable
                     OnDataReceived?.Invoke(Metric.MagnetometerZ, ZData, timeStamp);
                     sensorTypeString = "4";
                     break;
+                case SensorType.MotorXFeedback: // primary motor
+                    OnDataReceived?.Invoke(Metric.MotorXFeedback, XData, timeStamp);
+                    sensorTypeString = "5";
+                    break;
+                case SensorType.MotorYFeedback: // axis of rotation motor
+                    OnDataReceived?.Invoke(Metric.MotorYFeedback, XData, timeStamp);
+                    sensorTypeString = "6";
+                    break;
+                case SensorType.MotorZFeedback: // axis tilt motor
+                    OnDataReceived?.Invoke(Metric.MotorZFeedback, XData, timeStamp);
+                    sensorTypeString = "7";
+                    break;
                 default:
                     sensorTypeString = "0";
                     break;

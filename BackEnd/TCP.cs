@@ -226,12 +226,7 @@ public class TCP : IDisposable
                             float xData = BitConverter.ToSingle(packetFixed, 11);
                             float yData = BitConverter.ToSingle(packetFixed, 15);
                             float zData = BitConverter.ToSingle(packetFixed, 19);
-                            // Debug statement to filter out light data (it comes in too slow right now)
-                            if (sensorType == SensorType.Light) {
-                                Debug.WriteLine($"{sensorType}: {xData} {timeStamp} {sampleCount}");
-                            }
-                            // Debug statement to print incoming smartdot packet data
-                            //Debug.WriteLine($"{sensorType}: {xData} {yData} {zData}");
+                            // Invoke event to send sensor data to proper place
                             SmartDotReceivedEvent?.Invoke(sensorType, timeStamp, sampleCount, xData, yData, zData);
                             break;
                         case MessageType.B_A_RECEIVE_CONFIG_INFO:
@@ -533,5 +528,8 @@ public enum SensorType : byte
     Accelerometer = 0x41,
     Gyroscope = 0x47,
     Light = 0x4C,
-    Magnetometer = 0x4D
+    Magnetometer = 0x4D,
+    MotorXFeedback = 0x58,
+    MotorYFeedback = 0x59,
+    MotorZFeedback = 0x5A
 }
