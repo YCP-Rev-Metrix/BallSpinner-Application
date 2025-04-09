@@ -93,4 +93,12 @@ public class Coordinates
         this.x = x;
         this.y = y;
     }
+
+    public static List<double> ToList(Coordinates coordinates)
+    {
+        List<double> result = new List<double>();
+        result.Add((double)coordinates.x);
+        result.Add((double)coordinates.y);
+        return result;
+    }
 }

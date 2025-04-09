@@ -38,7 +38,7 @@ public partial class InitialValues : ContentPage
     {
         if (MaxVal.Value <= MinVal.Value) MaxVal.Value = MinVal.Value + 1;
         Coordinates lower = new Coordinates(0, MinVal.Value);
-        Coordinates inflection = new Coordinates(70, 50);
+        Coordinates inflection = new Coordinates(70, ((MaxVal.Value-MinVal.Value)*(1.0/16.0))+MinVal.Value);
         Coordinates upper = new Coordinates(100, MaxVal.Value);
         ContextStore.OnGraphChanged(lower, inflection, upper);
         BindingContext = ContextStore;
@@ -48,7 +48,7 @@ public partial class InitialValues : ContentPage
     {
         if (MinVal.Value >= MaxVal.Value) MinVal.Value = MaxVal.Value + 1;
         Coordinates lower = new Coordinates(0, MinVal.Value);
-        Coordinates inflection = new Coordinates(70, 50);
+        Coordinates inflection = new Coordinates(70, ((MaxVal.Value-MinVal.Value)*(1.0/16.0))+MinVal.Value);
         Coordinates upper = new Coordinates(100, MaxVal.Value);
         ContextStore.OnGraphChanged(lower, inflection, upper);
         BindingContext = ContextStore;

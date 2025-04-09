@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace RevMetrix.BallSpinner.FrontEnd;
 public class GraphViewModel : WebDataViewModel
 {
+    //THIS IS OUTDATED LEGACY CODE! NEW GRAPH STUFF IS IN CHARTVIEWMODEL!
     public string Name { get; }
 
     public GraphViewModel(IBallSpinner ballSpinner, string name, Metric metrics) : base(ballSpinner)

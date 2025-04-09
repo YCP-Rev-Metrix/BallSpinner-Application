@@ -23,7 +23,15 @@ class InitialValuesViewModel : INotifyPropertyChanged
     public ISeries[] Series { get; private set; }
     public ObservableCollection<Ball> Arsenal { get; private set; }
     public event PropertyChangedEventHandler? PropertyChanged;
-    public Axis XAxis { get; private set; }
+    public Axis[] XAxes { get; private set; } =
+    {
+        new Axis 
+        {
+            LabelsPaint = new SolidColorPaint(SKColors.White),
+            //Name = "Time (ms)",
+            //NamePaint = new SolidColorPaint(SKColors.White),
+        }
+    };
     public Axis[] YAxes { get; set; } =
     {
         new Axis
@@ -31,6 +39,9 @@ class InitialValuesViewModel : INotifyPropertyChanged
             MinLimit = 0,
             MaxLimit = 800,
             CustomSeparators = new double[] { 0, 100, 200, 300, 400, 500, 600, 700, 800 },
+            LabelsPaint = new SolidColorPaint(SKColors.White),
+            //Name = "RPM",
+            //NamePaint = new SolidColorPaint(SKColors.White),
         }
     };
 
@@ -49,7 +60,7 @@ class InitialValuesViewModel : INotifyPropertyChanged
         Coordinates starterInflection = new Coordinates(70, 50);
         Coordinates starterUpper = new Coordinates(100, 800);
         List<List<double>> axes = model.CalculateBezierCurve(starterLower, starterInflection, starterUpper);
-        chart = new InitialValuesChart(axes[0], axes[1], axes[2], axes[3]);
+        chart = new InitialValuesChart(axes[0], axes[1], axes[2], axes[3], Coordinates.ToList(starterInflection));
         Series = chart.Series;
         
     }
@@ -58,7 +69,7 @@ class InitialValuesViewModel : INotifyPropertyChanged
     {
         InitialValuesModel model = new InitialValuesModel();
         List<List<double>> axes = model.CalculateBezierCurve(lower, inflection, upper);
-        chart = new InitialValuesChart(axes[0], axes[1], axes[2], axes[3]);
+        chart = new InitialValuesChart(axes[0], axes[1], axes[2], axes[3], Coordinates.ToList(inflection));
         Series = chart.Series;
         OnPropertyChanged(nameof(Series));
         

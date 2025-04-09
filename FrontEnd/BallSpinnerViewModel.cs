@@ -32,6 +32,35 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
             
         }
     ];*/
+    public ICartesianAxis[] MagYAxes { get; set; } = [
+        new Axis
+        {
+            MaxLimit = 1,
+
+        }
+    ];
+    public ICartesianAxis[] RotYAxes { get; set; } = [
+        new Axis
+        {
+            MaxLimit = 180,
+            MinLimit = -180,
+            CustomSeparators = new double[] { -180, 0, 180 },
+        }
+    ];
+    public ICartesianAxis[] AccYAxes { get; set; } = [
+        new Axis
+        {
+            MaxLimit = 1,
+            MinLimit = -1,
+        }
+    ];
+    public ICartesianAxis[] LigYAxes { get; set; } = [
+        new Axis
+        {
+            MaxLimit = 0.1,
+            MinLimit = 0,
+        }
+    ];
     public ObservableCollection<ISeries> AccelerationSeries { get; set; } 
 
     public ObservableCollection<ISeries> RotationSeries { get; set; }
