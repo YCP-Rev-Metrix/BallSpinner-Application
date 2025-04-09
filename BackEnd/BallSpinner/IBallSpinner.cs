@@ -184,12 +184,12 @@ public enum Metric
     /// <summary/>
     AccelerationZ = 1 << 8,
 
-    MotorXFeedback = 1 << 9,
-
-    MotorYFeedback = 1 << 10,
-
-    MotorZFeedback = 1 << 11,
-
     /// <summary/>
-    Light = 1 << 9
+    Light = 1 << 9,
+
+    MotorXFeedback = 1 << 10,
+
+    MotorYFeedback = 1 << 11,
+
+    MotorZFeedback = 1 << 12,
 }

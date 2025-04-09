@@ -16,6 +16,7 @@ public class DataParser: IDisposable
     public string TempFilePath { get; private set; } = string.Empty;
 
     private event Action<Metric, float, float>? OnDataReceived;
+    public event Action<double, bool> OnDataParserStart;
     private WriteToTempRevFile? _writer;
 
     public void Start(string name)
@@ -26,12 +27,15 @@ public class DataParser: IDisposable
 
         _writer = new WriteToTempRevFile(TempFilePath);
         _writer.Start();
+
+        OnDataParserStart.Invoke(0.01, true);
     }
 
     public void Stop()
     {
         _writer?.Dispose();
         _writer = null;
+        OnDataParserStart.Invoke(0.01, false);
     }
 
     /// <summary>
@@ -48,25 +52,25 @@ public class DataParser: IDisposable
             switch (sensorType)
             {
                 case SensorType.Accelerometer:
-                    OnDataReceived?.Invoke(Metric.AccelerationX, XData, timeStamp);
-                    OnDataReceived?.Invoke(Metric.AccelerationY, YData, timeStamp);
-                    OnDataReceived?.Invoke(Metric.AccelerationZ, ZData, timeStamp);
+                    //OnDataReceived?.Invoke(Metric.AccelerationX, XData, timeStamp);
+                    //OnDataReceived?.Invoke(Metric.AccelerationY, YData, timeStamp);
+                    //OnDataReceived?.Invoke(Metric.AccelerationZ, ZData, timeStamp);
                     sensorTypeString = "3";
                     break;
                 case SensorType.Gyroscope:
-                    OnDataReceived?.Invoke(Metric.RotationX, XData, timeStamp);
-                    OnDataReceived?.Invoke(Metric.RotationY, YData, timeStamp);
-                    OnDataReceived?.Invoke(Metric.RotationZ, ZData, timeStamp);
+                    //OnDataReceived?.Invoke(Metric.RotationX, XData, timeStamp);
+                    //OnDataReceived?.Invoke(Metric.RotationY, YData, timeStamp);
+                    //OnDataReceived?.Invoke(Metric.RotationZ, ZData, timeStamp);
                     sensorTypeString = "2";
                     break;
                 case SensorType.Light:
-                    OnDataReceived?.Invoke(Metric.Light, XData, timeStamp);
+                    //OnDataReceived?.Invoke(Metric.Light, XData, timeStamp);
                     sensorTypeString = "1";
                     break;
                 case SensorType.Magnetometer:
-                    OnDataReceived?.Invoke(Metric.MagnetometerX, XData, timeStamp);
-                    OnDataReceived?.Invoke(Metric.MagnetometerY, YData, timeStamp);
-                    OnDataReceived?.Invoke(Metric.MagnetometerZ, ZData, timeStamp);
+                    //OnDataReceived?.Invoke(Metric.MagnetometerX, XData, timeStamp);
+                    //OnDataReceived?.Invoke(Metric.MagnetometerY, YData, timeStamp);
+                    //OnDataReceived?.Invoke(Metric.MagnetometerZ, ZData, timeStamp);
                     sensorTypeString = "4";
                     break;
                 case SensorType.MotorXFeedback: // primary motor
@@ -124,5 +128,9 @@ public class DataParser: IDisposable
     public void Dispose()
     {
         _writer?.Dispose();
+    }
+    public void StopBallRotation()
+    {
+        OnDataParserStart.Invoke(0.01, false);
     }
 }

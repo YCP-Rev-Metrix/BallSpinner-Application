@@ -226,6 +226,7 @@ public class TCP : IDisposable
                             float xData = BitConverter.ToSingle(packetFixed, 11);
                             float yData = BitConverter.ToSingle(packetFixed, 15);
                             float zData = BitConverter.ToSingle(packetFixed, 19);
+                            Debug.WriteLine("Paxcket" + sampleCount);
                             // Invoke event to send sensor data to proper place
                             SmartDotReceivedEvent?.Invoke(sensorType, timeStamp, sampleCount, xData, yData, zData);
                             break;
