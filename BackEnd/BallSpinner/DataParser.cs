@@ -52,29 +52,30 @@ public class DataParser: IDisposable
             switch (sensorType)
             {
                 case SensorType.Accelerometer:
-                    //OnDataReceived?.Invoke(Metric.AccelerationX, XData, timeStamp);
-                    //OnDataReceived?.Invoke(Metric.AccelerationY, YData, timeStamp);
-                    //OnDataReceived?.Invoke(Metric.AccelerationZ, ZData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.AccelerationX, XData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.AccelerationY, YData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.AccelerationZ, ZData, timeStamp);
                     sensorTypeString = "3";
                     break;
                 case SensorType.Gyroscope:
-                    //OnDataReceived?.Invoke(Metric.RotationX, XData, timeStamp);
-                    //OnDataReceived?.Invoke(Metric.RotationY, YData, timeStamp);
-                    //OnDataReceived?.Invoke(Metric.RotationZ, ZData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.RotationX, XData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.RotationY, YData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.RotationZ, ZData, timeStamp);
                     sensorTypeString = "2";
                     break;
                 case SensorType.Light:
-                    //OnDataReceived?.Invoke(Metric.Light, XData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.Light, XData, timeStamp);
                     sensorTypeString = "1";
                     break;
                 case SensorType.Magnetometer:
-                    //OnDataReceived?.Invoke(Metric.MagnetometerX, XData, timeStamp);
-                    //OnDataReceived?.Invoke(Metric.MagnetometerY, YData, timeStamp);
-                    //OnDataReceived?.Invoke(Metric.MagnetometerZ, ZData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.MagnetometerX, XData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.MagnetometerY, YData, timeStamp);
+                    OnDataReceived?.Invoke(Metric.MagnetometerZ, ZData, timeStamp);
                     sensorTypeString = "4";
                     break;
                 case SensorType.MotorXFeedback: // primary motor
                     OnDataReceived?.Invoke(Metric.MotorXFeedback, XData, timeStamp);
+                    Debug.WriteLine("Encoder Value Recieved");
                     sensorTypeString = "5";
                     break;
                 case SensorType.MotorYFeedback: // axis of rotation motor

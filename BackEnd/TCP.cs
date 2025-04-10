@@ -192,8 +192,6 @@ public class TCP : IDisposable
                     {
                         packetFixed[i] = _receive[currentIndex + i];
                     }
-                    // Check to see if multiple packets are being process at the same time
-                    Debug.WriteLine($"{BitConverter.ToString(packetFixed)}");
                     currentIndex += packetFixed.Length;
 
                     var (messageType, messageSize) = GetMessageInfo(packetFixed);
@@ -220,13 +218,13 @@ public class TCP : IDisposable
                             SmartDotAddressReceivedEvent?.Invoke(physicalAddress);
                             break;
                         case MessageType.B_A_SD_SENSOR_DATA:
+                            Debug.WriteLine(BitConverter.ToString(new byte[] { packetFixed[3] }));
                             SensorType sensorType = (SensorType)Enum.ToObject(typeof(SensorType), packetFixed[3]);
                             int sampleCount = packetFixed[6] | (packetFixed[5] << 8) | (packetFixed[4] << 16); //3 bytes
                             float timeStamp = BitConverter.ToSingle(packetFixed, 7); //BitConverter expects LITTLE ENDIAN
                             float xData = BitConverter.ToSingle(packetFixed, 11);
                             float yData = BitConverter.ToSingle(packetFixed, 15);
                             float zData = BitConverter.ToSingle(packetFixed, 19);
-                            Debug.WriteLine("Paxcket" + sampleCount);
                             // Invoke event to send sensor data to proper place
                             SmartDotReceivedEvent?.Invoke(sensorType, timeStamp, sampleCount, xData, yData, zData);
                             break;
