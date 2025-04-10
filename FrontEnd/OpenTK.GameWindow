@@ -1,0 +1,4 @@
+public class Game : GameWindow
+{
+    // Your existing OpenTK GameWindow code
+}
