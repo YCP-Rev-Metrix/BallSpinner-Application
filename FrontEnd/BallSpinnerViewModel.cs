@@ -38,7 +38,7 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
 
     private IBallSpinner _ballSpinner;
 
-    public IDataViewModel LeftView { get; }
+    public OpenGLView LeftView { get; }
 
     public IDataViewModel TopMiddleView { get; }
 
@@ -66,7 +66,7 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         NotSimulation = !IsSimulation;
         NotConnectedFadeVisible = !IsSimulation;
 
-        LeftView = new BallViewModel(_ballSpinner);
+        LeftView = new OpenGLView();
         TopMiddleView = new GraphViewModel(_ballSpinner, "Acceleration (g)", Metric.AccelerationX | Metric.AccelerationY | Metric.AccelerationZ);
         BottomMiddleView = new GraphViewModel(_ballSpinner, "Rotation (°)", Metric.RotationX | Metric.RotationY | Metric.RotationZ);
         TopRightView = new GraphViewModel(_ballSpinner, "Magnetometer (μT)", Metric.MagnetometerX | Metric.MagnetometerY | Metric.MagnetometerZ);

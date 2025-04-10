@@ -54,10 +54,13 @@
                     </Grid.ColumnDefinitions>
 
                     <Border>
-                        <WebView
-                            x:Name="LeftView"
+                         
+                        <local:OpenGLView
+                            x:Name="OpenGLView"
                             Grid.Column="0"
-                            Source="{Binding LeftView.Source}" />
+                            WidthRequest="300"
+                            HeightRequest="325"
+                             /> 
                     </Border>
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
@@ -68,7 +71,6 @@
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
-
 
                         <Border Grid.Row="0" Grid.Column="0">
                             <Grid>
@@ -142,6 +144,7 @@
                 </Grid>
             </VerticalStackLayout>
         </Border>
+
         <Grid IsVisible="{Binding NotConnectedFadeVisible}">
             <BoxView
                 HorizontalOptions="FillAndExpand"

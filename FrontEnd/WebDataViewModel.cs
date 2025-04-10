@@ -17,7 +17,7 @@ public abstract class WebDataViewModel : IDataViewModel
     /// <summary>
     /// URL that the <see cref="WebView"/> will use
     /// </summary>
-    public abstract string Source { get; }
+    //public abstract string Source { get; }
 
     public abstract Metric Metrics { get; }
     public Action<Metric, float, float>? DataReceived { get; set; }
