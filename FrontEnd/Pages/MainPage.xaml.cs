@@ -24,7 +24,7 @@ public partial class MainPage : ContentPage
     /// <summary/>
     public MainPage()
     {
-        InitializeComponent();
+        //InitializeComponent();
         BindingContext = this;
         //i add this here to make a pop up 
         using (Game game = new Game(800, 600, "OpenTK"))

@@ -16,7 +16,7 @@ public class GraphViewModel : WebDataViewModel
         Metrics = metrics;
     }
 
-    public override string Source => "http://localhost:8081/Pages/ChartJS/ChartJS.html";
+    public string Source => "http://localhost:8081/Pages/ChartJS/ChartJS.html";
 
     public override Metric Metrics { get; }
 }

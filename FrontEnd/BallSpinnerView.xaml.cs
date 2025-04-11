@@ -20,7 +20,7 @@ public partial class BallSpinnerView : ContentView
         base.OnBindingContextChanged();
 
         _viewModel = (BallSpinnerViewModel)BindingContext;
-        _viewModel.LeftView.DataReceived += (metric, value, timeFromStart) => { DataReceived(_viewModel.LeftView, LeftView, metric, value, timeFromStart); };
+        //_viewModel.LeftView.DataReceived += (metric, value, timeFromStart) => { DataReceived(_viewModel.LeftView, LeftView, metric, value, timeFromStart); };
         _viewModel.TopMiddleView.DataReceived += (metric, value, timeFromStart) => { DataReceived(_viewModel.TopMiddleView, TopMiddleView, metric, value, timeFromStart); };
         _viewModel.TopRightView.DataReceived += (metric, value, timeFromStart) => { DataReceived(_viewModel.TopRightView, TopRightView, metric, value, timeFromStart); };
         _viewModel.BottomMiddleView.DataReceived += (metric, value, timeFromStart) => { DataReceived(_viewModel.BottomMiddleView, BottomMiddleView, metric, value, timeFromStart); };
