@@ -115,7 +115,7 @@
                     VerticalOptions="CenterAndExpand"
                     VerticalTextAlignment="Center" />
             </VerticalStackLayout>
-        </Grid> -->
+        </Grid> 
 
        
 
