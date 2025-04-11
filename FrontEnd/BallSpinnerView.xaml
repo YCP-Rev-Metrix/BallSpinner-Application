@@ -89,6 +89,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Label
                                     Grid.Row="0"
@@ -107,6 +108,10 @@
                                     Grid.Row="1"
                                     XAxes="{Binding XAxes}">
                                 </lvc:CartesianChart>
+                                <Label Grid.Row="2"
+                                       FontSize="16"
+                                       HorizontalOptions="Center"
+                                       Text="Time"/>
                             </Grid>
                         </Border>
                         <Border Grid.Row="0" Grid.Column="1">
@@ -114,6 +119,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Label
                                     Grid.Row="0"
@@ -131,6 +137,10 @@
                                     AnimationsSpeed="0"
                                     Series="{Binding RotationSeries}">
                                 </lvc:CartesianChart>
+                                <Label Grid.Row="2"
+                                       FontSize="16"
+                                       HorizontalOptions="Center"
+                                       Text="Time"/>
                             </Grid>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="0">
@@ -138,6 +148,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Label
                                     Grid.Row="0"
@@ -155,6 +166,10 @@
                                     AnimationsSpeed="0"
                                     Series="{Binding MagnetometerSeries}">
                                 </lvc:CartesianChart>
+                                <Label Grid.Row="2"
+                                       FontSize="16"
+                                       HorizontalOptions="Center"
+                                       Text="Time"/>
                             </Grid>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="1">
@@ -162,6 +177,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Label
                                     Grid.Row="0"
@@ -179,6 +195,10 @@
                                     AnimationsSpeed="0"
                                     Series="{Binding LightSeries}">
                                 </lvc:CartesianChart>
+                                <Label Grid.Row="2"
+                                       FontSize="16"
+                                       HorizontalOptions="Center"
+                                       Text="Time"/>
                             </Grid>
                         </Border>
                     </Grid>
