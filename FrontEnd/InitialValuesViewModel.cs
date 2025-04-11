@@ -11,6 +11,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting;
+using SkiaSharp;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 
@@ -22,6 +24,15 @@ class InitialValuesViewModel : INotifyPropertyChanged
     public ObservableCollection<Ball> Arsenal { get; private set; }
     public event PropertyChangedEventHandler? PropertyChanged;
     public Axis XAxis { get; private set; }
+    public Axis[] YAxes { get; set; } =
+    {
+        new Axis
+        {
+            MinLimit = 0,
+            MaxLimit = 800,
+            CustomSeparators = new double[] { 0, 100, 200, 300, 400, 500, 600, 700, 800 },
+        }
+    };
 
 
     public InitialValuesViewModel(IDatabase database)
