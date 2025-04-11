@@ -75,27 +75,23 @@ public class DataParser: IDisposable
                     break;
                 case SensorType.MotorXFeedback: // primary motor
                     OnDataReceived?.Invoke(Metric.MotorXFeedback, XData, timeStamp);
-                    Debug.WriteLine("Encoder Value Recieved");
+                    Debug.WriteLine("Encoder Value Recieved: " + XData);
                     sensorTypeString = "5";
                     break;
-                case SensorType.MotorYFeedback: // axis of rotation motor
-                    OnDataReceived?.Invoke(Metric.MotorYFeedback, XData, timeStamp);
-                    sensorTypeString = "6";
-                    break;
-                case SensorType.MotorZFeedback: // axis tilt motor
-                    OnDataReceived?.Invoke(Metric.MotorZFeedback, XData, timeStamp);
-                    sensorTypeString = "7";
-                    break;
                 default:
-                    sensorTypeString = "0";
+                    sensorTypeString = null;
                     break;
             }
             string[] smartDotData =
         {
             sensorTypeString, timeStamp.ToString(), sampleCount.ToString(), XData.ToString(), YData.ToString(), ZData.ToString()
         };
+            // For now we are recieving sensors that cannot be stored in the database, so nothing should be written to cache file for these
+            if (sensorTypeString != null)
+            {
+                _writer?.WriteData(smartDotData);
 
-            _writer?.WriteData(smartDotData);
+            }
         }
 
 

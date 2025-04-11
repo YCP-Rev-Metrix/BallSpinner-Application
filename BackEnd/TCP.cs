@@ -196,7 +196,7 @@ public class TCP : IDisposable
 
                     var (messageType, messageSize) = GetMessageInfo(packetFixed);
                     _receive[currentIndex] = 0;
-
+                    //Debug.WriteLine("Incoming packet " + BitConverter.ToString(packetFixed));
                     switch (messageType)
                     {
                         case MessageType.A_B_NAME_REQ:
@@ -222,9 +222,24 @@ public class TCP : IDisposable
                             SensorType sensorType = (SensorType)Enum.ToObject(typeof(SensorType), packetFixed[3]);
                             int sampleCount = packetFixed[6] | (packetFixed[5] << 8) | (packetFixed[4] << 16); //3 bytes
                             float timeStamp = BitConverter.ToSingle(packetFixed, 7); //BitConverter expects LITTLE ENDIAN
-                            float xData = BitConverter.ToSingle(packetFixed, 11);
-                            float yData = BitConverter.ToSingle(packetFixed, 15);
-                            float zData = BitConverter.ToSingle(packetFixed, 19);
+                            float xData, yData, zData;
+                            // These packets do not recieve a y or zz value, just parse for x
+                            if (sensorType == SensorType.CurrentSensorX || sensorType == SensorType.CurrentSensorY || sensorType == SensorType.CurrentSensorZ || sensorType == SensorType.MotorXFeedback)
+                            {
+                                xData = BitConverter.ToSingle(packetFixed, 11);
+
+                                Debug.WriteLine(BitConverter.ToString(new ArraySegment<byte>(packetFixed, 11, 4).ToArray()));
+
+                                yData = 0;
+                                zData = 0;
+                            }
+                            else
+                            {
+                                xData = BitConverter.ToSingle(packetFixed, 11);
+                                yData = BitConverter.ToSingle(packetFixed, 15);
+                                zData = BitConverter.ToSingle(packetFixed, 19);
+                            }
+
                             // Invoke event to send sensor data to proper place
                             SmartDotReceivedEvent?.Invoke(sensorType, timeStamp, sampleCount, xData, yData, zData);
                             break;
@@ -528,7 +543,8 @@ public enum SensorType : byte
     Gyroscope = 0x47,
     Light = 0x4C,
     Magnetometer = 0x4D,
-    MotorXFeedback = 0x58,
-    MotorYFeedback = 0x59,
-    MotorZFeedback = 0x5A
+    MotorXFeedback = 0x6D,
+    CurrentSensorX = 0x43,
+    CurrentSensorY = 0x56,
+    CurrentSensorZ = 0x52,
 }
