@@ -115,7 +115,7 @@ public class FrontEnd : IFrontEnd
         {
             Title = "Login",
             Width = 600,
-            Height = 400,
+            Height = 600,
             X = 100,
             Y = 100
         };
