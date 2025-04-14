@@ -16,6 +16,7 @@ public class DataParser : IDisposable
     public string TempFilePath { get; private set; } = string.Empty;
 
     private event Action<Metric, float, float>? OnDataReceived;
+    public event Action<double, bool> OnDataParserStart;
     private WriteToTempRevFile? _writer;
 
     public int NumRecords { get; set; } = 0;
@@ -36,6 +37,8 @@ public class DataParser : IDisposable
         }
         _writer.OnRecordAdded += HandleRecordAdded;
         _writer.Start();
+
+        OnDataParserStart.Invoke(0.01, true);
     }
     /// <summary>
     /// Releases all unneeded resources.
@@ -82,16 +85,25 @@ public class DataParser : IDisposable
                     OnDataReceived?.Invoke(Metric.MagnetometerZ, ZData, timeStamp);
                     sensorTypeString = "4";
                     break;
+                case SensorType.MotorXFeedback: // primary motor
+                    OnDataReceived?.Invoke(Metric.MotorXFeedback, XData, timeStamp);
+                    Debug.WriteLine("Encoder Value Recieved: " + XData);
+                    sensorTypeString = "5";
+                    break;
                 default:
-                    sensorTypeString = "0";
+                    sensorTypeString = null;
                     break;
             }
             string[] smartDotData =
         {
             sensorTypeString, timeStamp.ToString(), sampleCount.ToString(), XData.ToString(), YData.ToString(), ZData.ToString()
         };
+            // For now we are recieving sensors that cannot be stored in the database, so nothing should be written to cache file for these
+            if (sensorTypeString != null)
+            {
+                _writer?.WriteData(smartDotData);
 
-            _writer?.WriteData(smartDotData);
+            }
         }
 
 
@@ -132,5 +144,9 @@ public class DataParser : IDisposable
     private void HandleRecordAdded()
     {
         NumRecords++;
+    }
+    public void StopBallRotation()
+    {
+        OnDataParserStart.Invoke(0.01, false);
     }
 }

@@ -22,12 +22,15 @@ public abstract class WebDataViewModel : IDataViewModel
     public abstract Metric Metrics { get; }
     public Action<Metric, float, float>? DataReceived { get; set; }
 
+    public Action<double, bool> InitializeSimulation { get; set; }
+
     private IBallSpinner _ballSpinner;
     
     public WebDataViewModel(IBallSpinner ballSpinner)
     {
         _ballSpinner = ballSpinner;
         _ballSpinner.DataParser.Subscribe(OnDataReceived);
+        _ballSpinner.DataParser.OnDataParserStart += OnDataParserStart;
     }
 
     public void Dispose()
@@ -43,5 +46,9 @@ public abstract class WebDataViewModel : IDataViewModel
     public void OnDataReceived(Metric metric, float value, float timeFromStart)
     {
         DataReceived?.Invoke(metric, value, timeFromStart);
+    }
+    public void OnDataParserStart(double timeStep, bool Start)
+    {
+        InitializeSimulation?.Invoke(timeStep, Start);
     }
 }

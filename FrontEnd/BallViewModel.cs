@@ -14,5 +14,5 @@ public class BallViewModel : WebDataViewModel
 
     public override string Source => "http://localhost:8081/Pages/ThreeJS/ThreeJS.html";
 
-    public override Metric Metrics => Metric.RotationX | Metric.RotationY | Metric.RotationZ;
+    public override Metric Metrics => Metric.RotationX | Metric.RotationY | Metric.RotationZ | Metric.MotorXFeedback;
 }
