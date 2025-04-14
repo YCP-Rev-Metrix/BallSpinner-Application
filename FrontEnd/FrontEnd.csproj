@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
@@ -66,7 +66,7 @@
     <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.40" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="RevMetrix.BallSpinner.Common.Api" Version="1.1.8" />
+    <PackageReference Include="RevMetrix.BallSpinner.Common.Api" Version="1.1.9" />
     <PackageReference Include="RevMetrix.Client.Api" Version="1.0.15" />
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">

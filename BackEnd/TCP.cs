@@ -227,7 +227,7 @@ public class TCP : IDisposable
                             float yData = BitConverter.ToSingle(packetFixed, 15);
                             float zData = BitConverter.ToSingle(packetFixed, 19);
                             // Debug statement to filter out light data (it comes in too slow right now)
-                            if (sensorType == SensorType.Light) {
+                            if (sensorType == SensorType.Magnetometer) {
                                 Debug.WriteLine($"{sensorType}: {xData} {timeStamp} {sampleCount}");
                             }
                             // Debug statement to print incoming smartdot packet data
