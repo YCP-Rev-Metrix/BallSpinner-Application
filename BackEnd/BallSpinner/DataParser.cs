@@ -48,6 +48,7 @@ public class DataParser : IDisposable
         // For now, these are commented out because the dispose() of _writer deletes memory mapped file
         //_writer?.Dispose();
         //_writer = null;
+        StopBallRotation();
     }
 
     /// <summary>
