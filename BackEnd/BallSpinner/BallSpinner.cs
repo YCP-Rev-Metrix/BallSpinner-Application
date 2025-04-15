@@ -554,7 +554,7 @@ public class BallSpinnerClass : IBallSpinner
                 }
                 // Every second, increase/decrease the angle by 15 degrees
                 SecondaryMotorCounter += (0.5 * secondaryDirection);
-                _connection!.SetMotorRPMs(RPMVal, BitConverter.GetBytes((float)0), BitConverter.GetBytes((float)0));
+                _connection!.SetMotorRPMs(RPMVal, BitConverter.GetBytes((float)SecondaryMotorCounter), BitConverter.GetBytes((float)0));
             }
             catch (Exception ex)
             {
