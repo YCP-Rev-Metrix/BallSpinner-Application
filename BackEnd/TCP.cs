@@ -284,6 +284,8 @@ public class TCP : IDisposable
     /// <summary>
     /// Sends voltages to the motors
     /// </summary>
+    ///
+    /* This method is depricated
     public async void SetMotorVoltages(byte x, byte y, byte z)
     {
         if (!_client.Connected)
@@ -308,12 +310,12 @@ public class TCP : IDisposable
         // Send the motor instruction to the PI
         await _client.Client.SendAsync(instructions);
     }
-
+    */
     /// <summary>
     /// Sends RPMS to the motors
     /// The Rpm parameter is expected to be a 32 bit float value conerted to a byte array
     /// </summary>
-    public async void SetMotorRPMs(byte[] Rpm)
+    public async void SetMotorRPMs(byte[] MajorAxisRpm, byte[] SecondaryAxisRPM, byte[] tertiaryAxisRPM)
     {
         if (!_client.Connected)
             throw new Exception("Can't send instructions without being connected");
@@ -333,20 +335,20 @@ public class TCP : IDisposable
             0x00,
             0x03, // size
 
-            Rpm[0], // Set driver motor RPM value
-            Rpm[1],
-            Rpm[2],
-            Rpm[3],
+            MajorAxisRpm[0], // Set driver motor RPM value
+            MajorAxisRpm[1],
+            MajorAxisRpm[2],
+            MajorAxisRpm[3],
 
-            0x00, //Motor 2 values
-            0x00,
-            0x00,
-            0x00,
+            SecondaryAxisRPM[0], // Motor 2 values
+            SecondaryAxisRPM[1],
+            SecondaryAxisRPM[2],
+            SecondaryAxisRPM[3],
 
-            0x00, // Motor 3 values
-            0x00,
-            0x00,
-            0x00,
+            tertiaryAxisRPM[0], // Motor 3 values
+            tertiaryAxisRPM[1],
+            tertiaryAxisRPM[2],
+            tertiaryAxisRPM[3],
             };
             // Send the motor instruction to the PI
             await _client.Client.SendAsync(instructions);

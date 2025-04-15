@@ -69,6 +69,7 @@ public class BallSpinnerClass : IBallSpinner
 
     private byte _currentVoltage = 0;
     private Timer? _motorTimer;
+    private Timer? _secondaryMotorTimer;
 
 
     /// <summary>
@@ -153,6 +154,14 @@ public class BallSpinnerClass : IBallSpinner
     public Ball ball { get; set; }
 
     public string Comments { get; set;  }
+    /// <summary>
+    /// Used to determine the value for the secondary motor whenever the elapsed event fires off
+    /// </summary>
+    private int SecondaryMotorCounter { get; set; } = 0;
+    /// <summary>
+    /// Determines the direction of oscilation of the seconary motor
+    /// </summary>
+    private int secondaryDirection { get; set; } = 1;
 
     /// <summary />
     public BallSpinnerClass(IPAddress address, int FileIndex)
@@ -169,9 +178,6 @@ public class BallSpinnerClass : IBallSpinner
         // Debug.WriteLine($"Range byte: 0b{Convert.ToString(data[0], 2).PadLeft(8, '0')}");
 
         // SmartDotConfigReceivedEvent(data);
-
-        ball = new Ball("Test", 8.0, 11, "Pancake");
-
     }
 
     /// <inheritdoc/>
@@ -182,6 +188,9 @@ public class BallSpinnerClass : IBallSpinner
 
         _motorTimer?.Dispose();
         _motorTimer = null;
+
+        _secondaryMotorTimer.Dispose();
+        _secondaryMotorTimer = null;
     }
 
     /// <inheritdoc/>
@@ -378,6 +387,10 @@ public class BallSpinnerClass : IBallSpinner
         _motorTimer.Elapsed += OnTimedEvent;
         _motorTimer.Start();
 
+        SecondaryMotorCounter = 0;
+        secondaryDirection = 1; // initialize in the forward direction
+        _secondaryMotorTimer = new Timer(TimeSpan.FromSeconds(1));
+        _secondaryMotorTimer.Elapsed += SecondaryMotorTimedEvent;
     }
 
     /// <inheritdoc/>
@@ -388,6 +401,9 @@ public class BallSpinnerClass : IBallSpinner
 
         //_connection?.SetMotorVoltages(0, 0, 0);
         _connection?.StopMotorInstructions();
+
+        _secondaryMotorTimer?.Dispose();
+        _secondaryMotorTimer = null;
 
         DataParser.Stop();
     }
@@ -531,7 +547,7 @@ public class BallSpinnerClass : IBallSpinner
             Debug.WriteLine("Current index: " + currentRPMInd);
             byte[] RPMVal = BitConverter.GetBytes((float)RPMList[currentRPMInd]);
             currentRPMInd += 1;
-            _connection!.SetMotorRPMs(RPMVal);
+            _connection!.SetMotorRPMs(RPMVal, BitConverter.GetBytes((float) 0), BitConverter.GetBytes((float) 0));
         }
         catch (Exception ex)
         {
@@ -546,8 +562,26 @@ public class BallSpinnerClass : IBallSpinner
             if (currentRPMInd >= RPMCount)
             {
                 _motorTimer.Stop();
+                _secondaryMotorTimer.Start();
             }
         }
+    }
+
+    private void SecondaryMotorTimedEvent(object? source, ElapsedEventArgs e)
+    {
+        // This allow the degrees to oscilate from 0 to 180 and back to 0
+        if (SecondaryMotorCounter + 1 > 180)
+        {
+            secondaryDirection = -1;
+        }
+        else if (SecondaryMotorCounter - 1 < 0)
+        {
+            secondaryDirection = 1;
+        }
+        // Every second, increase/decrease the angle by 15 degrees
+        SecondaryMotorCounter += (15 * secondaryDirection);
+
+        _connection!.SetMotorRPMs(BitConverter.GetBytes((float) 60), BitConverter.GetBytes(SecondaryMotorCounter), BitConverter.GetBytes((float) 0));
     }
 
 }
