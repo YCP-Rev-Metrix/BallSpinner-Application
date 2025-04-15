@@ -64,7 +64,6 @@ public class BallSpinnerClass : IBallSpinner
 
     private byte _currentVoltage = 0;
     private Timer? _motorTimer;
-    private Timer? _secondaryMotorTimer;
 
 
     /// <summary>
@@ -152,11 +151,16 @@ public class BallSpinnerClass : IBallSpinner
     /// <summary>
     /// Used to determine the value for the secondary motor whenever the elapsed event fires off
     /// </summary>
-    private int SecondaryMotorCounter { get; set; } = 0;
+    private double SecondaryMotorCounter { get; set; } = 0;
     /// <summary>
     /// Determines the direction of oscilation of the seconary motor
     /// </summary>
     private int secondaryDirection { get; set; } = 1;
+    /// <summary>
+    /// Boolean that determines if the primary motor rpms should continue to be incremented in motor sending code.
+    /// This is set to false when end of RPMList has been reached.
+    /// </summary>
+    private bool runPrimaryMotor { get; set; } = true;
 
     /// <summary />
     public BallSpinnerClass(IPAddress address)
@@ -182,9 +186,6 @@ public class BallSpinnerClass : IBallSpinner
 
         _motorTimer?.Dispose();
         _motorTimer = null;
-
-        _secondaryMotorTimer?.Dispose();
-        _secondaryMotorTimer = null;
     }
 
     /// <inheritdoc/>
@@ -374,17 +375,16 @@ public class BallSpinnerClass : IBallSpinner
 
         DataParser.Start(Name);
 
-        currentRPMInd = 0;
-
-        _currentVoltage = 1;
-        _motorTimer = new Timer(TimeSpan.FromSeconds(0.010));
-        _motorTimer.Elapsed += OnTimedEvent;
-        _motorTimer.Start();
-
+        // set init values
+        runPrimaryMotor = true;
         SecondaryMotorCounter = 0;
         secondaryDirection = 1; // initialize in the forward direction
-        _secondaryMotorTimer = new Timer(TimeSpan.FromSeconds(1));
-        _secondaryMotorTimer.Elapsed += SecondaryMotorTimedEvent;
+        currentRPMInd = 0;
+
+        _motorTimer = new Timer(TimeSpan.FromSeconds(0.010));
+        _motorTimer.Elapsed += OnTimedEvent;
+
+        _motorTimer.Start();
     }
 
     /// <inheritdoc/>
@@ -395,9 +395,6 @@ public class BallSpinnerClass : IBallSpinner
 
         //_connection?.SetMotorVoltages(0, 0, 0);
         _connection?.StopMotorInstructions();
-
-        _secondaryMotorTimer?.Dispose();
-        _secondaryMotorTimer = null;
 
         DataParser.Stop();
     }
@@ -523,59 +520,57 @@ public class BallSpinnerClass : IBallSpinner
     }
     private void OnTimedEvent(object? source, ElapsedEventArgs e)
     {
-        try
-        {
-            // Prevent reentrancy: Try to set _eventRunning from 0 to 1 atomically
-            if (Interlocked.CompareExchange(ref _eventRunning, 1, 0) != 0)
+            try
             {
-                Interlocked.Increment(ref _discardedEvents); // Event was skipped due to reentrancy
-                Debug.WriteLine("Number of discarded events: " + _discardedEvents);
-                return;
-            }
+                // Prevent reentrancy: Try to set _eventRunning from 0 to 1 atomically
+                if (Interlocked.CompareExchange(ref _eventRunning, 1, 0) != 0)
+                {
+                    Interlocked.Increment(ref _discardedEvents); // Event was skipped due to reentrancy
+                    Debug.WriteLine("Number of discarded events: " + _discardedEvents);
+                    return;
+                }
 
-            if (currentRPMInd >= RPMCount)
+                if (currentRPMInd >= RPMCount)
+                {
+                    return; // Don't stop the timer yet—ensure we reset _eventRunning first
+                }
+
+                Debug.WriteLine("Current index: " + currentRPMInd);
+                byte[] RPMVal = BitConverter.GetBytes((float)RPMList[currentRPMInd]);
+                if (runPrimaryMotor == true) // dont increment RPM if primary values are done sending
+                {
+                    currentRPMInd += 1;
+                }
+
+                // get secondary motor value
+                // This allow the degrees to oscilate from 0 to 180 and back to 0
+                if (SecondaryMotorCounter + 1 > 180)
+                {
+                    secondaryDirection = -1;
+                }
+                else if (SecondaryMotorCounter - 1 < 0)
+                {
+                    secondaryDirection = 1;
+                }
+                // Every second, increase/decrease the angle by 15 degrees
+                SecondaryMotorCounter += (0.5 * secondaryDirection);
+                _connection!.SetMotorRPMs(RPMVal, BitConverter.GetBytes((float)0), BitConverter.GetBytes((float)0));
+            }
+            catch (Exception ex)
             {
-                return; // Don't stop the timer yet—ensure we reset _eventRunning first
+                Debug.WriteLine(ex.Message);
             }
-
-            Debug.WriteLine("Current index: " + currentRPMInd);
-            byte[] RPMVal = BitConverter.GetBytes((float)RPMList[currentRPMInd]);
-            currentRPMInd += 1;
-            _connection!.SetMotorRPMs(RPMVal, BitConverter.GetBytes((float) 0), BitConverter.GetBytes((float) 0));
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex.Message);
-        }
-        finally
-        {
-            Interlocked.Exchange(ref _eventRunning, 0);
-            Interlocked.Exchange(ref _discardedEvents, 0);
-
-            // Ensure the timer is stopped only after _eventRunning is reset
-            if (currentRPMInd >= RPMCount)
+            finally
             {
-                _motorTimer.Stop();
-                _secondaryMotorTimer.Start();
+                Interlocked.Exchange(ref _eventRunning, 0);
+                Interlocked.Exchange(ref _discardedEvents, 0);
+
+                // Ensure the timer is stopped only after _eventRunning is reset
+                if (currentRPMInd >= RPMCount)
+                {
+                    runPrimaryMotor = false;
+                    currentRPMInd = RPMCount - 1;
+                }
             }
-        }
     }
-
-    private void SecondaryMotorTimedEvent(object? source, ElapsedEventArgs e)
-    {
-        // This allow the degrees to oscilate from 0 to 180 and back to 0
-        if (SecondaryMotorCounter + 1 > 180)
-        {
-            secondaryDirection = -1;
-        }
-        else if (SecondaryMotorCounter - 1 < 0)
-        {
-            secondaryDirection = 1;
-        }
-        // Every second, increase/decrease the angle by 15 degrees
-        SecondaryMotorCounter += (15 * secondaryDirection);
-        // Send RPMs. For now primary RPM is always set to last primary rpm value
-        _connection!.SetMotorRPMs(BitConverter.GetBytes((float)RPMList[^1]), BitConverter.GetBytes((float) SecondaryMotorCounter), BitConverter.GetBytes((float) 0));
-    }
-
 }
