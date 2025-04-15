@@ -580,8 +580,8 @@ public class BallSpinnerClass : IBallSpinner
         }
         // Every second, increase/decrease the angle by 15 degrees
         SecondaryMotorCounter += (15 * secondaryDirection);
-
-        _connection!.SetMotorRPMs(BitConverter.GetBytes((float) 60), BitConverter.GetBytes(SecondaryMotorCounter), BitConverter.GetBytes((float) 0));
+        // Send RPMs. For now primary RPM is always set to last primary rpm value
+        _connection!.SetMotorRPMs(BitConverter.GetBytes((float)RPMList[^1]), BitConverter.GetBytes((float) SecondaryMotorCounter), BitConverter.GetBytes((float) 0));
     }
 
 }
