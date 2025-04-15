@@ -24,12 +24,6 @@ public class Simulation : IBallSpinner
     ///<inheritdoc/>
     public string Name { get; set; } = "Simulation";
 
-    /// <summary>
-    /// Gives an index to the current IBallSpinner implementation. This allows for multiple simulations to be run at the same time
-    /// with a separate file name, so that an exception can be avoided.
-    /// </summary>
-    private int _FileIndex;
-
     public string SmartDotMAC { get; } = "11:11:11:11:11:11";
 
     ///<inheritdoc/>
@@ -93,9 +87,8 @@ public class Simulation : IBallSpinner
     private IEnumerator<double?> enumerator;
 
     /// <summary/>
-    public Simulation(int FileIndex)
+    public Simulation()
     {
-        _FileIndex = FileIndex;
         InitializeConnection();
     }
 
@@ -145,7 +138,7 @@ public class Simulation : IBallSpinner
 
         bool Completed = false;
 
-        DataParser.Start(Name + _FileIndex.ToString());
+        DataParser.Start(Name);
         // For now timeStep is hardcoded, but when this is no longer true, the TimeSpan.FromSeconds needs to be altered to be variable
         TimeSpan frequency = TimeSpan.FromSeconds(1 / 10f);
         _timer = new Timer((o) =>
