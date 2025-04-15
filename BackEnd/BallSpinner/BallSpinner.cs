@@ -381,7 +381,7 @@ public class BallSpinnerClass : IBallSpinner
         secondaryDirection = 1; // initialize in the forward direction
         currentRPMInd = 0;
 
-        _motorTimer = new Timer(TimeSpan.FromSeconds(0.010));
+        _motorTimer = new Timer(TimeSpan.FromSeconds(0.1));
         _motorTimer.Elapsed += OnTimedEvent;
 
         _motorTimer.Start();
@@ -539,7 +539,7 @@ public class BallSpinnerClass : IBallSpinner
                 byte[] RPMVal = BitConverter.GetBytes((float)RPMList[currentRPMInd]);
                 if (runPrimaryMotor == true) // dont increment RPM if primary values are done sending
                 {
-                    currentRPMInd += 1;
+                    currentRPMInd += 10;
                 }
 
                 // get secondary motor value
@@ -553,7 +553,7 @@ public class BallSpinnerClass : IBallSpinner
                     secondaryDirection = 1;
                 }
                 // Every second, increase/decrease the angle by 15 degrees
-                SecondaryMotorCounter += (0.5 * secondaryDirection);
+                SecondaryMotorCounter += (1 * secondaryDirection);
                 _connection!.SetMotorRPMs(RPMVal, BitConverter.GetBytes((float)SecondaryMotorCounter), BitConverter.GetBytes((float)0));
             }
             catch (Exception ex)
