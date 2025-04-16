@@ -69,8 +69,8 @@ partial class InitialValuesViewModel : INotifyPropertyChanged
         List<List<double>> axes = model.CalculateBezierCurve(starterLower, starterInflection, starterUpper);
         chart = new InitialValuesChart(axes[0], axes[1], axes[2], axes[3], Coordinates.ToList(starterInflection));
         Series = chart.Series;
-        max = 800;
-        min = 0;
+        max = 800.0;
+        min = 0.0;
     }
 
     public void OnGraphChanged(Coordinates lower, Coordinates inflection, Coordinates upper)
