@@ -28,28 +28,44 @@ public partial class NewBallSpinnerView : ContentPage
 		InitializeComponent();
 	}
 
-	public void AddSimulationButton(object sender, EventArgs args)
+	public async void AddSimulationButton(object sender, EventArgs args)
 	{
-		_task.SetResult(new Simulation(++_SimulationCount));
+		if (_SimulationCount < 1)
+		{
+            _task.SetResult(new Simulation());
+        }
+		else
+		{
+			await DisplayAlert("Alert", "You cannot add more than one simulation", "Okay");
+			_task.SetResult(null);
+		}
     }
 
 	public async void AddBallSpinnerButton(object sender, EventArgs args)
 	{
-        var addr = IPAddr.Text;
-		if (string.IsNullOrEmpty(addr))
+        if (_BallSpinnerCount < 1)
 		{
-			await DisplayAlert("Alert", "You have not entered an IP address", "Fine");
-		}
-		else
-		{
-			try
-			{
-				_task.SetResult(new BackEnd.BallSpinner.BallSpinnerClass(IPAddress.Parse(addr), ++_BallSpinnerCount));
-			}
-            catch (Exception e)
+            var addr = IPAddr.Text;
+            if (string.IsNullOrEmpty(addr))
             {
-                await DisplayAlert("Alert", e.Message, "BOOOOOOOOOOOOOOOOOOOOOOOOO");
+                await DisplayAlert("Alert", "You have not entered an IP address", "Fine");
             }
+            else
+            {
+                try
+                {
+                    _task.SetResult(new BackEnd.BallSpinner.BallSpinnerClass(IPAddress.Parse(addr)));
+                }
+                catch (Exception e)
+                {
+                    await DisplayAlert("Alert", e.Message, "BOOOOOOOOOOOOOOOOOOOOOOOOO");
+                }
+            }
+        }
+        else
+        {
+            await DisplayAlert("Alert", "You cannot add more than one Ball Spinner", "Okay");
+            _task.SetResult(null);
         }
     }
 }

@@ -28,7 +28,7 @@ public partial class MainPage : ContentPage
     public bool LoggedIn { get; private set; } = false;
 
     // Counts the number of currently open simulations/ballspinners.
-    public int SimulationCount { get; set; } = 0;
+    public int SimulationCount { get; set; } = 1; // defaults to 1 because a simulation is opened by default
 
     public int BallSpinnerCount { get; set; } = 0;
     /// <summary/>
@@ -51,7 +51,7 @@ public partial class MainPage : ContentPage
 
         _database.OnLoginChanged += Database_OnLoginChanged;
         //Add simulation by default
-        BallSpinners.Add(new BallSpinnerViewModel(_frontEnd, this, new Simulation(++SimulationCount)));
+        BallSpinners.Add(new BallSpinnerViewModel(_frontEnd, this, new Simulation()));
     }
 
     private void Database_OnLoginChanged(bool obj)
@@ -204,6 +204,11 @@ public partial class MainPage : ContentPage
     /// <param name="args"></param>
     private async void OnAddBallSpinnerButtonClicked(object sender, EventArgs args)
     {
+        if (BallSpinnerCount >= 1 && SimulationCount >= 1)
+        {
+            await DisplayAlert("Alert", "You have reached the limit for the number of IBallSpinner instances open", "Okay");
+            return;
+        }
         var ballSpinner = await _frontEnd.AddBallSpinner(BallSpinnerCount, SimulationCount);
 
         if(ballSpinner != null)

@@ -192,13 +192,11 @@ public class TCP : IDisposable
                     {
                         packetFixed[i] = _receive[currentIndex + i];
                     }
-                    // Check to see if multiple packets are being process at the same time
-                    Debug.WriteLine($"{BitConverter.ToString(packetFixed)}");
                     currentIndex += packetFixed.Length;
 
                     var (messageType, messageSize) = GetMessageInfo(packetFixed);
                     _receive[currentIndex] = 0;
-
+                    //Debug.WriteLine("Incoming packet " + BitConverter.ToString(packetFixed));
                     switch (messageType)
                     {
                         case MessageType.A_B_NAME_REQ:
@@ -220,18 +218,29 @@ public class TCP : IDisposable
                             SmartDotAddressReceivedEvent?.Invoke(physicalAddress);
                             break;
                         case MessageType.B_A_SD_SENSOR_DATA:
+                            Debug.WriteLine(BitConverter.ToString(new byte[] { packetFixed[3] }));
                             SensorType sensorType = (SensorType)Enum.ToObject(typeof(SensorType), packetFixed[3]);
                             int sampleCount = packetFixed[6] | (packetFixed[5] << 8) | (packetFixed[4] << 16); //3 bytes
                             float timeStamp = BitConverter.ToSingle(packetFixed, 7); //BitConverter expects LITTLE ENDIAN
-                            float xData = BitConverter.ToSingle(packetFixed, 11);
-                            float yData = BitConverter.ToSingle(packetFixed, 15);
-                            float zData = BitConverter.ToSingle(packetFixed, 19);
-                            // Debug statement to filter out light data (it comes in too slow right now)
-                            if (sensorType == SensorType.Light) {
-                                Debug.WriteLine($"{sensorType}: {xData} {timeStamp} {sampleCount}");
+                            float xData, yData, zData;
+                            // These packets do not recieve a y or zz value, just parse for x
+                            if (sensorType == SensorType.CurrentSensorX || sensorType == SensorType.CurrentSensorY || sensorType == SensorType.CurrentSensorZ || sensorType == SensorType.MotorXFeedback)
+                            {
+                                xData = BitConverter.ToSingle(packetFixed, 11);
+
+                                Debug.WriteLine(BitConverter.ToString(new ArraySegment<byte>(packetFixed, 11, 4).ToArray()));
+
+                                yData = 0;
+                                zData = 0;
                             }
-                            // Debug statement to print incoming smartdot packet data
-                            //Debug.WriteLine($"{sensorType}: {xData} {yData} {zData}");
+                            else
+                            {
+                                xData = BitConverter.ToSingle(packetFixed, 11);
+                                yData = BitConverter.ToSingle(packetFixed, 15);
+                                zData = BitConverter.ToSingle(packetFixed, 19);
+                            }
+
+                            // Invoke event to send sensor data to proper place
                             SmartDotReceivedEvent?.Invoke(sensorType, timeStamp, sampleCount, xData, yData, zData);
                             break;
                         case MessageType.B_A_RECEIVE_CONFIG_INFO:
@@ -275,6 +284,8 @@ public class TCP : IDisposable
     /// <summary>
     /// Sends voltages to the motors
     /// </summary>
+    ///
+    /* This method is depricated
     public async void SetMotorVoltages(byte x, byte y, byte z)
     {
         if (!_client.Connected)
@@ -299,12 +310,12 @@ public class TCP : IDisposable
         // Send the motor instruction to the PI
         await _client.Client.SendAsync(instructions);
     }
-
+    */
     /// <summary>
     /// Sends RPMS to the motors
     /// The Rpm parameter is expected to be a 32 bit float value conerted to a byte array
     /// </summary>
-    public async void SetMotorRPMs(byte[] Rpm)
+    public async void SetMotorRPMs(byte[] MajorAxisRpm, byte[] SecondaryAxisRPM, byte[] tertiaryAxisRPM)
     {
         if (!_client.Connected)
             throw new Exception("Can't send instructions without being connected");
@@ -324,20 +335,20 @@ public class TCP : IDisposable
             0x00,
             0x03, // size
 
-            Rpm[0], // Set driver motor RPM value
-            Rpm[1],
-            Rpm[2],
-            Rpm[3],
+            MajorAxisRpm[0], // Set driver motor RPM value
+            MajorAxisRpm[1],
+            MajorAxisRpm[2],
+            MajorAxisRpm[3],
 
-            0x00, //Motor 2 values
-            0x00,
-            0x00,
-            0x00,
+            SecondaryAxisRPM[0], // Motor 2 values
+            SecondaryAxisRPM[1],
+            SecondaryAxisRPM[2],
+            SecondaryAxisRPM[3],
 
-            0x00, // Motor 3 values
-            0x00,
-            0x00,
-            0x00,
+            tertiaryAxisRPM[0], // Motor 3 values
+            tertiaryAxisRPM[1],
+            tertiaryAxisRPM[2],
+            tertiaryAxisRPM[3],
             };
             // Send the motor instruction to the PI
             await _client.Client.SendAsync(instructions);
@@ -533,5 +544,9 @@ public enum SensorType : byte
     Accelerometer = 0x41,
     Gyroscope = 0x47,
     Light = 0x4C,
-    Magnetometer = 0x4D
+    Magnetometer = 0x4D,
+    MotorXFeedback = 0x6D,
+    CurrentSensorX = 0x43,
+    CurrentSensorY = 0x56,
+    CurrentSensorZ = 0x52,
 }

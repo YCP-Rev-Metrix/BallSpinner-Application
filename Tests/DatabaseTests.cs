@@ -130,33 +130,34 @@ public class DatabaseTests : TestBase
         };
         
         TempFileWriter.WriteData(dataArray3);
-        TempFileWriter.Stop();
 
         List<SampleData> sample = new List<SampleData>();
-        await Database.GetSampleData(sample, revFilePath);
+        await Database.GetSampleData(sample, revFilePath, 3, DataParser.NUM_DATA_POINTS);
+        // Dispose of memory mapped file
+        TempFileWriter.Stop();
         // Test the contents of sample to make sure it is parsed into JSON correctly
         //Assert.Empty(sample);
         // Test to make sure dataArray1 is parsed correctly into sample and is 1st element
         Assert.Equal("2", sample[0].Type);
         Assert.Equal(43, sample[0].Count);
         Assert.Equal(5.0, sample[0].Logtime);
-        Assert.Equal(434.212, sample[0].X);
-        Assert.Equal(4342.2, sample[0].Y);
-        Assert.Equal(23423, sample[0].Z);
+        Assert.InRange((double) sample[0].X, 434.212 - epsilon, 434.212 + epsilon);
+        Assert.InRange((double)sample[0].Y, 4342.2 - epsilon, 4342.2 + epsilon);
+        Assert.InRange((double)sample[0].Z, 23423 - epsilon, 23423 + epsilon);
         // Test to make sure dataArray2 is parsed correctly into sample and is 2nd element
         Assert.Equal("3", sample[1].Type);
         Assert.Equal(4, sample[1].Count);
         Assert.Equal(52.0, sample[1].Logtime);
-        Assert.Equal(112.4124, sample[1].X);
-        Assert.Equal(4342412.2, sample[1].Y);
-        Assert.Equal(44, sample[1].Z);
+        Assert.InRange((double)sample[1].X, 112.4124 - epsilon, 112.4124 + epsilon);
+        Assert.InRange((double)sample[1].Y, 4342412.2 - epsilon, 4342412.2 + epsilon);
+        Assert.InRange((double)sample[1].Z, 44 - epsilon, 44 + epsilon);
         // Test to make sure dataArray3 is parsed correctly into sample and is 3nd element
         Assert.Equal("4", sample[2].Type);
         Assert.Equal(4323, sample[2].Count);
         Assert.Equal(532.0, sample[2].Logtime);
-        Assert.Equal(2112.4124, sample[2].X);
-        Assert.Equal(431112.2, sample[2].Y);
-        Assert.Equal(765.2, sample[2].Z);
+        Assert.InRange((double)sample[2].X, 2112.4124 - epsilon, 2112.4124 + epsilon);
+        Assert.InRange((double)sample[2].Y, 431112.2 - epsilon, 431112.2 + epsilon);
+        Assert.InRange((double)sample[2].Z, 765.2 - epsilon, 765.2 + epsilon);
     }
 
     [Fact]

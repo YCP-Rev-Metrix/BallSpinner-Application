@@ -1,19 +1,20 @@
-using System;
-using System.Globalization;
-using System.IO;
-using CsvHelper;
+using System.IO.MemoryMappedFiles;
+using System.Text;
 
 namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 public class WriteToTempRevFile : IDisposable
 {
-    private readonly string _filePath;
+    private readonly string _fileName;
 
-    private StreamWriter? _writer;
-    private CsvWriter? _csvWriter;
+    private MemoryMappedFile _file;
 
-    public WriteToTempRevFile(string filePath)
+    private int position = 0; // Track write position
+
+    public event Action OnRecordAdded;
+
+    public WriteToTempRevFile(string fileName)
     {
-        _filePath = filePath;
+        _fileName = fileName;
     }
 
     /// <summary>
@@ -21,17 +22,12 @@ public class WriteToTempRevFile : IDisposable
     /// </summary>
     public void Start()
     {
-        string? directory = Path.GetDirectoryName(_filePath);
-
-        if (directory != null)
-            Directory.CreateDirectory(directory);
-
-        _writer = File.CreateText(_filePath);
-        _csvWriter = new CsvWriter(_writer, CultureInfo.InvariantCulture);
+        // Open a new memory mapped file. Set capacity to 1 mb
+        _file = MemoryMappedFile.CreateOrOpen(_fileName, 1024 * 1024);
     }
 
     /// <summary>
-    /// Indicates that writing has stopped
+    /// Indicates that writing has stopped and file data is no longer needed.
     /// </summary>
     public void Stop()
     {
@@ -41,10 +37,7 @@ public class WriteToTempRevFile : IDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        _csvWriter?.Dispose();
-
-        _writer = null;
-        _csvWriter = null;
+        _file.Dispose();
     }
 
     /// <summary>
@@ -52,16 +45,25 @@ public class WriteToTempRevFile : IDisposable
     /// </summary>
     public void WriteData(string[] dataArray)
     {
-        if (_writer == null || _csvWriter == null)
-            throw new Exception("Trying to write to temp file without opening it first");
-
-        foreach (var record in dataArray)
+        // Create a view accessor for reading/writing
+        using (var accessor = _file.CreateViewAccessor())
         {
-            _csvWriter.WriteField(record);
-        }
+            for (int i = 0; i < dataArray.Length; i++)
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(dataArray[i]);
+                int length = bytes.Length;
 
-        _csvWriter.NextRecord();
-        _csvWriter.Flush();
+                // Write length first (so we can read properly)
+                accessor.Write(position, length);
+                position += sizeof(int); // Move forward
+
+                // Write actual string bytes
+                accessor.WriteArray(position, bytes, 0, bytes.Length);
+                position += length; // Move forward
+            }
+            OnRecordAdded.Invoke();
+            Console.WriteLine("Data written to memory-mapped file.");
+        }
     }
 }
 

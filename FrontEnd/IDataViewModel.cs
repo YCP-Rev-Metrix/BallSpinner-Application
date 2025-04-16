@@ -30,6 +30,8 @@ public interface IDataViewModel : IDisposable
 
     Action<Metric, float, float>? DataReceived { get; set; }
 
+    public Action<double, bool> InitializeSimulation { get; set; }
+
     /// <summary>
     /// Clear and reset all data in the view
     /// </summary>

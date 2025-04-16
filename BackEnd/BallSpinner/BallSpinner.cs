@@ -52,11 +52,6 @@ public class BallSpinnerClass : IBallSpinner
 
     /// <inheritdoc/>
     public event Action<bool>? OnConnectionChanged;
-    /// <summary>
-    /// Gives an index to the current IBallSpinner implementation. This allows for multiple simulations to be run at the same time
-    /// with a separate file name, so that an exception can be avoided.
-    /// </summary>
-    private int _FileIndex;
 
     /// <inheritdoc/>
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -153,12 +148,24 @@ public class BallSpinnerClass : IBallSpinner
     public Ball ball { get; set; }
 
     public string Comments { get; set;  }
+    /// <summary>
+    /// Used to determine the value for the secondary motor whenever the elapsed event fires off
+    /// </summary>
+    private double SecondaryMotorCounter { get; set; } = 0;
+    /// <summary>
+    /// Determines the direction of oscilation of the seconary motor
+    /// </summary>
+    private int secondaryDirection { get; set; } = 1;
+    /// <summary>
+    /// Boolean that determines if the primary motor rpms should continue to be incremented in motor sending code.
+    /// This is set to false when end of RPMList has been reached.
+    /// </summary>
+    private bool runPrimaryMotor { get; set; } = true;
 
     /// <summary />
-    public BallSpinnerClass(IPAddress address, int FileIndex)
+    public BallSpinnerClass(IPAddress address)
     {
         _address = address;
-        _FileIndex = FileIndex;
         InitializeConnection();
 
         //Me testing - brandon
@@ -169,9 +176,6 @@ public class BallSpinnerClass : IBallSpinner
         // Debug.WriteLine($"Range byte: 0b{Convert.ToString(data[0], 2).PadLeft(8, '0')}");
 
         // SmartDotConfigReceivedEvent(data);
-
-        ball = new Ball("Test", 8.0, 11, "Pancake");
-
     }
 
     /// <inheritdoc/>
@@ -369,15 +373,18 @@ public class BallSpinnerClass : IBallSpinner
     {
         //Stop();
 
-        DataParser.Start(Name + _FileIndex.ToString());
+        DataParser.Start(Name);
 
+        // set init values
+        runPrimaryMotor = true;
+        SecondaryMotorCounter = 0;
+        secondaryDirection = 1; // initialize in the forward direction
         currentRPMInd = 0;
 
-        _currentVoltage = 1;
-        _motorTimer = new Timer(TimeSpan.FromSeconds(0.010));
+        _motorTimer = new Timer(TimeSpan.FromSeconds(0.1));
         _motorTimer.Elapsed += OnTimedEvent;
-        _motorTimer.Start();
 
+        _motorTimer.Start();
     }
 
     /// <inheritdoc/>
@@ -513,41 +520,57 @@ public class BallSpinnerClass : IBallSpinner
     }
     private void OnTimedEvent(object? source, ElapsedEventArgs e)
     {
-        try
-        {
-            // Prevent reentrancy: Try to set _eventRunning from 0 to 1 atomically
-            if (Interlocked.CompareExchange(ref _eventRunning, 1, 0) != 0)
+            try
             {
-                Interlocked.Increment(ref _discardedEvents); // Event was skipped due to reentrancy
-                Debug.WriteLine("Number of discarded events: " + _discardedEvents);
-                return;
-            }
+                // Prevent reentrancy: Try to set _eventRunning from 0 to 1 atomically
+                if (Interlocked.CompareExchange(ref _eventRunning, 1, 0) != 0)
+                {
+                    Interlocked.Increment(ref _discardedEvents); // Event was skipped due to reentrancy
+                    Debug.WriteLine("Number of discarded events: " + _discardedEvents);
+                    return;
+                }
 
-            if (currentRPMInd >= RPMCount)
+                if (currentRPMInd >= RPMCount)
+                {
+                    return; // Don't stop the timer yet—ensure we reset _eventRunning first
+                }
+
+                Debug.WriteLine("Current index: " + currentRPMInd);
+                byte[] RPMVal = BitConverter.GetBytes((float)RPMList[currentRPMInd]);
+                if (runPrimaryMotor == true) // dont increment RPM if primary values are done sending
+                {
+                    currentRPMInd += 10;
+                }
+
+                // get secondary motor value
+                // This allow the degrees to oscilate from 0 to 180 and back to 0
+                if (SecondaryMotorCounter + 1 > 180)
+                {
+                    secondaryDirection = -1;
+                }
+                else if (SecondaryMotorCounter - 1 < 0)
+                {
+                    secondaryDirection = 1;
+                }
+                // Every second, increase/decrease the angle by 15 degrees
+                SecondaryMotorCounter += (1 * secondaryDirection);
+                _connection!.SetMotorRPMs(RPMVal, BitConverter.GetBytes((float)SecondaryMotorCounter), BitConverter.GetBytes((float)0));
+            }
+            catch (Exception ex)
             {
-                return; // Don't stop the timer yet—ensure we reset _eventRunning first
+                Debug.WriteLine(ex.Message);
             }
-
-            Debug.WriteLine("Current index: " + currentRPMInd);
-            byte[] RPMVal = BitConverter.GetBytes((float)RPMList[currentRPMInd]);
-            currentRPMInd += 1;
-            _connection!.SetMotorRPMs(RPMVal);
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex.Message);
-        }
-        finally
-        {
-            Interlocked.Exchange(ref _eventRunning, 0);
-            Interlocked.Exchange(ref _discardedEvents, 0);
-
-            // Ensure the timer is stopped only after _eventRunning is reset
-            if (currentRPMInd >= RPMCount)
+            finally
             {
-                _motorTimer.Stop();
+                Interlocked.Exchange(ref _eventRunning, 0);
+                Interlocked.Exchange(ref _discardedEvents, 0);
+
+                // Ensure the timer is stopped only after _eventRunning is reset
+                if (currentRPMInd >= RPMCount)
+                {
+                    runPrimaryMotor = false;
+                    currentRPMInd = RPMCount - 1;
+                }
             }
-        }
     }
-
 }

@@ -11,27 +11,44 @@ namespace RevMetrix.BallSpinner.BackEnd.BallSpinner;
 /// <summary>
 /// Class for distributing data from ball spinner to view/database/etc
 /// </summary>
-public class DataParser: IDisposable
+public class DataParser : IDisposable
 {
     public string TempFilePath { get; private set; } = string.Empty;
 
     private event Action<Metric, float, float>? OnDataReceived;
+    public event Action<double, bool> OnDataParserStart;
     private WriteToTempRevFile? _writer;
 
+    public int NumRecords { get; set; } = 0;
+    /// <summary>
+    /// Represents the number of data points within the sensor packets. Whenever the sensor packets are altered, this constant should 
+    /// change along with it.
+    /// </summary>
+    public static int NUM_DATA_POINTS { get; } = 6;
     public void Start(string name)
     {
-        TempFilePath = Utilities.GetTempRevFileDir(name);
-
         Stop();
 
-        _writer = new WriteToTempRevFile(TempFilePath);
+        TempFilePath = name;
+        // ONly create new writer object if it does not already exist
+        if (_writer == null)
+        {
+            _writer = new WriteToTempRevFile(name);
+        }
+        _writer.OnRecordAdded += HandleRecordAdded;
         _writer.Start();
-    }
 
+        OnDataParserStart.Invoke(0.01, true);
+    }
+    /// <summary>
+    /// Releases all unneeded resources.
+    /// </summary>
     public void Stop()
     {
-        _writer?.Dispose();
-        _writer = null;
+        // For now, these are commented out because the dispose() of _writer deletes memory mapped file
+        //_writer?.Dispose();
+        //_writer = null;
+        StopBallRotation();
     }
 
     /// <summary>
@@ -69,16 +86,25 @@ public class DataParser: IDisposable
                     OnDataReceived?.Invoke(Metric.MagnetometerZ, ZData, timeStamp);
                     sensorTypeString = "4";
                     break;
+                case SensorType.MotorXFeedback: // primary motor
+                    OnDataReceived?.Invoke(Metric.MotorXFeedback, XData, timeStamp);
+                    Debug.WriteLine("Encoder Value Recieved: " + XData);
+                    sensorTypeString = "5";
+                    break;
                 default:
-                    sensorTypeString = "0";
+                    sensorTypeString = null;
                     break;
             }
             string[] smartDotData =
         {
             sensorTypeString, timeStamp.ToString(), sampleCount.ToString(), XData.ToString(), YData.ToString(), ZData.ToString()
         };
+            // For now we are recieving sensors that cannot be stored in the database, so nothing should be written to cache file for these
+            if (sensorTypeString != null)
+            {
+                _writer?.WriteData(smartDotData);
 
-            _writer?.WriteData(smartDotData);
+            }
         }
 
 
@@ -112,5 +138,16 @@ public class DataParser: IDisposable
     public void Dispose()
     {
         _writer?.Dispose();
+    }
+    /// <summary>
+    /// Handler function that increments NumRecords when WriteToTempRevFile successfully writes a smartdot sample point.
+    /// </summary>
+    private void HandleRecordAdded()
+    {
+        NumRecords++;
+    }
+    public void StopBallRotation()
+    {
+        OnDataParserStart.Invoke(0.01, false);
     }
 }
