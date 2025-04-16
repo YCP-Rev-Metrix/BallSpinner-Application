@@ -24,12 +24,6 @@ public class Simulation : IBallSpinner
     ///<inheritdoc/>
     public string Name { get; set; } = "Simulation";
 
-    /// <summary>
-    /// Gives an index to the current IBallSpinner implementation. This allows for multiple simulations to be run at the same time
-    /// with a separate file name, so that an exception can be avoided.
-    /// </summary>
-    private int _FileIndex;
-
     public string SmartDotMAC { get; } = "11:11:11:11:11:11";
 
     ///<inheritdoc/>
@@ -90,10 +84,11 @@ public class Simulation : IBallSpinner
 
     public string Comments { get; set; }
 
+    private IEnumerator<double?> enumerator;
+
     /// <summary/>
-    public Simulation(int FileIndex)
+    public Simulation()
     {
-        _FileIndex = FileIndex;
         InitializeConnection();
     }
 
@@ -138,8 +133,13 @@ public class Simulation : IBallSpinner
     {
         Stop();
 
-        DataParser.Start(Name + _FileIndex.ToString());
+        // Get enumerator for RPM values
+        enumerator = RPMList.GetEnumerator();
 
+        bool Completed = false;
+
+        DataParser.Start(Name);
+        // For now timeStep is hardcoded, but when this is no longer true, the TimeSpan.FromSeconds needs to be altered to be variable
         TimeSpan frequency = TimeSpan.FromSeconds(1 / 10f);
         _timer = new Timer((o) =>
         {
@@ -178,6 +178,28 @@ public class Simulation : IBallSpinner
             // Send light data (where Y-Up is brightest)
             float light = Math.Max(Vector3.Dot(Vector3.TransformNormal(Vector3.UnitZ, Matrix4x4.CreateFromQuaternion(Rotation)), Vector3.UnitY), 0);
             DataParser.SendSmartDotToSubscribers(SensorType.Light, time, 0, light, 0, 0);
+
+
+            if (!Completed)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    if (!enumerator.MoveNext())
+                    {
+                        Console.WriteLine("End of collection reached.");
+                        Completed = true;
+                        // Stop the simulation
+                        DataParser.StopBallRotation();
+                        break;
+                    }
+                }
+            }
+            // Send RPM value
+            if (!Completed)
+            {
+                DataParser.SendSmartDotToSubscribers(SensorType.MotorXFeedback, time, 0, (float)enumerator.Current, 0, 0);
+                enumerator.MoveNext();
+            }
             UpdateCharts();
 
         }, null, frequency, frequency);

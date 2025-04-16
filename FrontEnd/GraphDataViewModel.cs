@@ -17,6 +17,8 @@ public abstract class GraphDataViewModel : IDataViewModel
     public abstract Metric Metrics { get; }
     public Action<Metric, float, float>? DataReceived { get; set; }
 
+    public Action<double, bool> InitializeSimulation { get; set; }
+
     private IBallSpinner _ballSpinner;
 
     public GraphDataViewModel(IBallSpinner ballSpinner)

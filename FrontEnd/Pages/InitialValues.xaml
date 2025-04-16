@@ -43,7 +43,9 @@
                             Grid.Column="2"
                             AnimationsSpeed="0"
                             Series="{Binding Series}"
-                            YAxes="{Binding YAxes}"/>
+                            YAxes="{Binding YAxes}"
+                            XAxes="{Binding XAxes}"
+                            PressedCommand="{Binding PointerDownCommand}"/>
 
         <Grid Grid.Row="0"
               Grid.Column="3">

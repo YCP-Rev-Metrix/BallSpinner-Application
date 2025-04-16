@@ -36,9 +36,11 @@ public partial class InitialValues : ContentPage
 
     private void OnMaxSliderValueChanged(object sender, EventArgs args)
     {
+        Coordinates preInflection = ContextStore.GetInflection();
         if (MaxVal.Value <= MinVal.Value) MaxVal.Value = MinVal.Value + 1;
         Coordinates lower = new Coordinates(0, MinVal.Value);
-        Coordinates inflection = new Coordinates(70, 50);
+        Coordinates inflection = new Coordinates(70, ((MaxVal.Value - MinVal.Value) * (1.0 / 16.0) + MinVal.Value));
+        //Coordinates inflection = new Coordinates(preInflection.x, ((MaxVal.Value-MinVal.Value)*(preInflection.y/(MaxVal.Value-MinVal.Value)))+MinVal.Value);
         Coordinates upper = new Coordinates(100, MaxVal.Value);
         ContextStore.OnGraphChanged(lower, inflection, upper);
         BindingContext = ContextStore;
@@ -46,9 +48,11 @@ public partial class InitialValues : ContentPage
 
     private void OnMinSliderValueChanged(object sender, EventArgs args)
     {
+        Coordinates preInflection = ContextStore.GetInflection();
         if (MinVal.Value >= MaxVal.Value) MinVal.Value = MaxVal.Value + 1;
         Coordinates lower = new Coordinates(0, MinVal.Value);
-        Coordinates inflection = new Coordinates(70, 50);
+        Coordinates inflection = new Coordinates(70, ((MaxVal.Value - MinVal.Value) * (1.0 / 16.0) + MinVal.Value));
+        //Coordinates inflection = new Coordinates(preInflection.x, ((MaxVal.Value-MinVal.Value)*(preInflection.y/(MaxVal.Value-MinVal.Value)))+MinVal.Value);
         Coordinates upper = new Coordinates(100, MaxVal.Value);
         ContextStore.OnGraphChanged(lower, inflection, upper);
         BindingContext = ContextStore;

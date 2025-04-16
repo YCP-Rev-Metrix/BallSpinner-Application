@@ -16,6 +16,7 @@ using OpenTK.Platform.Windows;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.Maui.Controls.PlatformConfiguration;
+using Newtonsoft.Json.Linq;
 
 
 
@@ -35,6 +36,7 @@ public partial class BallSpinnerView : ContentView
         base.OnBindingContextChanged();
         _viewModel = (BallSpinnerViewModel)BindingContext;
         _viewModel.LeftView.DataReceived += (metric, value, timeFromStart) => { DataReceived(_viewModel.LeftView, LeftView, metric, value, timeFromStart); };
+        _viewModel.LeftView.InitializeSimulation += (timeStep, Start) => { InitializeBallRotation(timeStep, LeftView, Start); };
         _viewModel.TopMiddleView.DataReceived += (metric, value, timeFromStart) => { ChartDataReceived(_viewModel.TopMiddleView, TopMiddleView, metric, value, timeFromStart); };
         _viewModel.TopRightView.DataReceived += (metric, value, timeFromStart) => { ChartDataReceived(_viewModel.TopRightView, TopRightView, metric, value, timeFromStart); };
         _viewModel.BottomMiddleView.DataReceived += (metric, value, timeFromStart) => { ChartDataReceived(_viewModel.BottomMiddleView, BottomMiddleView, metric, value, timeFromStart); };
@@ -59,11 +61,29 @@ public partial class BallSpinnerView : ContentView
 
         try
         {
-
+            if (metric == Metric.MotorXFeedback)
+            {
+                Console.WriteLine("NIIIIIIIIIICCCCCCCEEEEEEE");
+            }
             //Need to switch to a web connection, this is crazy slow!
             webview.Eval($"window.data('{metric}',{value}, {timeFromStart})");
         }
         catch(Exception e)
+        {
+            Console.WriteLine(e.ToString());
+        }
+    }
+
+    private void InitializeBallRotation(double timeStep, WebView webview, bool Start)
+    {
+        try
+        {
+
+            //Need to switch to a web connection, this is crazy slow!
+            webview.Eval($"window.StartBallRotation({timeStep}, {Start.ToString().ToLower()});");
+
+        }
+        catch (Exception e)
         {
             Console.WriteLine(e.ToString());
         }

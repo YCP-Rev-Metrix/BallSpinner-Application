@@ -106,7 +106,8 @@
                                     x:Name="TopMiddleView"
                                     AnimationsSpeed="0"
                                     Grid.Row="1"
-                                    XAxes="{Binding XAxes}">
+                                    XAxes="{Binding XAxes}"
+                                    YAxes="{Binding AccYAxes}">
                                 </lvc:CartesianChart>
                                 <Label Grid.Row="2"
                                        FontSize="16"
@@ -136,7 +137,8 @@
                                     InputTransparent="True"
                                     AnimationsSpeed="0"
                                     Series="{Binding RotationSeries}"
-                                    XAxes="{Binding XAxes}">
+                                    XAxes="{Binding XAxes}"
+                                    YAxes="{Binding RotYAxes}">
                                 </lvc:CartesianChart>
                                 <Label Grid.Row="2"
                                        FontSize="16"
@@ -166,7 +168,8 @@
                                     InputTransparent="True"
                                     AnimationsSpeed="0"
                                     Series="{Binding MagnetometerSeries}"
-                                    XAxes="{Binding XAxes}">
+                                    XAxes="{Binding XAxes}"
+                                    YAxes="{Binding MagYAxes}">
                                 </lvc:CartesianChart>
                                 <Label Grid.Row="2"
                                        FontSize="16"
@@ -196,7 +199,8 @@
                                     InputTransparent="True"
                                     AnimationsSpeed="0"
                                     Series="{Binding LightSeries}"
-                                    XAxes="{Binding XAxes}">
+                                    XAxes="{Binding XAxes}"
+                                    YAxes="{Binding LigYAxes}">
                                 </lvc:CartesianChart>
                                 <Label Grid.Row="2"
                                        FontSize="16"

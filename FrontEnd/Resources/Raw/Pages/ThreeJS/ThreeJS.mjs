@@ -3,6 +3,9 @@ import { OrbitControls } from '/Modules/Three/Addons/OrbitControls.js';
 
 const scene = new THREE.Scene();
 
+let rotationQuaternion = new THREE.Quaternion(); // Accumulated total rotation
+let intervalQuaternion = new THREE.Quaternion(); // Incremental rotation per timeStep
+
 const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 const width = 500;
 const height = 500;
@@ -92,62 +95,27 @@ const arrowH = new THREE.ArrowHelper(new THREE.Vector3(0, 2, 0), mesh.position, 
 let x = 0;
 let y = 0;
 let z = 0;
-const initialRotation = new THREE.Matrix4();
+let initialRotation = new THREE.Matrix4();
 
 scene.add(arrowH);
 
 function render() {
-    //arrow at the center of the ball
-    const dir = new THREE.Vector3(0, 1, 0);  // Initial arrow direction in local space
-    dir.applyQuaternion(mesh.quaternion);    // Apply the ball's rotation quaternion
-    arrowHelper.setDirection(dir);           // Update arrow helper's direction
-    arrowHelper.position.copy(mesh.position);
+    mesh.quaternion.copy(rotationQuaternion);
 
-    // arrow out the side 
-    const diy = new THREE.Vector3(1, 0, 0);  // Initial arrow direction in local space
-    diy.applyQuaternion(mesh.quaternion);    // Apply the ball's rotation quaternion
-    arrowHelpe.setDirection(diy);           // Update arrow helper's direction
-    arrowHelpe.position.copy(mesh.position);
-
-    // arrow out the side 
-    const die = new THREE.Vector3(0, 0, 1);  // Initial arrow direction in local space
-    die.applyQuaternion(mesh.quaternion);    // Apply the ball's rotation quaternion
-    arrowHelp.setDirection(die);           // Update arrow helper's direction
-    arrowHelp.position.copy(mesh.position);
-
-    // arrow out the side 
-    const dia = new THREE.Vector3(-1, 0, 0);  // Initial arrow direction in local space
-    dia.applyQuaternion(mesh.quaternion);    // Apply the ball's rotation quaternion
-    arrowHel.setDirection(dia);           // Update arrow helper's direction
-    arrowHel.position.copy(mesh.position);
-
-    // arrow out the side 
-    const dis = new THREE.Vector3(0, 0, -1);  // Initial arrow direction in local space
-    dis.applyQuaternion(mesh.quaternion);    // Apply the ball's rotation quaternion
-    arrowHe.setDirection(dis);           // Update arrow helper's direction
-    arrowHe.position.copy(mesh.position);
-
-    // arrow out the side 
-    const dit = new THREE.Vector3(0, -1, 0);  // Initial arrow direction in local space
-    dit.applyQuaternion(mesh.quaternion);    // Apply the ball's rotation quaternion
-    arrowH.setDirection(dit);           // Update arrow helper's direction
-    arrowH.position.copy(mesh.position);
-
-    //ball
-    let newEuler = new THREE.Euler(THREE.MathUtils.degToRad(x), THREE.MathUtils.degToRad(y), THREE.MathUtils.degToRad(z), 'XYZ');
-
-    const newQuaternion = new THREE.Quaternion().setFromEuler(newEuler);
-
-    const lerpFactor = 0.1;
-    const interpolatedQuaternion = new THREE.Quaternion().slerpQuaternions(mesh.quaternion, newQuaternion, lerpFactor);
-
-    let newMatrix = new THREE.Matrix4();
-    newMatrix.makeRotationFromQuaternion(interpolatedQuaternion);
-
-    let combinedMatrix = new THREE.Matrix4();
-    combinedMatrix.multiply(newMatrix).multiply(initialRotation);
-
-    mesh.rotation.setFromRotationMatrix(combinedMatrix);
+    // Update arrows based on mesh rotation
+    [arrowHelper, arrowHelpe, arrowHelp, arrowHel, arrowHe, arrowH].forEach((arrow, index) => {
+        const baseDirs = [
+            new THREE.Vector3(0, 1, 0),
+            new THREE.Vector3(1, 0, 0),
+            new THREE.Vector3(0, 0, 1),
+            new THREE.Vector3(-1, 0, 0),
+            new THREE.Vector3(0, 0, -1),
+            new THREE.Vector3(0, -1, 0)
+        ];
+        let dir = baseDirs[index].clone().applyQuaternion(mesh.quaternion);
+        arrow.setDirection(dir);
+        arrow.position.copy(mesh.position);
+    });
 
     renderer.render(scene, camera);
 }
@@ -158,32 +126,50 @@ var minZ = 0;
 
 window.data = function (metric, value, time) {
     console.log(metric + " " + value + " " + time);
-
-    if (time > minX && metric === 'RotationX') {
+    // If the current metric is for the real motor x speed, update motor x RPM for the simulation
+    if (metric === 'MotorXFeedback') {
         x = value;
+    }
+    /*
+    Old code. Not needed right now
+    if (time > minX && metric === 'MotorXFeedback') {
+        x = value;
+
+        initialRotation = new THREE.Matrix4();
+        // Convert RPM value to radians
+        var RadianX = (x / 60) * (time - minx)
+        let euler = new THREE.Euler(
+            x,
+            y,
+            z,
+            'XYZ'
+        );
+
+        initialRotation.makeRotationFromEuler(euler);
+
         minX = time;
     }
-    else if (time > minY && metric === 'RotationY') {
-        y = value;
-        minY = time;
-    }
-    else if (time > minZ && metric === 'RotationZ') {
-        z = value;
+    */
+}
 
-        if (minZ == 0) {
-            initialRotation = new THREE.Matrix4();
+let IntervalID = 0;
+window.StartBallRotation = function (timeStep, StartInterval) {
+    if (StartInterval) {
+        IntervalID = window.setInterval(function () {
+            console.log("Interval");
 
-            let euler = new THREE.Euler(
-                x,
-                y,
-                z,
-                'XYZ'
-            );
+            // Calculate how much to rotate in this time step (radians per timeStep)
+            let radiansX = ((x / 60) * timeStep) * 2 * Math.PI;
 
-            initialRotation.makeRotationFromEuler(euler);
-        }
+            // Build incremental quaternion for this rotation step
+            let euler = new THREE.Euler(radiansX, 0, 0, 'XYZ');
+            intervalQuaternion.setFromEuler(euler);
 
-        minZ = time;
+            // Apply incremental rotation to the accumulated rotation
+            rotationQuaternion.multiply(intervalQuaternion);
+        }, timeStep * 1000);
+    } else {
+        window.clearInterval(IntervalID);
     }
 }
 
