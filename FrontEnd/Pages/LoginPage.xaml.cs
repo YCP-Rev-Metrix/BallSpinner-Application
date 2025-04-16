@@ -54,21 +54,8 @@ public partial class LoginPage : ContentPage
         {
             try
             {
-                char[] phoneNumArr = phoneNum.ToCharArray();
-                string formattedPhoneNum = phoneNumArr[0] + 
-                                           phoneNumArr[1] + 
-                                           phoneNumArr[2] + 
-                                           "-" +
-                                           phoneNumArr[3] +
-                                           phoneNumArr[4] +
-                                           phoneNumArr[5] +
-                                           "-" +
-                                           phoneNumArr[6] +
-                                           phoneNumArr[7] +
-                                           phoneNumArr[8] +
-                                           phoneNumArr[9];
 
-                var token = await _database.RegisterUser(firstName, lastName, username, password, email, formattedPhoneNum);
+                var token = await _database.RegisterUser(firstName, lastName, username, password, email, phoneNum);
                 Console.WriteLine($"Auth: {token?.TokenA}");
                 Console.WriteLine($"Refresh: {token?.TokenB}");
             }

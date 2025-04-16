@@ -2,6 +2,7 @@ using System.Text;
 using System.Xml;
 using Common.POCOs;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using RevMetrix.BallSpinner.BackEnd;
 
 namespace RevMetrix.BallSpinner.BackEnd.Database;
@@ -16,8 +17,13 @@ public partial class Database : IDatabase
         string email, string phonenumber)
     {
         UserIdentification user = new UserIdentification(firstname, lastname, username, password, email, phonenumber);
+        // Create settings to preserve PascalCase
+        var jsonSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new DefaultContractResolver() // Keeps original casing (PascalCase)
+        };
 
-        var jsonBody = JsonConvert.SerializeObject(user);
+        var jsonBody = JsonConvert.SerializeObject(user, jsonSettings);
 
         // Create the request content
         var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
