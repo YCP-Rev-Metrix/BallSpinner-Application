@@ -20,6 +20,9 @@ using Microsoft.Graphics.Canvas.Effects;
 using Microsoft.UI.Xaml;
 using Microsoft.Maui.ApplicationModel;
 using LiveChartsCore.Kernel.Sketches;
+using LiveChartsCore.Kernel.Events;
+using LiveChartsCore.Defaults;
+
 
 namespace RevMetrix.BallSpinner.FrontEnd;
 public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
@@ -69,17 +72,20 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
 
     public ObservableCollection<ISeries> LightSeries { get; set; }
 
+    //public LineSeries<ObservablePoint> accelXSeries = new LineSeries<ObservablePoint>()
     public LineSeries<double> accelXSeries = new LineSeries<double>()
     {
         Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 4 }
     };
+    //public LineSeries<ObservablePoint> accelYSeries = new LineSeries<ObservablePoint>()
     public LineSeries<double> accelYSeries = new LineSeries<double>()
     {
-        Stroke = new SolidColorPaint(SKColors.Red) { StrokeThickness = 4 }
+            Stroke = new SolidColorPaint(SKColors.Red) { StrokeThickness = 4 }
     };
-    public LineSeries<double> accelZSeries = new LineSeries<double>() 
+    //public LineSeries<ObservablePoint> accelZSeries = new LineSeries<ObservablePoint>()
+    public LineSeries<double> accelZSeries = new LineSeries<double>()
     {
-        Stroke = new SolidColorPaint(SKColors.Green) { StrokeThickness = 4 }
+            Stroke = new SolidColorPaint(SKColors.Green) { StrokeThickness = 4 }
     };
     public LineSeries<double> rotatXSeries = new LineSeries<double>()
     {
@@ -110,7 +116,12 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
         Stroke = new SolidColorPaint(SKColors.Blue) { StrokeThickness = 4 }
     };
     const int maxDataPoints = 50; //maximum values for the graphs
-    private readonly DispatcherTimer _timer = new DispatcherTimer();
+    //private readonly Stopwatch _timer = new Stopwatch();
+    //public List<ObservablePoint> accX = new List<ObservablePoint>();
+    //public List<ObservablePoint> accY = new List<ObservablePoint>();
+    //public List<ObservablePoint> accZ = new List<ObservablePoint>();
+
+
 
     public bool NotConnectedFadeVisible
     {
@@ -171,6 +182,7 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
     private FrontEnd _frontEnd;
     public BallSpinnerViewModel(FrontEnd frontend, MainPage mainPage, IBallSpinner ballspinner)
     {
+        //_timer.Start();
         accelXSeries.GeometrySize = 0.5;
         accelYSeries.GeometrySize = 0.5;
         accelZSeries.GeometrySize = 0.5;
@@ -214,8 +226,31 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
             var rotatSeriesList = new List<ISeries>();
             var magneSeriesList = new List<ISeries>();
 
+            //_timer.Stop();
+            //double time = _timer.ElapsedMilliseconds*(1/1000);
+            //_timer.Start();
 
+            //for (int i = 0; i < accelXValues.Count; i++)
+            //{
+            /*if (accelXValues.Count > 0)
+            {
+                accX.Add(new ObservablePoint(time, accelXValues[accelXValues.Count - 1]));
+                accY.Add(new ObservablePoint(time, accelYValues[accelYValues.Count - 1]));
+                accZ.Add(new ObservablePoint(time, accelZValues[accelZValues.Count - 1]));
 
+            }*/
+            //}
+            //accelXSeries.Values = accX;
+            /*for (int i = 0; i < accelYValues.Count; i++)
+            {
+                accY.Add(new ObservablePoint(time+i, accelYValues[i]));
+            }*/
+            //accelYSeries.Values = accY;
+            /*for (int i = 0; i < accelZValues.Count; i++)
+            {
+                accZ.Add(new ObservablePoint(time+i, accelZValues[i]));
+            }*/
+            //accelZSeries.Values = accZ;
             accelXSeries.Values = accelXValues;
             accelYSeries.Values = accelYValues;
             accelZSeries.Values = accelZValues;
@@ -226,6 +261,7 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
             magneYSeries.Values = magneYValues;
             magneZSeries.Values = magneZValues;
             lightSeries.Values = lightValues;
+            //Console.Out.WriteLine(rotatXValues[0]);  uncomment for brandon testing of rotat values.
 
             AccelerationSeries = //new ObservableCollection<ISeries> 
             [
@@ -367,7 +403,16 @@ public partial class BallSpinnerViewModel : INotifyPropertyChanged, IDisposable
     {
         _frontEnd.SmartDotSettings(this);
     }
-    
+
+    public void PointerDown(PointerCommandArgs args)
+    {
+        var chart = (ICartesianChartView)args.Chart;
+
+        // scales the UI coordinates to the corresponding data in the chart.
+        var scaledPoint = chart.ScalePixelsToData(args.PointerPosition);
+
+        Console.Out.WriteLine("Pointer Detected");
+    }
     //TODO: Function call to Backend to get ODR & sample rates
 
     //TODO: Function call to Backend to pass selected sample rates

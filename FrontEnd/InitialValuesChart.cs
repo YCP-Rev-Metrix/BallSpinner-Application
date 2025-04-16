@@ -1,10 +1,13 @@
 ﻿using LiveChartsCore;
 using LiveChartsCore.Defaults;
+using LiveChartsCore.Kernel.Events;
+using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Drawing.Geometries;
 using LiveChartsCore.SkiaSharpView.Painting;
 using RevMetrix.BallSpinner.BackEnd;
 using SkiaSharp;
+using System.Collections.ObjectModel;
 using System.Collections.Generic;
 
 namespace RevMetrix.BallSpinner.FrontEnd;
@@ -15,10 +18,11 @@ public class InitialValuesChart
     public List<ObservablePoint> lineValues;
     public List<ObservablePoint> bezierValues;
     public List<ObservablePoint> inflectionPoint;
+    public List<ISeries> seriesList;
 
     public InitialValuesChart(List<double> x, List<double> y, List<double> bezierX, List<double> bezierY, List<double> inflection)
     {
-        var seriesList = new List<ISeries>();
+        seriesList = new List<ISeries>();
         
         //List<ObservablePoint> placeholder = new List<ObservablePoint>();
         //List<ObservablePoint> placeholder2 = new List<ObservablePoint>();
@@ -74,6 +78,19 @@ public class InitialValuesChart
 
 
         Series = seriesList.ToArray();
+    }
+
+    public void ChangeWithInflection(double x, double y)
+    {
+        inflectionPoint.Clear();
+        inflectionPoint.Add(new ObservablePoint(x, y));
+    }
+
+    public Coordinates GetInflection()
+    {
+        double inflectionX = (double)inflectionPoint[0].X;
+        double inflectionY = (double)inflectionPoint[0].Y;
+        return new Coordinates(inflectionX, inflectionY);
     }
 
 }
