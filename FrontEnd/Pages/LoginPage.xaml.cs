@@ -58,6 +58,16 @@ public partial class LoginPage : ContentPage
                 var token = await _database.RegisterUser(firstName, lastName, username, password, email, phoneNum);
                 Console.WriteLine($"Auth: {token?.TokenA}");
                 Console.WriteLine($"Refresh: {token?.TokenB}");
+
+                RegisterFirstNameField.Text = null;
+                RegisterLastNameField.Text = null;
+                RegisterEmailField.Text = null;
+                RegisterPhoneNumField.Text = null;
+                RegisterUsernameField.Text = null;
+                RegisterPasswordField.Text = null;
+                RegisterConfirmPasswordField.Text = null;
+
+                await DisplayAlert("Alert", "User successfully created", "Woooooo");
             }
             catch (Exception e)
             {
