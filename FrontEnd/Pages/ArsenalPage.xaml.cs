@@ -43,7 +43,6 @@ public partial class ArsenalPage : ContentPage
     private async void AddBall(object sender, EventArgs args)
     {
         if (   string.IsNullOrEmpty(Name.Text)
-            || string.IsNullOrEmpty(Diameter.Text)
             || string.IsNullOrEmpty(Weight.Text)
             || CoreType.SelectedIndex == -1)
         {
@@ -53,7 +52,7 @@ public partial class ArsenalPage : ContentPage
         {
             try
             {
-                await _database.AddBowlingBall(new Ball(Name.Text, double.Parse(Diameter.Text), double.Parse(Weight.Text), (string?)CoreType.ItemsSource[CoreType.SelectedIndex]));
+                await _database.AddBowlingBall(new Ball(Name.Text, 2, double.Parse(Weight.Text), (string?)CoreType.ItemsSource[CoreType.SelectedIndex]));
                 Refresh(sender, args);
             }
             catch (Exception e)

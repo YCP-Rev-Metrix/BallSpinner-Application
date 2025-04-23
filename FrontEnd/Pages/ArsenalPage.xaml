@@ -41,13 +41,10 @@
                             <ColumnDefinition Width="100" />
                             <ColumnDefinition Width="100" />
                         </Grid.ColumnDefinitions>
-                        
+
                         <Label Grid.Column="0"
                                FontSize="18"
                                Text="Name" />
-                        <Label Grid.Column="1"
-                               FontSize="18"
-                               Text="Diameter" />
                         <Label Grid.Column="2"
                                FontSize="18"
                                Text="Weight" />
@@ -79,8 +76,6 @@
                                         </Grid.ColumnDefinitions>
                                         <Label Grid.Column="0" 
                                                Text="{Binding Name}" />
-                                        <Label Grid.Column="1" 
-                                               Text="{Binding Diameter}" />
                                         <Label Grid.Column="2" 
                                                Text="{Binding Weight}" />
                                         <Label Grid.Column="3" 
@@ -108,9 +103,6 @@
                                Text="Name:"/>
                         <Label FontSize="16"
                                WidthRequest="100"
-                               Text="Diameter:"/>
-                        <Label FontSize="16"
-                               WidthRequest="100"
                                Text="Weight:"/>
                         <Label FontSize="16"
                                WidthRequest="100"
@@ -121,10 +113,6 @@
                         <Entry x:Name="Name"
                                WidthRequest="200"
                                Placeholder="Walton Alicious Gonzaga Sr."/>
-                        <Entry x:Name="Diameter"
-                               Keyboard="Numeric"
-                               WidthRequest="200"
-                               Placeholder="inchs"/>
                         <Entry x:Name="Weight"
                                Keyboard="Numeric"
                                WidthRequest="200"

@@ -148,19 +148,6 @@ public class BallSpinnerClass : IBallSpinner
     public Ball ball { get; set; }
 
     public string Comments { get; set;  }
-    /// <summary>
-    /// Used to determine the value for the secondary motor whenever the elapsed event fires off
-    /// </summary>
-    private double SecondaryMotorCounter { get; set; } = 0;
-    /// <summary>
-    /// Determines the direction of oscilation of the seconary motor
-    /// </summary>
-    private int secondaryDirection { get; set; } = 1;
-    /// <summary>
-    /// Boolean that determines if the primary motor rpms should continue to be incremented in motor sending code.
-    /// This is set to false when end of RPMList has been reached.
-    /// </summary>
-    private bool runPrimaryMotor { get; set; } = true;
 
     /// <summary />
     public BallSpinnerClass(IPAddress address)
@@ -376,9 +363,6 @@ public class BallSpinnerClass : IBallSpinner
         DataParser.Start(Name);
 
         // set init values
-        runPrimaryMotor = true;
-        SecondaryMotorCounter = 0;
-        secondaryDirection = 1; // initialize in the forward direction
         currentRPMInd = 0;
 
         _motorTimer = new Timer(TimeSpan.FromSeconds(0.1));
@@ -537,24 +521,9 @@ public class BallSpinnerClass : IBallSpinner
 
                 Debug.WriteLine("Current index: " + currentRPMInd);
                 byte[] RPMVal = BitConverter.GetBytes((float)RPMList[currentRPMInd]);
-                if (runPrimaryMotor == true) // dont increment RPM if primary values are done sending
-                {
-                    currentRPMInd += 10;
-                }
 
-                // get secondary motor value
-                // This allow the degrees to oscilate from 0 to 180 and back to 0
-                if (SecondaryMotorCounter + 1 > 180)
-                {
-                    secondaryDirection = -1;
-                }
-                else if (SecondaryMotorCounter - 1 < 0)
-                {
-                    secondaryDirection = 1;
-                }
-                // Every second, increase/decrease the angle by 15 degrees
-                SecondaryMotorCounter += (1 * secondaryDirection);
-                _connection!.SetMotorRPMs(RPMVal, BitConverter.GetBytes((float)SecondaryMotorCounter), BitConverter.GetBytes((float)0));
+                _connection!.SetMotorRPMs(RPMVal, RPMVal, BitConverter.GetBytes((float)0));
+                currentRPMInd += 10;
             }
             catch (Exception ex)
             {
@@ -568,8 +537,7 @@ public class BallSpinnerClass : IBallSpinner
                 // Ensure the timer is stopped only after _eventRunning is reset
                 if (currentRPMInd >= RPMCount)
                 {
-                    runPrimaryMotor = false;
-                    currentRPMInd = RPMCount - 1;
+                _motorTimer.Stop();
                 }
             }
     }
