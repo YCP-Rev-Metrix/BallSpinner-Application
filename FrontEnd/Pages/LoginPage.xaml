@@ -6,65 +6,139 @@
     xmlns:local="clr-namespace:RevMetrix.BallSpinner.FrontEnd"
     Title="LoginPage">
 
-    <HorizontalStackLayout
-        Padding="10,0,10,0"
-        HorizontalOptions="Center"
-        VerticalOptions="Center">
-        <VerticalStackLayout>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <VerticalStackLayout Margin="10, 10, 10, 10"
+                             Grid.Column="0">
             <!--  Title  -->
-            <Label
-                Margin="0,0,0,10"
-                FontAttributes="Bold"
-                FontSize="24"
-                HorizontalOptions="Center"
-                Text="Login/Register" />
+            <Label Margin="0,0,0,10"
+                   FontAttributes="Bold"
+                   FontSize="24"
+                   HorizontalOptions="Center"
+                   Text="Login" />
 
             <!--  Username Entry  -->
-            <Entry
-                x:Name="UsernameField"
-                Margin="0,0,0,10"
-                HorizontalOptions="Fill"
-                Placeholder="Username"
-                SemanticProperties.Description="Enter Username"
-                SemanticProperties.HeadingLevel="Level2"
-                Completed="OnLoginButtonClicked"
-                Text="" />
+            <Entry x:Name="LoginUsernameField"
+                   Margin="0,0,0,10"
+                   HorizontalOptions="Fill"
+                   Placeholder="Username"
+                   SemanticProperties.Description="Enter Username"
+                   SemanticProperties.HeadingLevel="Level2"
+                   Completed="OnLoginButtonClicked"
+                   Text="" />
 
             <!--  Password Entry  -->
-            <Entry
-                x:Name="PasswordField"
-                Margin="0,0,0,20"
-                HorizontalOptions="Fill"
-                IsPassword="True"
-                Placeholder="Password"
-                SemanticProperties.Description="Enter Password"
-                SemanticProperties.HeadingLevel="Level2"
-                Completed="OnLoginButtonClicked"
-                Text="" />
+            <Entry x:Name="LoginPasswordField"
+                   Margin="0,0,0,295"
+                   HorizontalOptions="Fill"
+                   IsPassword="True"
+                   Placeholder="Password"
+                   SemanticProperties.Description="Enter Password"
+                   SemanticProperties.HeadingLevel="Level2"
+                   Completed="OnLoginButtonClicked"
+                   Text="" />
 
             <!--  Login Button  -->
-            <Button
-                Margin="0,0,0,10"
-                Clicked="OnLoginButtonClicked"
-                HorizontalOptions="Center"
-                SemanticProperties.Hint="Log the user in when clicked"
-                Text="Login" />
-
-            <!--  Register Button  -->
-            <Button
-                Padding="10,0"
-                Clicked="OnRegisterButtonClicked"
-                HorizontalOptions="Center"
-                SemanticProperties.Hint="Register a new user when clicked"
-                Text="Register" />
+            <Button Margin="0,0,0,10"
+                    Clicked="OnLoginButtonClicked"
+                    HorizontalOptions="Center"
+                    SemanticProperties.Hint="Log the user in when clicked"
+                    Text="Login" />
 
             <!--  Optional: Forgot Password Link  -->
-            <Label
-                Margin="10"
-                FontSize="14"
-                HorizontalOptions="Center"
-                Text="Forgot your password?" />
+            <Label Margin="10"
+                   FontSize="14"
+                   HorizontalOptions="Center"
+                   Text="Forgot your password?" />
 
         </VerticalStackLayout>
-    </HorizontalStackLayout>
+
+        <Line Grid.Column="1"
+              HorizontalOptions="Center"
+              Y1="10"
+              Y2="552"
+              Stroke="YellowGreen"
+              StrokeDashArray="6,6"
+              StrokeDashOffset="6" />
+
+        <VerticalStackLayout Grid.Column="2"
+                             Margin="10, 10, 10, 10">
+            <Label Margin="0,0,0,10"
+                   FontAttributes="Bold"
+                   FontSize="24"
+                   HorizontalOptions="Center"
+                   Text="Register" />
+
+            <Entry x:Name="RegisterFirstNameField"
+                   Margin="0,0,0,10"
+                   HorizontalOptions="Fill"
+                   Placeholder="First Name"
+                   SemanticProperties.Description="Enter First Name"
+                   SemanticProperties.HeadingLevel="Level2"
+                   Completed="OnRegisterButtonClicked" />
+
+            <Entry x:Name="RegisterLastNameField"
+                   Margin="0,0,0,10"
+                   HorizontalOptions="Fill"
+                   Placeholder="Last Name"
+                   SemanticProperties.Description="Enter Last Name"
+                   SemanticProperties.HeadingLevel="Level2"
+                   Completed="OnRegisterButtonClicked" />
+
+            <Entry x:Name="RegisterEmailField"
+                   Margin="0,0,0,10"
+                   HorizontalOptions="Fill"
+                   Placeholder="Email"
+                   SemanticProperties.Description="Enter Email"
+                   SemanticProperties.HeadingLevel="Level2"
+                   Completed="OnRegisterButtonClicked" />
+
+            <Entry x:Name="RegisterPhoneNumField"
+                   Margin="0,0,0,10"
+                   HorizontalOptions="Fill"
+                   Placeholder="Phone number"
+                   Keyboard="Numeric"
+                   SemanticProperties.Description="Enter Phone Number"
+                   SemanticProperties.HeadingLevel="Level2"
+                   Completed="OnRegisterButtonClicked" />
+
+            <Entry x:Name="RegisterUsernameField"
+                   Margin="0,0,0,10"
+                   HorizontalOptions="Fill"
+                   Placeholder="Username"
+                   SemanticProperties.Description="Enter Username"
+                   SemanticProperties.HeadingLevel="Level2"
+                   Completed="OnRegisterButtonClicked" />
+
+            <Entry x:Name="RegisterPasswordField"
+                   Margin="0,0,0,10"
+                   HorizontalOptions="Fill"
+                   IsPassword="True"
+                   Placeholder="Password"
+                   SemanticProperties.Description="Enter Password"
+                   SemanticProperties.HeadingLevel="Level2"
+                   Completed="OnRegisterButtonClicked" />
+            
+            <Entry x:Name="RegisterConfirmPasswordField"
+                   Margin="0,0,0,20"
+                   HorizontalOptions="Fill"
+                   IsPassword="True"
+                   Placeholder="Re-enter Password"
+                   SemanticProperties.Description="Enter Password"
+                   SemanticProperties.HeadingLevel="Level2"
+                   Completed="OnRegisterButtonClicked" />
+            
+            <!--  Register Button  -->
+            <Button Padding="10,0"
+                    Clicked="OnRegisterButtonClicked"
+                    HorizontalOptions="Center"
+                    SemanticProperties.Hint="Register a new user when clicked"
+                    Text="Register" />
+        </VerticalStackLayout>
+    </Grid>
 </ContentPage>

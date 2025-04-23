@@ -4,6 +4,70 @@
              x:Class="RevMetrix.BallSpinner.FrontEnd.Pages.ArsenalPage"
              Title="ArsenalPage">
 
+    <!-- ELEMENTS ON THE ARSENAL PAGE -->
+    <!-- 
+        Element: Grid
+        Documentation: https://learn.microsoft.com/en-us/dotnet/maui/user-interface/layouts/grid?view=net-maui-9.0
+        Description:
+             Used to organize elements on a page. Grid.RowDefinitions 
+            and Grid.ColumnDefinitions set the size of the grid and the 
+            height/width of each column/row. Setting the Grid.Row or 
+            Grid.Column property of an element in a grid you can move it
+            around. The height/width of a row/column is int numebr of
+            pixels, but "Auto" will adjust for whatever is in the row/coumn
+            and "*" will have it take the remaining space divided by the
+            number of "*" (ex. A grid with a height of 500 and  rows "*", 
+            "*", "100" will be sized to rows of 200, 200, and 100 px). 
+ 
+        Element: Label
+        Documentation: https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/label?view=net-maui-9.0
+        Description:
+            Displays text.
+ 
+        Element: ListView
+        Documentation: https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/listview?view=net-maui-9.0
+        Description:
+            Create a list of objects from the ItemSource and the ItemTemplate 
+            property. By setting the BindingContext for the page, you can access 
+            and ObservableCollection<T> as a source. By setting the ItemTemplate 
+            to be a grid you can effectivly create a table with variable size. 
+            The BindingContext for ItemTemplate is ItemSource[i].Property, 
+            for example the first label of the second element in the table is 
+            Arsenal[1].Name.
+ 
+        Element: VerticalStackLayout
+        Documentation: https://learn.microsoft.com/en-us/dotnet/maui/user-interface/layouts/verticalstacklayout?view=net-maui-9.0
+        Description:
+            Organizes containted elements into a vertical stack.
+ 
+        Element: HorizontalStackLayout
+        Documentation: https://learn.microsoft.com/en-us/dotnet/maui/user-interface/layouts/horizontalstacklayout?view=net-maui-9.0
+        Description:
+            Organizes containted elements into a horizontal stack.
+    
+        Element: Entry
+        Documentation: https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/entry?view=net-maui-9.0
+        Description:
+            A text entry field. It can be specified to only take specific kinds 
+            of imputs(i.e. numeric only). The elements can be referenced by their 
+            x:Name property and their contents then accessed through their Text 
+            property.
+ 
+         Element: Picker
+         Documentation: https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/picker?view=net-maui-9.0
+         Description:
+            A picker is dropdown menu for selecting an item from a list. The 
+            elements can be referenced by their x:Name property and their 
+            contents then accessed through their Text property. This page 
+            only uses a fixed set of options, for a variable size picker
+            see InitialValues.xaml.
+ 
+         Element: Button
+         Documentation: https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/button?view=net-maui-9.0
+         Description:
+            Its a button, calls the function named by Clicked when clicked.
+     -->
+
     <Grid Margin="20,20,20,20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -11,6 +75,7 @@
             <RowDefinition Height="70" />
         </Grid.RowDefinitions>
 
+        <!-- Title Bar at top of page -->
         <Label Margin="0,20,0,10"
                FontSize="26"
                Text="Arsenal"
@@ -22,72 +87,119 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            
-            <ScrollView Orientation="Horizontal">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0" 
+            <Grid>
+                <!-- Row 1: Column titles
+                     Row 2: Table of bowling balls -->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" 
                           Margin="10,0,0,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="350" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- These are Labels for the headrs of the table of balls -->
+                    <Label Grid.Column="0"
+                               FontSize="18"
+                               Text="Name" />
+                    <Label Grid.Column="1"
+                               FontSize="18"
+                               Text="Diameter" />
+                    <Label Grid.Column="2"
+                               FontSize="18"
+                               Text="Weight" />
+                    <!-- This has the 4th label, and two picker for sorting-->
+                    <Grid Grid.Column="3">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="113"/>
+                            <ColumnDefinition Width="73"/>
                         </Grid.ColumnDefinitions>
 
                         <Label Grid.Column="0"
                                FontSize="18"
-                               Text="Name" />
-                        <Label Grid.Column="2"
-                               FontSize="18"
-                               Text="Weight" />
-                        <Label Grid.Column="3"
-                               FontSize="18"
-                               Text="Core Type"/>
+                               Text="Core Type" />
+                        <Picker Grid.Column="1"
+                                x:Name="SortType"
+                                FontSize="12"
+                                VerticalOptions="Start"
+                                SelectedIndexChanged="OnSortIndexChanged">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Name</x:String>
+                                    <x:String>Core Type</x:String>
+                                    <x:String>Weight</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                        <Picker Grid.Column="2"
+                                x:Name="SortDir"
+                                FontSize="12"
+                                VerticalOptions="Start"
+                                SelectedIndexChanged="OnSortIndexChanged">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Asc.</x:String>
+                                    <x:String>Dsc.</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
                     </Grid>
+                </Grid>
 
-                    <ListView Grid.Row="1"
+                <!-- 
+                    The actuall table of bowling balls. It pulls the observable collection 
+                    arsenal from the BallsViewModel. The Template defines how each row of 
+                    the table is organized, effectivlly each row a grids of labels with 
+                    text elements bound to the properties of each ball in arsenal.
+                -->
+                <ListView Grid.Row="1"
                               Margin="0,10,0,0"
                               ItemsSource="{Binding Arsenal}"
                               VerticalScrollBarVisibility="Always"
                               HorizontalScrollBarVisibility="Always"
                               SelectionMode="Single"
                               ItemSelected="NewSelection">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <Grid Padding="10">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="200" />
-                                            <ColumnDefinition Width="100" />
-                                            <ColumnDefinition Width="100" />
-                                            <ColumnDefinition Width="100" />
-                                            <ColumnDefinition Width="100" />
-                                        </Grid.ColumnDefinitions>
-                                        <Label Grid.Column="0" 
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid Padding="10">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="100" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Column="0" 
                                                Text="{Binding Name}" />
-                                        <Label Grid.Column="2" 
+                                    <Label Grid.Column="1" 
+                                               Text="{Binding Diameter}" />
+                                    <Label Grid.Column="2" 
                                                Text="{Binding Weight}" />
-                                        <Label Grid.Column="3" 
+                                    <Label Grid.Column="3" 
                                                Text="{Binding CoreType}" />
-                                    </Grid>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </Grid>
-            </ScrollView>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
 
+            <!-- This is the columnn on the right side of the page for entering a new ball-->
             <VerticalStackLayout Grid.Row="1"
                                  Grid.Column="2"
                                  Spacing="12">
@@ -95,6 +207,7 @@
                        FontSize="20"
                        Text="Add New Ball"/>
 
+                <!-- Two vertical stacks in a horizontal stack for labels and entry fields for ball parameters-->
                 <HorizontalStackLayout Spacing="10">
                     <VerticalStackLayout Spacing="30"
                                          VerticalOptions="Center">
@@ -109,6 +222,10 @@
                                Text="Core:"/>
                     </VerticalStackLayout>
 
+                    <!-- 
+                        The contents of the entry elements and picker here are what is 
+                        passed to the backend when the subit button is clicked. 
+                    -->
                     <VerticalStackLayout Spacing="6">
                         <Entry x:Name="Name"
                                WidthRequest="200"
@@ -129,12 +246,18 @@
                     </VerticalStackLayout>
                 </HorizontalStackLayout>
 
+                <!-- The submit button for adding a new ball-->
                 <Button Margin="10"
                         Clicked="AddBall"
                         Text="Save Ball" />
             </VerticalStackLayout>
         </Grid>
 
+        <!-- 
+            A pair of management buttons for the bowling balls. 
+            Refresh calls a pull command in the view model, 
+            delete deletes the selected ball
+        -->
         <HorizontalStackLayout Grid.Row="2">
             <Button Margin="10"
                     Clicked="Refresh"

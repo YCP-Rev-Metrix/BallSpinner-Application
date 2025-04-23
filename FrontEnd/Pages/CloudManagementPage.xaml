@@ -4,6 +4,48 @@
              x:Class="RevMetrix.BallSpinner.FrontEnd.CloudManagementPage"
              Title="CloudManagementPage">
 
+    <!-- ELEMENTS ON THE CLOUD MANAGEMENT PAGE -->
+    <!--
+        Element: Grid
+        Documentation: https://learn.microsoft.com/en-us/dotnet/maui/user-interface/layouts/grid?view=net-maui-9.0
+        Description:
+                Used to organize elements on a page. Grid.RowDefinitions 
+            and Grid.ColumnDefinitions set the size of the grid and the 
+            height/width of each column/row. Setting the Grid.Row or 
+            Grid.Column property of an element in a grid you can move it
+            around. The height/width of a row/column is int numebr of
+            pixels, but "Auto" will adjust for whatever is in the row/coumn
+            and "*" will have it take the remaining space divided by the
+            number of "*" (ex. A grid with a height of 500 and  rows "*", 
+            "*", "100" will be sized to rows of 200, 200, and 100 px). 
+    
+        Element: Label
+        Documentation: https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/label?view=net-maui-9.0
+        Description:
+            Displays text.
+    
+        Element: ListView
+        Documentation: https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/listview?view=net-maui-9.0
+        Description:
+            Create a list of objects from the ItemSource and the ItemTemplate 
+            property. By setting the BindingContext for the page, you can access 
+            and ObservableCollection<T> as a source. By setting the ItemTemplate 
+            to be a grid you can effectivly create a table with variable size. 
+            The BindingContext for ItemTemplate is ItemSource[i].Property, 
+            for example the first label of the second element in the table is 
+            Arsenal[1].Name.
+    
+        Element: VerticalStackLayout
+        Documentation: https://learn.microsoft.com/en-us/dotnet/maui/user-interface/layouts/verticalstacklayout?view=net-maui-9.0
+        Description:
+            Organizes containted elements into a vertical stack.
+    
+        Element: Button
+        Documentation: https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/button?view=net-maui-9.0
+        Description:
+           Its a button, calls the function named by Clicked when clicked.
+    -->
+    
     <Grid Margin="20,20,20,20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -16,78 +58,106 @@
                Text="Manage Shots"
                HorizontalOptions="Center"/>
 
-        <ScrollView Grid.Row="1" 
-                    Margin="10,0,0,0"
-                    Orientation="Both">
-            <Grid>
+        <Grid Row="1"
+              Margin="10,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" 
+                  Margin="10,0,0,0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" 
-                      Margin="10,0,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0"
+                       FontSize="18"
+                       Text="Name" />
+                <Label Grid.Column="1"
+                       FontSize="18"
+                       Text="Ball" />
+                <Label Grid.Column="2"
+                       FontSize="18"
+                       Text="Count" />
+                <Grid Grid.Column="3">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="200" />
-                        <ColumnDefinition Width="100" />
-                        <ColumnDefinition Width="100" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="113"/>
+                        <ColumnDefinition Width="73"/>
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Column="0"
                            FontSize="18"
-                           Text="Name" />
-                    <Label Grid.Column="1"
-                           FontSize="18"
-                           Text="Ball" />
-                    <Label Grid.Column="2"
-                           FontSize="18"
-                           Text="Count" />
-                    <Label Grid.Column="3"
-                           FontSize="18"
                            Text="Comments" />
+                    <Picker Grid.Column="1"
+                            x:Name="SortType"
+                            FontSize="12"
+                            SelectedIndexChanged="OnSortIndexChanged">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Date</x:String>
+                                <x:String>Name</x:String>
+                                <x:String>Data Count</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                    <Picker Grid.Column="2"
+                            x:Name="SortDir"
+                            FontSize="12"
+                            SelectedIndexChanged="OnSortIndexChanged">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Asc.</x:String>
+                                <x:String>Dsc.</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
                 </Grid>
-
-                <ListView Grid.Row="1"
-                          Margin="0,10,0,0"
-                          ItemsSource="{Binding Shots}"
-                          VerticalScrollBarVisibility="Always"
-                          HorizontalScrollBarVisibility="Always"
-                          SelectionMode="Single"
-                          ItemSelected="NewSelection">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid Padding="10">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="200" />
-                                        <ColumnDefinition Width="100" />
-                                        <ColumnDefinition Width="100" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Label Grid.Column="0" 
-                                           Text="{Binding shotinfo.Name}" />
-                                    <Label Grid.Column="1"
-                                           Text="{Binding ball.Name}"/>
-                                    <Label Grid.Column="2"
-                                           Text="{Binding shotinfo.DataCount}" />
-                                    <Label Grid.Column="3"
-                                           Text="{Binding shotinfo.Comments}" />
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
             </Grid>
-        </ScrollView>
+
+            <ListView Grid.Row="1"
+                      Margin="0,10,0,0"
+                      ItemsSource="{Binding Shots}"
+                      VerticalScrollBarVisibility="Always"
+                      HorizontalScrollBarVisibility="Always"
+                      SelectionMode="Single"
+                      ItemSelected="NewSelection">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" 
+                                       Text="{Binding shotinfo.Name}" />
+                                <Label Grid.Column="1"
+                                       Text="{Binding ball.Name}"/>
+                                <Label Grid.Column="2"
+                                       Text="{Binding shotinfo.DataCount}" />
+                                <Label Grid.Column="3"
+                                       Text="{Binding shotinfo.Comments}" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
 
         <HorizontalStackLayout Grid.Row="2">
             <Button Margin="10"
