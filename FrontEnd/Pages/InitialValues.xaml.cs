@@ -15,6 +15,7 @@ public partial class InitialValues : ContentPage
 
     public List<double?> bezierPointsY;
 
+    public double bezierRatio;
 
     private InitialValuesViewModel ContextStore;
 
@@ -39,8 +40,10 @@ public partial class InitialValues : ContentPage
         Coordinates preInflection = ContextStore.GetInflection();
         if (MaxVal.Value <= MinVal.Value) MaxVal.Value = MinVal.Value + 1;
         Coordinates lower = new Coordinates(0, MinVal.Value);
-        Coordinates inflection = new Coordinates(70, ((MaxVal.Value - MinVal.Value) * (1.0 / 16.0) + MinVal.Value));
-        //Coordinates inflection = new Coordinates(preInflection.x, ((MaxVal.Value-MinVal.Value)*(preInflection.y/(MaxVal.Value-MinVal.Value)))+MinVal.Value);
+        //Coordinates inflection = new Coordinates(70, ((MaxVal.Value - MinVal.Value) * (1.0 / 16.0) + MinVal.Value));
+        double ratio = (preInflection.y - MinVal.Value) / (MaxVal.Value - MinVal.Value);
+        //Coordinates inflection = new Coordinates(preInflection.x, ((MaxVal.Value-MinVal.Value)*((preInflection.y-MinVal.Value)/(MaxVal.Value-MinVal.Value)))+MinVal.Value);
+        Coordinates inflection = new Coordinates(preInflection.x, (MaxVal.Value - MinVal.Value) * ratio + MinVal.Value);
         Coordinates upper = new Coordinates(100, MaxVal.Value);
         ContextStore.OnGraphChanged(lower, inflection, upper);
         BindingContext = ContextStore;
@@ -51,11 +54,17 @@ public partial class InitialValues : ContentPage
         Coordinates preInflection = ContextStore.GetInflection();
         if (MinVal.Value >= MaxVal.Value) MinVal.Value = MaxVal.Value + 1;
         Coordinates lower = new Coordinates(0, MinVal.Value);
-        Coordinates inflection = new Coordinates(70, ((MaxVal.Value - MinVal.Value) * (1.0 / 16.0) + MinVal.Value));
-        //Coordinates inflection = new Coordinates(preInflection.x, ((MaxVal.Value-MinVal.Value)*(preInflection.y/(MaxVal.Value-MinVal.Value)))+MinVal.Value);
+        //Coordinates inflection = new Coordinates(70, ((MaxVal.Value - MinVal.Value) * (1.0 / 16.0) + MinVal.Value));
+        Coordinates inflection = new Coordinates(preInflection.x, ((MaxVal.Value-MinVal.Value)*((preInflection.y-MinVal.Value)/(MaxVal.Value-MinVal.Value)))+MinVal.Value);
         Coordinates upper = new Coordinates(100, MaxVal.Value);
         ContextStore.OnGraphChanged(lower, inflection, upper);
         BindingContext = ContextStore;
+    }
+
+    private void UpdateRatio()
+    {
+        Coordinates inflection = ContextStore.GetInflection();
+        bezierRatio = (inflection.y - MinVal.Value) / (MaxVal.Value - MinVal.Value);
     }
 
     private async void PassValues(object sender, EventArgs args)
