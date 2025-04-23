@@ -112,9 +112,6 @@
                     <Label Grid.Column="0"
                                FontSize="18"
                                Text="Name" />
-                    <Label Grid.Column="1"
-                               FontSize="18"
-                               Text="Diameter" />
                     <Label Grid.Column="2"
                                FontSize="18"
                                Text="Weight" />
@@ -186,8 +183,6 @@
                                     </Grid.ColumnDefinitions>
                                     <Label Grid.Column="0" 
                                                Text="{Binding Name}" />
-                                    <Label Grid.Column="1" 
-                                               Text="{Binding Diameter}" />
                                     <Label Grid.Column="2" 
                                                Text="{Binding Weight}" />
                                     <Label Grid.Column="3" 
