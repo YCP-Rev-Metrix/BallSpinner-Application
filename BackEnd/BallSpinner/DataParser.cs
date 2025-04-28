@@ -146,6 +146,9 @@ public class DataParser : IDisposable
     {
         NumRecords++;
     }
+    /// <summary>
+    /// Stops the balls rotation in the simulation
+    /// </summary>
     public void StopBallRotation()
     {
         OnDataParserStart.Invoke(0.01, false);
