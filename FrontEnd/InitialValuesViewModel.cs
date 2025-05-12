@@ -30,6 +30,8 @@ partial class InitialValuesViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
     public double max;
     public double min;
+    public double xratio;
+    public double yratio;
     public Axis[] XAxes { get; private set; } =
     {
         new Axis 
@@ -93,6 +95,16 @@ partial class InitialValuesViewModel : INotifyPropertyChanged
         return chart.GetInflection();
     }
 
+    public double GetXRatio()
+    {
+        return xratio;
+    }
+
+    public double GetYRatio()
+    {
+        return yratio;
+    }
+
     [RelayCommand]
     public void PointerDown(PointerCommandArgs args)
     {
@@ -110,6 +122,9 @@ partial class InitialValuesViewModel : INotifyPropertyChanged
         chart = new InitialValuesChart(axes[0], axes[1], axes[2], axes[3], Coordinates.ToList(inflection));
         Series = chart.Series;
         OnPropertyChanged(nameof(Series));
+        xratio = (scaledPoint.X - lower.x) / (upper.x - lower.x);
+        yratio = (scaledPoint.Y - lower.y) / (upper.y - lower.y);
+
 
         //Console.Out.WriteLine("Chart Clicked");
     }
