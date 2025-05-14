@@ -187,9 +187,8 @@ public class Simulation : IBallSpinner
                     if (!enumerator.MoveNext())
                     {
                         Console.WriteLine("End of collection reached.");
+                        // Ensure enumerator does not continue
                         Completed = true;
-                        // Stop the simulation
-                        DataParser.StopBallRotation();
                         break;
                     }
                 }
